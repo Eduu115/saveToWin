@@ -2,11 +2,11 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthGuard } from './auth/AuthGuard'
 import { DEFAULT_LOCALE } from './i18n/locales'
-import { t } from './i18n/t'
 import { AppLayout } from './layout/AppLayout'
 import { AuthPage } from './pages/AuthPage'
 import { BudgetsPage } from './pages/BudgetsPage'
 import { DashboardPage } from './pages/DashboardPage'
+import { ImportPage } from './pages/ImportPage'
 import { LocaleLayout } from './pages/LocaleLayout'
 import { TransactionsPage } from './pages/TransactionsPage'
 
@@ -18,15 +18,6 @@ const queryClient = new QueryClient({
     },
   },
 })
-
-function SimplePage({ title }: { title: string }) {
-  return (
-    <div>
-      <h1 className="text-2xl font-extrabold tracking-tight">{title}</h1>
-      <p className="mt-2 text-ink-2">{t('placeholder.comingSoon')}</p>
-    </div>
-  )
-}
 
 export function App() {
   return (
@@ -43,7 +34,7 @@ export function App() {
                 <Route path="dashboard" element={<DashboardPage />} />
                 <Route path="transactions" element={<TransactionsPage />} />
                 <Route path="budgets" element={<BudgetsPage />} />
-                <Route path="import" element={<SimplePage title={t('import.title')} />} />
+                <Route path="import" element={<ImportPage />} />
               </Route>
             </Route>
           </Route>
