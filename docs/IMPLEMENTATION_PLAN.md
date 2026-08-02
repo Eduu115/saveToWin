@@ -222,6 +222,7 @@ requieren cookie JWT.
 | POST | `/auth/register` | `{email,password,name?}` → user + cookie + seed |
 | POST | `/auth/login` · `/auth/logout` | cookie JWT |
 | GET | `/auth/me` | user o `401` |
+| PATCH | `/auth/me` | `{ savingsGoalCents?, name? }` |
 | GET/POST/PATCH/DELETE | `/accounts[/:id]` | scoped `userId` |
 | GET/POST/PATCH/DELETE | `/categories[/:id]` | scoped `userId` |
 | GET | `/transactions` | `?from&to&…` → `{items,total}` scoped |

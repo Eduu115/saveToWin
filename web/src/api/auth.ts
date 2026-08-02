@@ -22,3 +22,10 @@ export function register(body: { email: string; password: string; name?: string 
 export function logout() {
   return api<{ ok: true }>('/api/auth/logout', { method: 'POST' })
 }
+
+export function updateMe(body: { savingsGoalCents?: number; name?: string | null }) {
+  return api<{ user: User }>('/api/auth/me', {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  })
+}
