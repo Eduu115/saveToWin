@@ -39,6 +39,8 @@ app.route('/api/budgets', budgetsRoutes)
 // ponytail: solo monta estáticos si hay build de web (dev API-only no tiene public/)
 if (existsSync('./public')) {
   app.use('/*', serveStatic({ root: './public' }))
+  // SPA fallback para rutas del cliente (/{locale}/…)
+  app.get('*', serveStatic({ root: './public', path: './index.html' }))
 }
 
 const port = env.port()
