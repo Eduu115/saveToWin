@@ -1,0 +1,25 @@
+{
+  "name": "saveToWin",
+  "short_name": "saveToWin",
+  "description": "Control de gastos y ahorros self-hosted",
+  "start_url": "/es/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#FAF6F0",
+  "theme_color": "#A8471C",
+  "lang": "es",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
