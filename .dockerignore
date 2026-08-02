@@ -1,0 +1,11 @@
+node_modules
+**/node_modules
+.git
+.env
+*.db
+.DS_Store
+server/public
+dist
+**/dist
+agent-transcripts
+docs/fintech-app-design-specifications
