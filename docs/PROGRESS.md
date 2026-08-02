@@ -6,8 +6,8 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ## Cursor
 
-- **Fase actual:** Fase 2 — Auth multi-usuario
-- **Próxima tarea:** `P2.3` — middleware /api/* + rate-limit auth
+- **Fase actual:** Fase 3 — API CRUD (scoped)
+- **Próxima tarea:** `P3.1` — zod + forma de error única
 
 ## Tablero de fases
 
@@ -15,7 +15,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 |------|--------|
 | 0 · Scaffold y tooling | ✅ hecha |
 | 1 · Dominio y datos | ✅ hecha |
-| 2 · Auth multi-usuario | 🔄 en curso |
+| 2 · Auth multi-usuario | ✅ hecha |
 | 3 · API CRUD (scoped) | ⬜ pendiente |
 | 4 · Frontend base + i18n | ⬜ pendiente |
 | 5 · Dashboard / stats / logo | ⬜ pendiente |
@@ -44,7 +44,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ### Fase 2 — Auth multi-usuario
 - [x] P2.1 · JWT helpers + env (`JWT_SECRET`, `DATABASE_URL`)
 - [x] P2.2 · register/login/logout/me + cookie JWT httpOnly + seed al registrar
-- [ ] P2.3 · middleware protege /api/* + rate-limit auth
+- [x] P2.3 · middleware protege /api/* + rate-limit auth
 
 ### Fase 3 — API CRUD (scoped por usuario)
 - [ ] P3.1 · zod + forma de error única
@@ -110,3 +110,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P1.5: seed por usuario idempotente + aislamiento. Fase 1 (pivot) hecha.
 - 2026-08-02 · P2.1: env fail-fast + sign/verify JWT (`sub` = userId).
 - 2026-08-02 · P2.2: register/login/logout/me + cookie JWT + seed al registrar.
+- 2026-08-02 · P2.3: middleware auth + rate-limit login/register. Fase 2 hecha.
