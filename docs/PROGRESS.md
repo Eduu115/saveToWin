@@ -6,22 +6,22 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ## Cursor
 
-- **Fase actual:** Fase 2 — API CRUD
-- **Próxima tarea:** `P2.1` — zod + forma de error única
+- **Fase actual:** Fase 1 — Dominio y datos (retrabajo Postgres + multi-usuario)
+- **Próxima tarea:** `P1.2` — types con `User` + `userId` (reabrir tras pivot)
 
 ## Tablero de fases
 
 | Fase | Estado |
 |------|--------|
 | 0 · Scaffold y tooling | ✅ hecha |
-| 1 · Dominio y datos | ✅ hecha |
-| 2 · API CRUD | ⬜ pendiente |
-| 3 · Auth | ⬜ pendiente |
+| 1 · Dominio y datos | 🔄 en curso (P1.1 ok; P1.2–P1.5 a rehacer) |
+| 2 · Auth multi-usuario | ⬜ pendiente |
+| 3 · API CRUD (scoped) | ⬜ pendiente |
 | 4 · Frontend base + i18n | ⬜ pendiente |
 | 5 · Dashboard / stats / logo | ⬜ pendiente |
 | 6 · Presupuestos y ahorro | ⬜ pendiente |
 | 7 · Import CSV | ⬜ pendiente |
-| 8 · Despliegue | ⬜ pendiente |
+| 8 · Despliegue (app + Postgres) | ⬜ pendiente |
 | 9 · Opcionales | ⬜ pendiente |
 
 ## Checklist (detalle en `docs/IMPLEMENTATION_PLAN.md` por ID)
@@ -36,29 +36,29 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ### Fase 1 — Dominio y datos
 - [x] P1.1 · money.ts + money.test.ts
-- [x] P1.2 · shared/types.ts (key EN + label ES)
-- [x] P1.3 · Drizzle schema (céntimos, fecha ISO, FKs)
-- [x] P1.4 · db client + migrate al arrancar
-- [x] P1.5 · seed idempotente (12 categorías + 7 cuentas)
+- [ ] P1.2 · shared/types.ts (`User` + entidades con `userId`)
+- [ ] P1.3 · Drizzle schema **Postgres** (users + FKs + userId)
+- [ ] P1.4 · db client `DATABASE_URL` + migrate al arrancar
+- [ ] P1.5 · seed **por usuario** (12 categorías + 7 cuentas)
 
-### Fase 2 — API CRUD
-- [ ] P2.1 · zod + forma de error única
-- [ ] P2.2 · /api/accounts
-- [ ] P2.3 · /api/categories
-- [ ] P2.4 · /api/transactions (+ filtros/paginación)
-- [ ] P2.5 · /api/budgets
+### Fase 2 — Auth multi-usuario
+- [ ] P2.1 · JWT helpers + env (`JWT_SECRET`, `DATABASE_URL`)
+- [ ] P2.2 · register/login/logout/me + cookie JWT httpOnly + seed al registrar
+- [ ] P2.3 · middleware protege /api/* + rate-limit auth
 
-### Fase 3 — Auth
-- [ ] P3.1 · CLI hash argon2 + env vars
-- [ ] P3.2 · login/logout/me + cookie sesión
-- [ ] P3.3 · middleware protege /api/* + rate-limit login
+### Fase 3 — API CRUD (scoped por usuario)
+- [ ] P3.1 · zod + forma de error única
+- [ ] P3.2 · /api/accounts (aislado)
+- [ ] P3.3 · /api/categories (aislado)
+- [ ] P3.4 · /api/transactions (+ filtros/paginación, aislado)
+- [ ] P3.5 · /api/budgets (aislado)
 
 ### Fase 4 — Frontend base + i18n
 - [ ] P4.1 · router /{locale}/… + redirect / → /es
 - [ ] P4.2 · diccionario es + helper t()
 - [ ] P4.3 · React Query + api client + guard de auth
-- [ ] P4.4 · pantalla Login
-- [ ] P4.5 · layout + nav + toggle tema
+- [ ] P4.4 · pantallas Login + Registro
+- [ ] P4.5 · layout + nav + toggle tema + logout
 - [ ] P4.6 · Transacciones: tabla + alta/edición
 
 ### Fase 5 — Dashboard / stats / logo
@@ -79,13 +79,14 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ### Fase 8 — Despliegue
 - [ ] P8.1 · Dockerfile multi-stage
-- [ ] P8.2 · docker-compose + volumen + .env.example
-- [ ] P8.3 · verificación end-to-end (móvil + persistencia)
+- [ ] P8.2 · docker-compose app + postgres + .env.example
+- [ ] P8.3 · verificación end-to-end (móvil + persistencia + aislamiento)
 
 ### Fase 9 — Opcionales
 - [ ] P9.1 · PWA
 - [ ] P9.2 · export/backup
 - [ ] P9.3 · HTTPS/Caddy (savetowin.app)
+- [ ] P9.4 · cerrar registro (`REGISTRATION_OPEN`)
 
 ## Log
 
@@ -101,3 +102,5 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P1.3: Drizzle schema + migración `0000` (céntimos, fecha ISO, FKs).
 - 2026-08-02 · P1.4: client better-sqlite3 + migrate al arrancar (`DATABASE_PATH`).
 - 2026-08-02 · P1.5: seed idempotente (12 categorías + 7 cuentas). Fase 1 hecha.
+- 2026-08-02 · **Pivot:** multi-usuario + Postgres + JWT httpOnly; host sigue en server casero.
+  Reabiertos P1.2–P1.5. Auth pasa a Fase 2; CRUD a Fase 3. SQLite queda obsoleto.

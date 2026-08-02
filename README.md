@@ -1,21 +1,22 @@
 # saveToWin
 
-App personal y self-hosted para controlar **gastos y ahorros**: registras tus
-movimientos (a mano o importando CSV del banco), se categorizan, y un dashboard
-te da gráficos, estadísticas y conclusiones accionables. Corre en tu servidor
-casero y es accesible y sincronizada desde móvil y cualquier dispositivo.
+App **self-hosted multi-usuario** para controlar **gastos y ahorros**: cada
+persona se registra, mete movimientos (a mano o CSV del banco), categoriza, y
+ve un dashboard con gráficos, estadísticas y conclusiones. Corre en **tu
+servidor casero** (Docker Compose: app + Postgres); cualquiera con acceso puede
+crear cuenta y solo ve **sus** datos.
 
-Gratis: hardware propio, sin servicios de pago.
+Marca: **saveToWin** · dominio prod `savetowin.app`.
 
 ---
 
 ## Objetivo
 
-- Meter pagos/ingresos y **categorizarlos** (categorías y subcategorías).
-- **Sincronizado**: los datos viven en el servidor; cualquier dispositivo ve lo mismo.
-- Dashboard **visual**: gasto por categoría y mes, evolución, tasa de ahorro,
-  presupuesto vs real, mayores variaciones.
-- **Conclusiones** automáticas por reglas (ej.: "restaurantes +30% vs tu media").
+- Registro/login por usuario; datos aislados.
+- Meter pagos/ingresos y **categorizarlos**.
+- **Sincronizado** entre dispositivos de la misma cuenta.
+- Dashboard **visual**: gasto por categoría/mes, tasa de ahorro, presupuesto vs real.
+- **Conclusiones** automáticas por reglas.
 
 ---
 
@@ -27,70 +28,41 @@ Gratis: hardware propio, sin servicios de pago.
 | Datos (cliente) | TanStack Query | Cachea y refetchea → sensación de "sync" gratis |
 | Gráficos | Recharts | Declarativo, encaja con React |
 | Import | PapaParse | Parsear CSV del banco |
-| Backend | Node + TypeScript + Hono | Micro-framework TS; un proceso sirve API + frontend |
-| Base de datos | SQLite + Drizzle ORM | Un fichero, cero servidor extra; queries tipadas + migraciones |
-| Auth | 1 usuario, hash + cookie httpOnly | Mínimo seguro sobre la red |
-| Despliegue | Docker Compose | `docker compose up -d` en el servidor casero |
+| Backend | Node + TypeScript + Hono | Un proceso sirve API + frontend |
+| Base de datos | **PostgreSQL** + Drizzle ORM | Multi-usuario y concurrencia real |
+| Auth | Registro + login, argon2, **JWT en cookie httpOnly** | Sólido frente a XSS; sin token en JS |
+| Despliegue | Docker Compose (app + postgres) | Servidor casero |
 
 **Regla no negociable:** el dinero se guarda como **entero de céntimos**
-(`1234` = 12,34 €). Nunca floats — `0.1 + 0.2 !== 0.3`. El formateo a euros es
-solo de presentación.
+(`1234` = 12,34 €). Nunca floats. El formateo a euros es solo de presentación.
 
 ---
 
 ## Arquitectura
 
 ```
-  Móvil / PC / tablet          Servidor casero (Docker)
-  ┌───────────────┐            ┌──────────────────────────────┐
-  │  Navegador    │  HTTPS/    │  Contenedor Node               │
-  │  (React SPA)  │◄─────────► │  Hono:  /api/*  +  estáticos   │
-  └───────────────┘   LAN o    │            │                   │
-                      internet │            ▼                   │
-                               │      SQLite (data.db)          │
-                               │      en volumen persistente    │
-                               └──────────────────────────────┘
+  Móvil / PC / tablet          Servidor casero (Docker Compose)
+  ┌───────────────┐            ┌──────────────────────────────────┐
+  │  Navegador    │  HTTPS/    │  app (Node/Hono: /api + estáticos) │
+  │  (React SPA)  │◄─────────► │              │                    │
+  └───────────────┘   LAN o    │              ▼                    │
+                      internet │  db (PostgreSQL, volumen)         │
+                               └──────────────────────────────────┘
 ```
-
-Un único contenedor: el mismo proceso Node sirve el frontend compilado y la API.
-La "sincronización" es directa: no hay estado por dispositivo, todos leen/escriben
-la misma DB. Sin websockets ni offline-first por ahora (se refetchea al enfocar).
 
 ---
 
 ## Modelo de datos
 
 ```
-Account   id · nombre · tipo (efectivo/banco/ahorro) · saldo_inicial(céntimos)
-Category  id · nombre · color · icono · tipo (gasto/ingreso) · parent_id
-Transaction  id · fecha · importe(céntimos) · tipo · category_id · account_id · nota · tags
-Budget    id · category_id · periodo (mensual) · limite(céntimos)
+User         id · email · password_hash · name · created_at
+Account      id · user_id · key · label · color · name · initial_balance(céntimos)
+Category     id · user_id · key · label · color · type · parent_id
+Transaction  id · user_id · fecha · importe(céntimos) · type · category_id · account_id · nota · tags
+Budget       id · user_id · category_id · periodo · limite(céntimos)
 ```
 
----
-
-## Estructura del repo
-
-```
-saveToWin/
-├── docker-compose.yml        despliegue en el servidor casero
-├── Dockerfile                multi-stage: build web → build server → runtime
-├── shared/                   tipos TS compartidos web↔server (dinero, modelos)
-├── server/
-│   └── src/
-│       ├── db/               schema Drizzle, migraciones, conexión SQLite
-│       ├── routes/           transactions, categories, accounts, budgets, stats, auth
-│       ├── lib/              money.ts (céntimos), auth/sesión
-│       └── index.ts          arranca Hono, sirve API + estáticos
-└── web/
-    └── src/
-        ├── api/              cliente fetch tipado
-        ├── stats/            cálculo de insights/conclusiones
-        ├── ui/               formulario, tabla, dashboard, gráficos
-        └── app/              rutas + providers (React Query)
-```
-
-Monorepo con workspaces de npm para compartir tipos y no duplicar el modelo.
+Al registrarse, se siembran 12 categorías + 7 cuentas por defecto para ese usuario.
 
 ---
 
@@ -98,6 +70,7 @@ Monorepo con workspaces de npm para compartir tipos y no duplicar el modelo.
 
 ```bash
 npm install
+# Postgres local o: docker compose up db -d
 npm run dev        # web (Vite) + server en paralelo
 ```
 
@@ -107,37 +80,31 @@ npm run dev        # web (Vite) + server en paralelo
 docker compose up -d --build
 ```
 
-- La DB (`data.db`) se monta en un volumen → persiste entre reinicios y se
-  respalda copiando ese fichero.
-- Acceso desde móvil: por LAN basta la IP del servidor. Para acceso desde fuera
-  de casa, poner **Caddy** delante (HTTPS automático). Ver *Seguridad*.
+Datos en volumen Postgres. Acceso LAN por IP; hacia internet, **Caddy** (HTTPS).
 
 ---
 
 ## Seguridad
 
-- Un solo usuario. Contraseña **hasheada** (argon2), nunca en claro.
-- Sesión en cookie **httpOnly + SameSite**.
-- Si se expone a internet: **HTTPS obligatorio** (Caddy como reverse proxy con
-  TLS automático). En LAN aislada, HTTP es tolerable pero no recomendado.
+- Passwords con **argon2** (nunca en claro).
+- **JWT** de acceso en cookie **httpOnly + SameSite** (+ Secure en prod).
+- Rate-limit en register/login.
+- Aislamiento estricto por `userId` en toda la API.
+- Si se expone a internet: **HTTPS obligatorio**.
 
 ---
 
 ## Roadmap
 
-1. **MVP** — alta manual, categorías, tabla, dashboard (gasto por categoría/mes), auth.
-2. Presupuestos, objetivos de ahorro, import CSV del banco.
-3. Conclusiones automáticas, export/backup, PWA (instalable en el móvil).
+Ver `docs/IMPLEMENTATION_PLAN.md` y `docs/PROGRESS.md`.
 
-Fuera de alcance por ahora (YAGNI): multi-usuario, sync en tiempo real,
-categorización con IA. Se añaden si hacen falta.
+Fuera de alcance por ahora: OAuth, 2FA, billing, sync realtime, categorización con IA.
 
 ---
 
 ## Decisiones
 
-- **Self-hosted, no cloud**: gratis y datos bajo tu control.
-- **SQLite y no Postgres**: un usuario, un fichero, cero servidor de DB que mantener.
-  Se migra a Postgres solo si algún día hay concurrencia real.
-- **Un proceso sirve todo**: menos piezas que desplegar y vigilar.
+- **Self-hosted en server casero**, multi-usuario (no SaaS comercial de pago).
+- **Postgres** (no SQLite): varios usuarios concurrentes.
+- **JWT en cookie httpOnly** (no `localStorage`): mitiga XSS.
 - **Céntimos**: correctitud del dinero por encima de comodidad.

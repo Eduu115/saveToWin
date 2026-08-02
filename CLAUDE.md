@@ -1,9 +1,10 @@
 # saveToWin — reglas para agentes
 
-App personal **self-hosted** para controlar gastos y ahorros: registrar
-movimientos (manual o CSV), categorizar, y ver dashboard con gráficos y
-conclusiones. Corre en un servidor casero, accesible y sincronizada desde
-cualquier dispositivo. Marca: **saveToWin** · dominio prod `savetowin.app`.
+App **self-hosted multi-usuario** para controlar gastos y ahorros: registro de
+cuentas, movimientos (manual o CSV), categorización, dashboard con gráficos y
+conclusiones. Corre en un **servidor casero** (Docker Compose); cualquiera con
+acceso puede registrarse y usar su propio espacio de datos. Marca: **saveToWin**
+· dominio prod `savetowin.app`.
 
 **Antes de tocar nada, lee:** `docs/IMPLEMENTATION_PLAN.md` (qué hacer, por
 tareas con ID) y `docs/PROGRESS.md` (qué está hecho y qué toca ahora).
@@ -27,6 +28,9 @@ con `ponytail:` (nombra el techo y la vía de mejora).
 
 - **Dinero en céntimos** (`integer`). `parseAmountToCents` al entrar,
   `formatCents` (formato **es-ES**, `1.234,56 €`) al salir. Nunca floats.
+- **Aislamiento por usuario:** toda fila de dominio lleva `userId`; queries y
+  mutaciones **siempre** filtran por el usuario de la sesión. Nunca devolver
+  datos de otro usuario.
 - **Color solo por tokens** de `docs/tokens.css` (o clases Tailwind). Cero hex
   sueltos. El gasto usa `--expense` (= `--fg-2`): **no tiene color propio**.
 - **Accesibilidad:** el significado nunca solo por color — signo + flecha +
@@ -44,8 +48,10 @@ con `ponytail:` (nombra el techo y la vía de mejora).
 
 TypeScript · monorepo npm workspaces (`web/`, `server/`, `shared/`) · Frontend
 Vite + React + TanStack Query + Recharts + PapaParse · Backend Node + Hono (un
-proceso sirve API + estáticos) · DB SQLite + Drizzle (`better-sqlite3`) · Auth
-1 usuario argon2 + cookie · Deploy Docker Compose.
+proceso sirve API + estáticos) · DB **PostgreSQL** + Drizzle (`postgres` /
+`drizzle-orm`) · Auth **multi-usuario**: registro + login, password **argon2**,
+**JWT** en cookie **httpOnly** (+ Secure en prod, SameSite=Lax) · Deploy Docker
+Compose (**app + postgres**) en servidor casero.
 
 ## Dataset canónico (mockups y tests de `stats`)
 
