@@ -22,7 +22,7 @@ import { fetchStats } from '../api/stats'
 import { t } from '../i18n/t'
 import { categoryBgClass, categoryCssVar, categoryIcon } from '../ui/categoryMeta'
 import { computeEnvelopeBar, type EnvelopeStatus } from '../ui/envelopeBar'
-import { ProgressRing } from '../ui/ProgressRing'
+import { SavingsGoalCard } from '../ui/SavingsGoalCard'
 
 const MONTHS_ES = [
   'Enero',
@@ -463,41 +463,17 @@ export function BudgetsPage() {
           })}
         </section>
 
-        {/* Objetivo solo lectura — edición en P6.2 */}
-        <aside className="rounded-card border border-line bg-surface p-5 shadow-raised">
-          <div className="mb-4 text-[15px] font-bold">{t('dashboard.goal.title')}</div>
-          {stats.data ? (
-            <div className="flex items-center gap-5">
-              <div className="relative h-[116px] w-[116px] flex-none">
-                <ProgressRing
-                  percent={stats.data.goalProgressPercent}
-                  size={116}
-                  strokeWidth={5}
-                  tone="savings"
-                  aria-label={`${stats.data.goalProgressPercent} %`}
-                />
-                <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center gap-0.5">
-                  <span className="text-[23px] font-extrabold tabular-nums tracking-tight">
-                    {stats.data.goalProgressPercent} %
-                  </span>
-                  <span className="text-[10px] font-medium text-ink-2">
-                    {t('dashboard.goal.ofGoal')}
-                  </span>
-                </div>
-              </div>
-              <div className="flex flex-col gap-1.5">
-                <span className="text-2xl font-extrabold tabular-nums tracking-tight">
-                  {formatCents(stats.data.savedCents)}
-                </span>
-                <span className="text-[12.5px] font-medium leading-snug text-ink-2">
-                  {t('dashboard.goal.of')} {formatCents(stats.data.savingsGoalCents)}
-                </span>
-              </div>
-            </div>
-          ) : (
+        {/* Objetivo — Directions 12a */}
+        {stats.data ? (
+          <SavingsGoalCard
+            stats={stats.data}
+            rollOverCents={rollsOver > 0 ? rollsOver : 0}
+          />
+        ) : (
+          <aside className="rounded-card border border-line bg-surface p-5 shadow-raised">
             <p className="text-ink-2">{t('common.loading')}</p>
-          )}
-        </aside>
+          </aside>
+        )}
       </div>
 
       {open && (

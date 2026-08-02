@@ -126,6 +126,11 @@ export const es = {
   'budgets.invalidAmount': 'Importe no válido',
   'budgets.prevMonth': 'Mes anterior',
   'budgets.nextMonth': 'Mes siguiente',
+  'budgets.goal.edit': 'Editar',
+  'budgets.goal.target': 'Objetivo',
+  'budgets.goal.landing': 'Llegada',
+  'budgets.goal.move': 'Mover a ahorro',
+  'budgets.moveNote': 'Traspaso del sobrante de sobres',
   'import.title': 'Importar',
   'placeholder.comingSoon': 'Próximamente',
 } as const
