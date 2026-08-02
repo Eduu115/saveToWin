@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowLeftRight, LayoutDashboard, LogOut, Moon, Sun, Target, Upload } from 'lucide-react'
+import { ArrowLeftRight, LayoutDashboard, LogOut, Moon, Settings, Sun, Target, Upload } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom'
 import { logout } from '../api/auth'
@@ -39,6 +39,7 @@ const nav = [
   { to: 'transactions', label: 'nav.transactions' as const, Icon: ArrowLeftRight },
   { to: 'budgets', label: 'nav.budgets' as const, Icon: Target },
   { to: 'import', label: 'nav.import' as const, Icon: Upload },
+  { to: 'settings', label: 'nav.settings' as const, Icon: Settings },
 ]
 
 function currentPeriod(): string {

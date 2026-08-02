@@ -8,6 +8,7 @@ import { BudgetsPage } from './pages/BudgetsPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { ImportPage } from './pages/ImportPage'
 import { LocaleLayout } from './pages/LocaleLayout'
+import { SettingsPage } from './pages/SettingsPage'
 import { TransactionsPage } from './pages/TransactionsPage'
 
 const queryClient = new QueryClient({
@@ -35,6 +36,7 @@ export function App() {
                 <Route path="transactions" element={<TransactionsPage />} />
                 <Route path="budgets" element={<BudgetsPage />} />
                 <Route path="import" element={<ImportPage />} />
+                <Route path="settings" element={<SettingsPage />} />
               </Route>
             </Route>
           </Route>
