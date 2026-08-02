@@ -7,7 +7,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 1 — Dominio y datos (retrabajo Postgres + multi-usuario)
-- **Próxima tarea:** `P1.4` — db client DATABASE_URL + migrate al arrancar
+- **Próxima tarea:** `P1.5` — seed por usuario (12 categorías + 7 cuentas)
 
 ## Tablero de fases
 
@@ -38,7 +38,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P1.1 · money.ts + money.test.ts
 - [x] P1.2 · shared/types.ts (`User` + entidades con `userId`)
 - [x] P1.3 · Drizzle schema **Postgres** (users + FKs + userId)
-- [ ] P1.4 · db client `DATABASE_URL` + migrate al arrancar
+- [x] P1.4 · db client `DATABASE_URL` + migrate al arrancar
 - [ ] P1.5 · seed **por usuario** (12 categorías + 7 cuentas)
 
 ### Fase 2 — Auth multi-usuario
@@ -106,3 +106,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
   Reabiertos P1.2–P1.5. Auth pasa a Fase 2; CRUD a Fase 3. SQLite queda obsoleto.
 - 2026-08-02 · P1.2: types con `User` + `userId` en entidades de dominio.
 - 2026-08-02 · P1.3: schema Drizzle Postgres + migración; SQLite eliminado.
+- 2026-08-02 · P1.4: client Postgres (`DATABASE_URL`) + migrate al arrancar; compose `db` en :5433.

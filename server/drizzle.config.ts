@@ -5,6 +5,6 @@ export default defineConfig({
   out: './db/migrations',
   dialect: 'postgresql',
   dbCredentials: {
-    url: process.env.DATABASE_URL ?? 'postgres://savetowin:savetowin@localhost:5432/savetowin',
+    url: process.env.DATABASE_URL ?? 'postgres://savetowin:savetowin@localhost:5433/savetowin',
   },
 })

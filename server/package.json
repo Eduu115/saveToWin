@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc && mkdir -p dist/db && cp -R db/migrations dist/db/migrations",
+    "build": "tsc && rm -rf dist/db/migrations && mkdir -p dist/db && cp -R db/migrations dist/db/migrations",
     "start": "node dist/src/index.js",
     "db:generate": "drizzle-kit generate"
   },
