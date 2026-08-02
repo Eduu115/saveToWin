@@ -1,0 +1,62 @@
+import { api } from './client'
+import type { Account, Category, Transaction } from '../domain'
+
+export function listTransactions(params: {
+  from?: string
+  to?: string
+  limit?: number
+  offset?: number
+}) {
+  const q = new URLSearchParams()
+  if (params.from) q.set('from', params.from)
+  if (params.to) q.set('to', params.to)
+  if (params.limit) q.set('limit', String(params.limit))
+  if (params.offset) q.set('offset', String(params.offset))
+  const qs = q.toString()
+  return api<{ items: Transaction[]; total: number }>(
+    `/api/transactions${qs ? `?${qs}` : ''}`,
+  )
+}
+
+export function createTransaction(body: {
+  date: string
+  amount: number
+  type: 'expense' | 'income'
+  categoryId: number
+  accountId: number
+  note?: string | null
+}) {
+  return api<Transaction>('/api/transactions', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
+}
+
+export function updateTransaction(
+  id: number,
+  body: Partial<{
+    date: string
+    amount: number
+    type: 'expense' | 'income'
+    categoryId: number
+    accountId: number
+    note: string | null
+  }>,
+) {
+  return api<Transaction>(`/api/transactions/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(body),
+  })
+}
+
+export function deleteTransaction(id: number) {
+  return api<{ ok: true }>(`/api/transactions/${id}`, { method: 'DELETE' })
+}
+
+export function listCategories() {
+  return api<{ items: Category[] }>('/api/categories')
+}
+
+export function listAccounts() {
+  return api<{ items: Account[] }>('/api/accounts')
+}

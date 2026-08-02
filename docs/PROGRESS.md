@@ -6,8 +6,8 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ## Cursor
 
-- **Fase actual:** Fase 4 — Frontend base + i18n
-- **Próxima tarea:** `P4.6` — Transacciones: tabla + alta/edición
+- **Fase actual:** Fase 5 — Dashboard / stats / logo
+- **Próxima tarea:** `P5.1` — módulo stats + stats.test.ts
 
 ## Tablero de fases
 
@@ -17,7 +17,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 | 1 · Dominio y datos | ✅ hecha |
 | 2 · Auth multi-usuario | ✅ hecha |
 | 3 · API CRUD (scoped) | ✅ hecha |
-| 4 · Frontend base + i18n | 🔄 en curso |
+| 4 · Frontend base + i18n | ✅ hecha |
 | 5 · Dashboard / stats / logo | ⬜ pendiente |
 | 6 · Presupuestos y ahorro | ⬜ pendiente |
 | 7 · Import CSV | ⬜ pendiente |
@@ -59,7 +59,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P4.3 · React Query + api client + guard de auth
 - [x] P4.4 · pantallas Login + Registro
 - [x] P4.5 · layout + nav + toggle tema + logout
-- [ ] P4.6 · Transacciones: tabla + alta/edición
+- [x] P4.6 · Transacciones: tabla + alta/edición
 
 ### Fase 5 — Dashboard / stats / logo
 - [ ] P5.1 · módulo stats + stats.test.ts (dataset canónico)
@@ -121,3 +121,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P4.3: React Query + api client + AuthGuard.
 - 2026-08-02 · P4.4: pantallas Login y Registro.
 - 2026-08-02 · P4.5: layout, nav, tema y logout.
+- 2026-08-02 · P4.6: UI transacciones (tabla + alta/edición). Fase 4 hecha.

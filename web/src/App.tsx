@@ -6,7 +6,7 @@ import { t } from './i18n/t'
 import { AppLayout } from './layout/AppLayout'
 import { AuthPage } from './pages/AuthPage'
 import { LocaleLayout } from './pages/LocaleLayout'
-import { PlaceholderPage } from './pages/PlaceholderPage'
+import { TransactionsPage } from './pages/TransactionsPage'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -39,7 +39,7 @@ export function App() {
               <Route element={<AppLayout />}>
                 <Route index element={<Navigate to="dashboard" replace />} />
                 <Route path="dashboard" element={<SimplePage title={t('dashboard.title')} />} />
-                <Route path="transactions" element={<PlaceholderPage titleKey="transactions.title" />} />
+                <Route path="transactions" element={<TransactionsPage />} />
                 <Route path="budgets" element={<SimplePage title={t('budgets.title')} />} />
                 <Route path="import" element={<SimplePage title={t('import.title')} />} />
               </Route>
