@@ -6,8 +6,8 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ## Cursor
 
-- **Fase actual:** Fase 3 — API CRUD (scoped)
-- **Próxima tarea:** `P3.5` — /api/budgets
+- **Fase actual:** Fase 4 — Frontend base + i18n
+- **Próxima tarea:** `P4.1` — router /{locale}/… + redirect / → /es
 
 ## Tablero de fases
 
@@ -16,7 +16,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 | 0 · Scaffold y tooling | ✅ hecha |
 | 1 · Dominio y datos | ✅ hecha |
 | 2 · Auth multi-usuario | ✅ hecha |
-| 3 · API CRUD (scoped) | 🔄 en curso |
+| 3 · API CRUD (scoped) | ✅ hecha |
 | 4 · Frontend base + i18n | ⬜ pendiente |
 | 5 · Dashboard / stats / logo | ⬜ pendiente |
 | 6 · Presupuestos y ahorro | ⬜ pendiente |
@@ -51,7 +51,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P3.2 · /api/accounts (aislado)
 - [x] P3.3 · /api/categories (aislado)
 - [x] P3.4 · /api/transactions (+ filtros/paginación, aislado)
-- [ ] P3.5 · /api/budgets (aislado)
+- [x] P3.5 · /api/budgets (aislado)
 
 ### Fase 4 — Frontend base + i18n
 - [ ] P4.1 · router /{locale}/… + redirect / → /es
@@ -115,3 +115,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P3.2: `/api/accounts` CRUD scoped por usuario.
 - 2026-08-02 · P3.3: `/api/categories` CRUD scoped por usuario.
 - 2026-08-02 · P3.4: `/api/transactions` con filtros y paginación.
+- 2026-08-02 · P3.5: `/api/budgets` CRUD scoped. Fase 3 hecha.
