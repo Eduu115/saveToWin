@@ -6,8 +6,8 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ## Cursor
 
-- **Fase actual:** Fase 6 — Presupuestos y ahorro
-- **Próxima tarea:** `P6.2` — objetivo de ahorro + seguimiento
+- **Fase actual:** Fase 7 — Import CSV
+- **Próxima tarea:** `P7.1` — subida + PapaParse + mapeo de columnas
 
 ## Tablero de fases
 
@@ -19,7 +19,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 | 3 · API CRUD (scoped) | ✅ hecha |
 | 4 · Frontend base + i18n | ✅ hecha |
 | 5 · Dashboard / stats / logo | ✅ hecha |
-| 6 · Presupuestos y ahorro | 🔄 en curso |
+| 6 · Presupuestos y ahorro | ✅ hecha |
 | 7 · Import CSV | ⬜ pendiente |
 | 8 · Despliegue (app + Postgres) | ⬜ pendiente |
 | 9 · Opcionales | ⬜ pendiente |
@@ -69,7 +69,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ### Fase 6 — Presupuestos y ahorro
 - [x] P6.1 · UI presupuestos (over/under con icono+texto)
-- [ ] P6.2 · objetivo de ahorro + seguimiento
+- [x] P6.2 · objetivo de ahorro + seguimiento
 
 ### Fase 7 — Import CSV
 - [ ] P7.1 · subida + PapaParse + mapeo de columnas
@@ -130,3 +130,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P5.3: Recharts gasto mensual + ranking categorías; estados vacío/carga/un punto (11b).
 - 2026-08-02 · P5.4: conclusiones por reglas (over / heads-up / on-track); Fase 5 hecha.
 - 2026-08-02 · P6.1: UI presupuestos Envelopes (12a) con estados Over/Justo/% + alta/edición.
+- 2026-08-02 · P6.2: objetivo editable + progreso real (Savings) + mover sobrante; Fase 6 hecha.
