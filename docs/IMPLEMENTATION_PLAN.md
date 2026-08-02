@@ -229,6 +229,8 @@ requieren cookie JWT.
 | POST/PATCH/DELETE | `/transactions[/:id]` | scoped |
 | POST | `/transactions/batch` | `{ items, skipDuplicates? }` → insert scoped + dedupe |
 | GET/POST/PATCH/DELETE | `/budgets[/:id]` | scoped |
+| GET | `/auth/registration` | `{ open }` (sin auth) |
+| GET/POST | `/backup` | export / restore JSON del user |
 | GET | `/stats` | `?period=YYYY-MM` → KPIs + objetivo + racha |
 | GET | `/health` | `{ ok: true }` (sin auth) |
 

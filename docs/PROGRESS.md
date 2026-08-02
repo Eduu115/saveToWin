@@ -6,8 +6,8 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ## Cursor
 
-- **Fase actual:** Fase 9 — Opcionales (solo si se piden)
-- **Próxima tarea:** ninguna obligatoria; plan core cerrado
+- **Fase actual:** — (plan completo)
+- **Próxima tarea:** ninguna
 
 ## Tablero de fases
 
@@ -22,7 +22,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 | 6 · Presupuestos y ahorro | ✅ hecha |
 | 7 · Import CSV | ✅ hecha |
 | 8 · Despliegue (app + Postgres) | ✅ hecha |
-| 9 · Opcionales | ⬜ pendiente |
+| 9 · Opcionales | ✅ hecha |
 
 ## Checklist (detalle en `docs/IMPLEMENTATION_PLAN.md` por ID)
 
@@ -83,10 +83,10 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P8.3 · verificación end-to-end (móvil + persistencia + aislamiento)
 
 ### Fase 9 — Opcionales
-- [ ] P9.1 · PWA
-- [ ] P9.2 · export/backup
-- [ ] P9.3 · HTTPS/Caddy (savetowin.app)
-- [ ] P9.4 · cerrar registro (`REGISTRATION_OPEN`)
+- [x] P9.1 · PWA
+- [x] P9.2 · export/backup
+- [x] P9.3 · HTTPS/Caddy (savetowin.app)
+- [x] P9.4 · cerrar registro (`REGISTRATION_OPEN`)
 
 ## Log
 
@@ -134,3 +134,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P7.1: PapaParse + detección CSV (ES/US) + UI subida/mapeo (Directions 7a/7b).
 - 2026-08-02 · P7.2–P7.4: preview + batch + dedupe + reglas; Fase 7 hecha.
 - 2026-08-02 · P8.1–P8.3: Dockerfile + compose app/db; e2e health, aislamiento, persistencia, dedupe; plan core cerrado.
+- 2026-08-02 · P9.1–P9.4: PWA, backup JSON, Caddy HTTPS, REGISTRATION_OPEN; plan completo.
