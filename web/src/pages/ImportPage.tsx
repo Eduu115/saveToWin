@@ -16,10 +16,12 @@ import {
   X,
 } from 'lucide-react'
 import { useCallback, useRef, useState, type DragEvent } from 'react'
-import { listAccounts } from '../api/transactions'
+import { listAccounts, listCategories, listTransactions } from '../api/transactions'
 import { firstValues, normalizeHeader, uniquifyRoles } from '../import/guess'
 import { bumpMappingUse, loadSavedMappings, saveMapping } from '../import/mappingsStore'
+import { buildImportDrafts, dupKey, type ImportDraft } from '../import/mapRows'
 import { parseBankCsv, type ParseOverrides } from '../import/parseBankCsv'
+import { loadLearnedRules } from '../import/rulesStore'
 import type {
   ColumnRole,
   CsvDelimiter,
@@ -30,8 +32,9 @@ import type {
   SavedMapping,
 } from '../import/types'
 import { t } from '../i18n/t'
+import { ImportReview } from './ImportReview'
 
-type Step = 'upload' | 'map'
+type Step = 'upload' | 'map' | 'review'
 
 const ROLES: ColumnRole[] = ['date', 'description', 'amount', 'note', 'ignore']
 
@@ -87,15 +90,18 @@ export function ImportPage() {
   const [savedList, setSavedList] = useState(() => loadSavedMappings())
   const [activeSavedId, setActiveSavedId] = useState<string | null>(null)
   const [pendingSaved, setPendingSaved] = useState<SavedMapping | null>(null)
-  const [mapReadyHint, setMapReadyHint] = useState(false)
+  const [drafts, setDrafts] = useState<ImportDraft[]>([])
+  const [learn, setLearn] = useState(true)
+  const [doneMsg, setDoneMsg] = useState<string | null>(null)
 
   const accounts = useQuery({ queryKey: ['accounts'], queryFn: listAccounts })
+  const categories = useQuery({ queryKey: ['categories'], queryFn: listCategories })
 
   const runParse = useCallback(
     async (f: File, overrides?: ParseOverrides, saved?: SavedMapping) => {
       setBusy(true)
       setError(null)
-      setMapReadyHint(false)
+      setDoneMsg(null)
       try {
         const result = await parseBankCsv(f, overrides)
         setFile(f)
@@ -161,7 +167,6 @@ export function ImportPage() {
       next[index] = role
       return uniquifyRoles(next)
     })
-    setMapReadyHint(false)
   }
 
   function cancelImport() {
@@ -171,9 +176,9 @@ export function ImportPage() {
     setRoles([])
     setError(null)
     setShowDetection(false)
-    setMapReadyHint(false)
     setActiveSavedId(null)
     setPendingSaved(null)
+    setDrafts([])
   }
 
   function reparseWith(overrides: ParseOverrides) {
@@ -189,11 +194,37 @@ export function ImportPage() {
     return roles.includes('date') && roles.includes('amount')
   }
 
-  function onContinuePreview() {
+  async function loadExistingKeys(from: string, to: string) {
+    const keys = new Set<string>()
+    let offset = 0
+    for (;;) {
+      const page = await listTransactions({ from, to, limit: 100, offset })
+      for (const tx of page.items) {
+        keys.add(dupKey(tx.date, tx.amount, tx.note ?? ''))
+      }
+      offset += page.items.length
+      if (offset >= page.total || page.items.length === 0) break
+    }
+    return keys
+  }
+
+  async function onContinuePreview() {
     if (!parsed || !mappingValid()) {
       setError(t('import.error.needDateAmount'))
       return
     }
+    const accId = Number(accountId)
+    const cats = categories.data?.items
+    if (!Number.isInteger(accId) || !cats?.length) {
+      setError(t('common.error'))
+      return
+    }
+    const other = cats.find((c) => c.key === 'Other')
+    if (!other) {
+      setError(t('common.error'))
+      return
+    }
+
     if (remember && mappingName.trim()) {
       const rolesByHeader: Record<string, ColumnRole> = {}
       parsed.headers.forEach((h, i) => {
@@ -211,8 +242,67 @@ export function ImportPage() {
       })
       setSavedList(loadSavedMappings())
     }
+
+    setBusy(true)
     setError(null)
-    setMapReadyHint(true)
+    try {
+      const byKey = new Map(cats.map((c) => [c.key, c.id]))
+      const bare = buildImportDrafts({
+        parsed,
+        roles,
+        accountId: accId,
+        categoriesByKey: byKey,
+        otherCategoryId: other.id,
+        learned: loadLearnedRules(),
+        existingKeys: new Set(),
+      })
+      const dates = bare.map((d) => d.date).sort()
+      const existingKeys =
+        dates.length > 0
+          ? await loadExistingKeys(dates[0]!, dates[dates.length - 1]!)
+          : new Set<string>()
+      const next = buildImportDrafts({
+        parsed,
+        roles,
+        accountId: accId,
+        categoriesByKey: byKey,
+        otherCategoryId: other.id,
+        learned: loadLearnedRules(),
+        existingKeys,
+      })
+      if (next.length === 0) {
+        setError(t('import.error.noRows'))
+        return
+      }
+      setDrafts(next)
+      setStep('review')
+    } catch {
+      setError(t('common.error'))
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  if (step === 'review') {
+    return (
+      <div className="flex flex-col gap-4">
+        <StepRail current={3} />
+        <ImportReview
+          drafts={drafts}
+          setDrafts={setDrafts}
+          categories={categories.data?.items ?? []}
+          accounts={accounts.data?.items ?? []}
+          learn={learn}
+          setLearn={setLearn}
+          onBack={() => setStep('map')}
+          onCancel={cancelImport}
+          onDone={(inserted) => {
+            cancelImport()
+            setDoneMsg(String(inserted))
+          }}
+        />
+      </div>
+    )
   }
 
   if (step === 'map' && parsed) {
@@ -488,11 +578,6 @@ export function ImportPage() {
                 {error}
               </p>
             )}
-            {mapReadyHint && (
-              <p className="rounded-[14px] border border-[color:var(--savings-border)] bg-savings-weak px-4 py-3 text-[13px] text-savings">
-                {t('import.mapReady')}
-              </p>
-            )}
 
             <div className="flex gap-2.5">
               <button
@@ -504,8 +589,8 @@ export function ImportPage() {
               </button>
               <button
                 type="button"
-                onClick={onContinuePreview}
-                disabled={!mappingValid()}
+                onClick={() => void onContinuePreview()}
+                disabled={!mappingValid() || busy}
                 className="flex h-[52px] flex-[1.6] items-center justify-center gap-2 rounded-[15px] bg-accent text-[13.5px] font-bold text-accent-fg shadow-accent disabled:opacity-40"
               >
                 {t('import.previewPrefix')} {parsed.rows.length} {t('import.previewSuffix')}
@@ -526,6 +611,12 @@ export function ImportPage() {
       </div>
 
       <StepRail current={1} />
+
+      {doneMsg && (
+        <p className="rounded-[14px] border border-[color:var(--savings-border)] bg-savings-weak px-4 py-3 text-[13px] text-savings">
+          {t('import.donePrefix')} {doneMsg} {t('import.doneSuffix')}
+        </p>
+      )}
 
       <div className="grid gap-3.5 lg:grid-cols-[1.75fr_1fr]">
         <div
