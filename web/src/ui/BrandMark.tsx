@@ -1,43 +1,31 @@
-/** Anillo de marca (versión simple; el generativo completo llega en P5.2). */
+import { ProgressRing, type ProgressRingTone } from './ProgressRing'
+
+/** Marca = anillo generativo (Directions 14a). El arco es el % del objetivo. */
 export function BrandMark({
+  percent = 70,
   size = 30,
+  strokeWidth,
+  tone = 'brand',
   className = '',
 }: {
+  /** % del objetivo de ahorro (entero). Default 70 = dataset canónico en login. */
+  percent?: number
   size?: number
+  strokeWidth?: number
+  tone?: ProgressRingTone
   className?: string
 }) {
-  const stroke = Math.max(2.5, size * 0.12)
-  const r = (size - stroke) / 2
-  const c = 2 * Math.PI * r
-  const progress = 0.7
+  const sw =
+    strokeWidth ??
+    (size >= 40 ? 8 : size >= 28 ? 7 : size >= 20 ? 9 : 10)
+
   return (
-    <svg
-      width={size}
-      height={size}
-      viewBox={`0 0 ${size} ${size}`}
+    <ProgressRing
+      percent={percent}
+      size={size}
+      strokeWidth={sw}
+      tone={tone}
       className={className}
-      aria-hidden
-    >
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={r}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={stroke}
-        opacity={0.28}
-      />
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={r}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={stroke}
-        strokeLinecap="round"
-        strokeDasharray={`${c * progress} ${c}`}
-        transform={`rotate(-90 ${size / 2} ${size / 2})`}
-      />
-    </svg>
+    />
   )
 }

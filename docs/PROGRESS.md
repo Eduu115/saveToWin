@@ -7,7 +7,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 5 — Dashboard / stats / logo
-- **Próxima tarea:** `P5.2` — KPIs + anillo generativo (logo/favicon/objetivo)
+- **Próxima tarea:** `P5.3` — gráficos Recharts + estados
 
 ## Tablero de fases
 
@@ -63,7 +63,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ### Fase 5 — Dashboard / stats / logo
 - [x] P5.1 · módulo stats + stats.test.ts (dataset canónico)
-- [ ] P5.2 · KPIs + anillo generativo (logo/favicon/objetivo)
+- [x] P5.2 · KPIs + anillo generativo (logo/favicon/objetivo)
 - [ ] P5.3 · gráficos Recharts + estados
 - [ ] P5.4 · conclusiones por reglas
 
@@ -125,3 +125,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · Fix UI: login/registro según Directions 8a/8b (split terracota + slogan).
 - 2026-08-02 · Regla dura: UI solo según Directions (CLAUDE.md).
 - 2026-08-02 · P5.1: `shared/stats.ts` + vitest dataset canónico julio 2026 (todos los KPIs cuadran).
+- 2026-08-02 · P5.2: anillo generativo 14a (logo/favicon/KPI), GET `/api/stats`, dashboard 1b (hero+objetivo+KPIs).

@@ -1,12 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { ArrowRight, CircleAlert, Eye, EyeOff, Lock, Server } from 'lucide-react'
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { login, register } from '../api/auth'
 import { ApiClientError } from '../api/client'
 import { DEFAULT_LOCALE } from '../i18n/locales'
 import { t } from '../i18n/t'
 import { BrandMark } from '../ui/BrandMark'
+import { setFaviconPercent } from '../ui/ProgressRing'
 
 type Mode = 'login' | 'register'
 
@@ -19,6 +20,10 @@ export function AuthPage({ mode }: { mode: Mode }) {
   const [name, setName] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    setFaviconPercent(70)
+  }, [])
 
   const mutation = useMutation({
     mutationFn: () =>
@@ -52,7 +57,7 @@ export function AuthPage({ mode }: { mode: Mode }) {
     <div className="flex flex-col justify-between bg-accent px-6 pb-8 pt-8 text-accent-fg md:w-[min(100%,620px)] md:flex-none md:px-14 md:py-14">
       <div className="flex items-center gap-3">
         <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-accent-fg text-accent md:h-[30px]">
-          <BrandMark size={22} />
+          <BrandMark percent={70} size={22} tone="brand" />
         </span>
         <span className="text-[17px] font-bold tracking-tight md:text-[19px]">{t('app.name')}</span>
       </div>

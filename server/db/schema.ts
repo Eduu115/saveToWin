@@ -18,6 +18,8 @@ export const users = pgTable('users', {
   email: text('email').notNull().unique(),
   passwordHash: text('password_hash').notNull(),
   name: text('name'),
+  /** Objetivo de ahorro (céntimos). Default canónico 12.000 €. */
+  savingsGoalCents: integer('savings_goal_cents').notNull().default(1_200_000),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
     .notNull()
     .default(sql`now()`),

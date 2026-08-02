@@ -1,10 +1,13 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ArrowLeftRight, LayoutDashboard, LogOut, Moon, Sun, Target, Upload } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom'
 import { logout } from '../api/auth'
+import { fetchStats } from '../api/stats'
 import { DEFAULT_LOCALE } from '../i18n/locales'
 import { t } from '../i18n/t'
+import { BrandMark } from '../ui/BrandMark'
+import { setFaviconPercent } from '../ui/ProgressRing'
 
 type Theme = 'light' | 'dark'
 
@@ -38,14 +41,31 @@ const nav = [
   { to: 'import', label: 'nav.import' as const, Icon: Upload },
 ]
 
+function currentPeriod(): string {
+  const d = new Date()
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`
+}
+
 export function AppLayout() {
   const { locale = DEFAULT_LOCALE } = useParams()
   const navigate = useNavigate()
   const qc = useQueryClient()
+  const period = currentPeriod()
+
+  const { data: stats } = useQuery({
+    queryKey: ['stats', period],
+    queryFn: () => fetchStats(period),
+  })
+  const goalPercent = stats?.goalProgressPercent ?? 0
+
+  useEffect(() => {
+    setFaviconPercent(goalPercent)
+  }, [goalPercent])
 
   const logoutMutation = useMutation({
     mutationFn: logout,
     onSettled: async () => {
+      setFaviconPercent(70)
       await qc.clear()
       navigate(`/${locale}/login`, { replace: true })
     },
@@ -61,7 +81,10 @@ export function AppLayout() {
       <header className="border-b border-line bg-surface px-4 py-3">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3">
           <div className="flex flex-wrap items-center gap-2">
-            <span className="mr-2 text-lg font-extrabold tracking-tight">{t('app.name')}</span>
+            <div className="mr-2 flex items-center gap-2.5">
+              <BrandMark percent={goalPercent} size={24} />
+              <span className="text-base font-bold tracking-tight">{t('app.name')}</span>
+            </div>
             <nav className="flex flex-wrap gap-1" aria-label="Principal">
               {nav.map(({ to, label, Icon }) => (
                 <NavLink key={to} to={`/${locale}/${to}`} className={linkClass}>

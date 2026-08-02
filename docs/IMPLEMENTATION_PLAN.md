@@ -227,6 +227,7 @@ requieren cookie JWT.
 | GET | `/transactions` | `?from&to&…` → `{items,total}` scoped |
 | POST/PATCH/DELETE | `/transactions[/:id]` | scoped |
 | GET/POST/PATCH/DELETE | `/budgets[/:id]` | scoped |
+| GET | `/stats` | `?period=YYYY-MM` → KPIs + objetivo + racha |
 | GET | `/health` | `{ ok: true }` (sin auth) |
 
 ## Definición de "hecho" (global)

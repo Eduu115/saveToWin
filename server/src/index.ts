@@ -14,6 +14,7 @@ const { accountsRoutes } = await import('./routes/accounts.js')
 const { categoriesRoutes } = await import('./routes/categories.js')
 const { transactionsRoutes } = await import('./routes/transactions.js')
 const { budgetsRoutes } = await import('./routes/budgets.js')
+const { statsRoutes } = await import('./routes/stats.js')
 
 export type {
   Account,
@@ -35,6 +36,7 @@ app.route('/api/accounts', accountsRoutes)
 app.route('/api/categories', categoriesRoutes)
 app.route('/api/transactions', transactionsRoutes)
 app.route('/api/budgets', budgetsRoutes)
+app.route('/api/stats', statsRoutes)
 
 // ponytail: solo monta estáticos si hay build de web (dev API-only no tiene public/)
 if (existsSync('./public')) {

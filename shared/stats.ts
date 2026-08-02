@@ -78,6 +78,49 @@ export function divRound(numerator: number, denominator: number): number {
   return -Math.trunc((-numerator + Math.trunc(denominator / 2)) / denominator)
 }
 
+/** Progreso del objetivo 0–100+ (entero %). */
+export function computeGoalProgressPercent(
+  savedCents: number,
+  savingsGoalCents: number,
+): number {
+  assertIntegerCents(savedCents, 'savedCents')
+  assertIntegerCents(savingsGoalCents, 'savingsGoalCents')
+  if (savingsGoalCents === 0) return 0
+  return divRound(savedCents * 100, savingsGoalCents)
+}
+
+/**
+ * Meses consecutivos con balance > 0 hacia atrás desde `period` (incluido).
+ * `monthlyBalances`: mapa `YYYY-MM` → balance en céntimos.
+ */
+export function computeSavingsStreak(
+  monthlyBalances: ReadonlyMap<string, number>,
+  period: string,
+): number {
+  let streak = 0
+  let cursor = period
+  for (;;) {
+    const bal = monthlyBalances.get(cursor)
+    if (bal === undefined || bal <= 0) break
+    streak += 1
+    cursor = previousPeriod(cursor)
+  }
+  return streak
+}
+
+/** Periodo anterior `YYYY-MM`. */
+export function previousPeriod(period: string): string {
+  const m = /^(\d{4})-(\d{2})$/.exec(period)
+  if (!m) throw new Error(`periodo inválido: ${period}`)
+  let year = Number(m[1])
+  let month = Number(m[2]) - 1
+  if (month < 1) {
+    month = 12
+    year -= 1
+  }
+  return `${year}-${String(month).padStart(2, '0')}`
+}
+
 /** Stats del periodo filtrando por `YYYY-MM`. */
 export function computePeriodStats(input: ComputePeriodStatsInput): PeriodStats {
   const {
@@ -112,10 +155,7 @@ export function computePeriodStats(input: ComputePeriodStatsInput): PeriodStats 
   const savingsRateTenths =
     incomeCents === 0 ? 0 : divRound(balanceCents * 1000, incomeCents)
 
-  const goalProgressPercent =
-    savingsGoalCents === 0
-      ? 0
-      : divRound(savedCents * 100, savingsGoalCents)
+  const goalPct = computeGoalProgressPercent(savedCents, savingsGoalCents)
 
   const budgetRemainingCents = budgetLimitCents - expenseCents
   const budgetUsedPercent =
@@ -135,7 +175,7 @@ export function computePeriodStats(input: ComputePeriodStatsInput): PeriodStats 
     savingsRateTenths,
     savedCents,
     savingsGoalCents,
-    goalProgressPercent,
+    goalProgressPercent: goalPct,
     budgetLimitCents,
     budgetRemainingCents,
     budgetUsedPercent,

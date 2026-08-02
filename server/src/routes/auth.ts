@@ -16,6 +16,7 @@ function toPublicUser(row: typeof users.$inferSelect) {
     email: row.email,
     name: row.name,
     createdAt: row.createdAt,
+    savingsGoalCents: row.savingsGoalCents,
   }
 }
 

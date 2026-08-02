@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   computePeriodStats,
+  computeSavingsStreak,
   daysInPeriod,
   divRound,
   type StatsTransaction,
@@ -95,6 +96,25 @@ describe('computePeriodStats — dataset canónico julio 2026', () => {
   it('media diaria 61,72 €', () => {
     expect(stats.daysInPeriod).toBe(31)
     expect(stats.dailyAverageCents).toBe(6_172)
+  })
+})
+
+describe('computeSavingsStreak', () => {
+  it('cuenta meses consecutivos en positivo', () => {
+    const map = new Map([
+      ['2026-05', 10_000],
+      ['2026-06', 20_000],
+      ['2026-07', 72_655],
+    ])
+    expect(computeSavingsStreak(map, '2026-07')).toBe(3)
+  })
+
+  it('corta en mes ≤ 0 o ausente', () => {
+    const map = new Map([
+      ['2026-06', -100],
+      ['2026-07', 72_655],
+    ])
+    expect(computeSavingsStreak(map, '2026-07')).toBe(1)
   })
 })
 

@@ -5,6 +5,7 @@ import { DEFAULT_LOCALE } from './i18n/locales'
 import { t } from './i18n/t'
 import { AppLayout } from './layout/AppLayout'
 import { AuthPage } from './pages/AuthPage'
+import { DashboardPage } from './pages/DashboardPage'
 import { LocaleLayout } from './pages/LocaleLayout'
 import { TransactionsPage } from './pages/TransactionsPage'
 
@@ -38,7 +39,7 @@ export function App() {
             <Route element={<AuthGuard />}>
               <Route element={<AppLayout />}>
                 <Route index element={<Navigate to="dashboard" replace />} />
-                <Route path="dashboard" element={<SimplePage title={t('dashboard.title')} />} />
+                <Route path="dashboard" element={<DashboardPage />} />
                 <Route path="transactions" element={<TransactionsPage />} />
                 <Route path="budgets" element={<SimplePage title={t('budgets.title')} />} />
                 <Route path="import" element={<SimplePage title={t('import.title')} />} />

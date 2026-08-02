@@ -1,0 +1,1 @@
+ALTER TABLE "users" ADD COLUMN "savings_goal_cents" integer DEFAULT 1200000 NOT NULL;

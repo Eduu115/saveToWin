@@ -8,6 +8,13 @@
       "when": 1785677081960,
       "tag": "0000_perpetual_silver_fox",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1785679895764,
+      "tag": "0001_normal_grandmaster",
+      "breakpoints": true
     }
   ]
 }

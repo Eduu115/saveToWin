@@ -23,6 +23,8 @@ export interface User {
   name: string | null
   /** ISO datetime */
   createdAt: string
+  /** Objetivo de ahorro (céntimos). Default 12.000 €. */
+  savingsGoalCents: number
 }
 
 export interface Account {
