@@ -122,3 +122,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P4.4: pantallas Login y Registro.
 - 2026-08-02 · P4.5: layout, nav, tema y logout.
 - 2026-08-02 · P4.6: UI transacciones (tabla + alta/edición). Fase 4 hecha.
+- 2026-08-02 · Fix UI: login/registro según Directions 8a/8b (split terracota + slogan).
