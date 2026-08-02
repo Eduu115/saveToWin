@@ -7,7 +7,8 @@
     "./money": "./money.ts",
     "./types": "./types.ts",
     "./stats": "./stats.ts",
-    "./insights": "./insights.ts"
+    "./insights": "./insights.ts",
+    "./categorize": "./categorize.ts"
   },
   "scripts": {
     "test": "vitest run"
