@@ -7,7 +7,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 4 — Frontend base + i18n
-- **Próxima tarea:** `P4.3` — React Query + api client + guard de auth
+- **Próxima tarea:** `P4.4` — pantallas Login + Registro
 
 ## Tablero de fases
 
@@ -56,7 +56,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ### Fase 4 — Frontend base + i18n
 - [x] P4.1 · router /{locale}/… + redirect / → /es
 - [x] P4.2 · diccionario es + helper t()
-- [ ] P4.3 · React Query + api client + guard de auth
+- [x] P4.3 · React Query + api client + guard de auth
 - [ ] P4.4 · pantallas Login + Registro
 - [ ] P4.5 · layout + nav + toggle tema + logout
 - [ ] P4.6 · Transacciones: tabla + alta/edición
@@ -118,3 +118,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P3.5: `/api/budgets` CRUD scoped. Fase 3 hecha.
 - 2026-08-02 · P4.1: router `/{locale}/…` + redirect `/` → `/es`.
 - 2026-08-02 · P4.2: diccionario `es` + helper `t()`.
+- 2026-08-02 · P4.3: React Query + api client + AuthGuard.
