@@ -4,9 +4,9 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch --env-file=../.env src/index.ts",
     "build": "tsc && rm -rf dist/db/migrations && mkdir -p dist/db && cp -R db/migrations dist/db/migrations",
-    "start": "node dist/src/index.js",
+    "start": "node --env-file=../.env dist/src/index.js",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {
