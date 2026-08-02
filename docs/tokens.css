@@ -1,0 +1,112 @@
+:root {
+  /* tipografía — Public Sans 400/500/600/700/800, auto-alojada */
+  --font-sans: 'Public Sans', system-ui, sans-serif;
+  --num: tabular-nums;            /* font-variant-numeric en TODO importe */
+
+  /* superficie y tinta */
+  --bg:        #FAF6F0;
+  --surface:   #FFFDFA;
+  --surface-2: #F4ECE1;
+  --fg:        #211B15;
+  --fg-2:      #6D5F52;
+  --fg-3:      #9A8B7D;
+  --border:    #E9DFD1;
+  --grid:      #F2E9DD;
+  --track:     #EEE5D8;
+
+  /* semánticos */
+  --accent:        #A8471C;
+  --accent-weak:   #FBEADE;
+  --accent-hover:  #8E3B16;
+  --on-accent:     #FFFFFF;
+  --income:        #0E6A6F;
+  --income-weak:   #E6F4F3;
+  --expense:       #6D5F52;   /* = --fg-2, el gasto NO tiene color propio */
+  --savings:       #2F6A43;
+  --savings-weak:  #E8F3EC;
+  --savings-border:#C7E0D1;
+  --warn:          #92600B;
+  --warn-weak:     #FDF1DC;
+  --warn-border:   #F0DCB4;
+  --danger:        #B03024;
+  --danger-weak:   #F8E7E4;
+  --danger-border: #EFCFCB;
+
+  /* categóricas — misma L y C, solo cambia el tono */
+  --c1:  oklch(0.60 0.155 151);  /* Groceries      */
+  --c2:  oklch(0.60 0.155 46);   /* Dining out     */
+  --c3:  oklch(0.60 0.155 256);  /* Transport      */
+  --c4:  oklch(0.60 0.155 306);  /* Tech           */
+  --c5:  oklch(0.60 0.155 206);  /* Subscriptions  */
+  --c6:  oklch(0.60 0.155 336);  /* Digital & games*/
+  --c7:  oklch(0.60 0.155 26);   /* Shopping       */
+  --c8:  oklch(0.60 0.155 96);   /* Home & bills   */
+  --c9:  oklch(0.60 0.155 181);  /* Health         */
+  --c10: oklch(0.60 0.155 271);  /* Education      */
+  --c11: oklch(0.60 0.155 126);  /* Travel         */
+  --c12: oklch(0.60 0.02  70);   /* Other          */
+
+  /* secuencial — heatmap, tono 45 */
+  --s1: oklch(0.965 0.014 45);
+  --s2: oklch(0.90  0.05  45);
+  --s3: oklch(0.82  0.09  45);
+  --s4: oklch(0.72  0.13  45);
+  --s5: oklch(0.60  0.155 45);
+  --s6: oklch(0.47  0.14  45);
+
+  /* radios */
+  --r-icon: 11px;  --r-tile: 14px;  --r-field: 16px;
+  --r-card: 20px;  --r-sheet: 28px; --r-pill: 100px;
+
+  /* sombras */
+  --sh-raised: 0 10px 30px -24px #211B1559;
+  --sh-accent: 0 10px 24px -10px #A8471CB3;
+  --sh-focus:  0 0 0 2px var(--bg), 0 0 0 4px var(--accent);
+
+  /* alturas */
+  --h-row: 52px;  --h-row-mobile: 64px;
+  --h-field: 56px; --h-btn: 48px; --h-tap: 44px;
+}
+
+[data-theme="dark"] {
+  --bg:        #191512;
+  --surface:   #211C18;
+  --surface-2: #2A231E;
+  --fg:        #F3ECE4;
+  --fg-2:      #B6A698;
+  --fg-3:      #8B7D70;
+  --border:    #3A3029;
+  --grid:      #2A231E;
+  --track:     #332B25;
+
+  --accent:        #F0885A;
+  --accent-weak:   #3A241A;
+  --accent-hover:  #F79B72;
+  --on-accent:     #241009;
+  --income:        #4FC9C0;
+  --income-weak:   #14282A;
+  --expense:       #B6A698;
+  --savings:       #6CC78F;
+  --savings-weak:  #16291E;
+  --savings-border:#2C4A37;
+  --warn:          #E8B45F;
+  --warn-weak:     #2E2416;
+  --warn-border:   #4A3A1F;
+  --danger:        #FF8F80;
+  --danger-weak:   #33201D;
+  --danger-border: #56302B;
+
+  /* mismo tono, solo sube la lightness */
+  --c1:  oklch(0.74 0.14 151);   --c2:  oklch(0.74 0.14 46);
+  --c3:  oklch(0.74 0.14 256);   --c4:  oklch(0.74 0.14 306);
+  --c5:  oklch(0.74 0.14 206);   --c6:  oklch(0.74 0.14 336);
+  --c7:  oklch(0.74 0.14 26);    --c8:  oklch(0.74 0.14 96);
+  --c9:  oklch(0.74 0.14 181);   --c10: oklch(0.74 0.14 271);
+  --c11: oklch(0.74 0.14 126);   --c12: oklch(0.74 0.02 70);
+
+  --s1: oklch(0.24 0.02  45);  --s2: oklch(0.36 0.055 45);
+  --s3: oklch(0.48 0.085 45);  --s4: oklch(0.60 0.11  45);
+  --s5: oklch(0.72 0.13  45);  --s6: oklch(0.85 0.145 45);
+
+  --sh-raised: 0 10px 30px -24px #00000080;
+}
