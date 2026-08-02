@@ -10,12 +10,12 @@ export function App() {
         <Route path="/" element={<Navigate to={`/${DEFAULT_LOCALE}`} replace />} />
         <Route path="/:locale" element={<LocaleLayout />}>
           <Route index element={<Navigate to="dashboard" replace />} />
-          <Route path="dashboard" element={<PlaceholderPage title="dashboard" />} />
-          <Route path="transactions" element={<PlaceholderPage title="transactions" />} />
-          <Route path="budgets" element={<PlaceholderPage title="budgets" />} />
-          <Route path="import" element={<PlaceholderPage title="import" />} />
-          <Route path="login" element={<PlaceholderPage title="login" />} />
-          <Route path="register" element={<PlaceholderPage title="register" />} />
+          <Route path="dashboard" element={<PlaceholderPage titleKey="dashboard.title" />} />
+          <Route path="transactions" element={<PlaceholderPage titleKey="transactions.title" />} />
+          <Route path="budgets" element={<PlaceholderPage titleKey="budgets.title" />} />
+          <Route path="import" element={<PlaceholderPage titleKey="import.title" />} />
+          <Route path="login" element={<PlaceholderPage titleKey="auth.login" />} />
+          <Route path="register" element={<PlaceholderPage titleKey="auth.register" />} />
         </Route>
         <Route path="*" element={<Navigate to={`/${DEFAULT_LOCALE}`} replace />} />
       </Routes>
