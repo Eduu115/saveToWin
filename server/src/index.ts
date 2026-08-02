@@ -2,10 +2,6 @@ import { existsSync } from 'node:fs'
 import { serve } from '@hono/node-server'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { Hono } from 'hono'
-import { getDbPath } from '../db/client.js'
-import { seed } from '../db/seed.js'
-
-seed()
 
 export type {
   Account,
@@ -28,5 +24,4 @@ const port = Number(process.env.PORT) || 3000
 
 serve({ fetch: app.fetch, port }, (info) => {
   console.log(`server listening on http://localhost:${info.port}`)
-  console.log(`database: ${getDbPath()}`)
 })

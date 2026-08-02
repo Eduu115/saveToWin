@@ -1,34 +1,73 @@
-import type { AnySQLiteColumn } from 'drizzle-orm/sqlite-core'
-import { integer, sqliteTable, text, uniqueIndex } from 'drizzle-orm/sqlite-core'
+import { sql } from 'drizzle-orm'
+import {
+  integer,
+  jsonb,
+  pgEnum,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  uniqueIndex,
+  type AnyPgColumn,
+} from 'drizzle-orm/pg-core'
 
-export const accounts = sqliteTable('accounts', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  key: text('key').notNull().unique(),
-  label: text('label').notNull(),
-  color: text('color').notNull(),
-  name: text('name').notNull(),
-  /** Céntimos */
-  initialBalance: integer('initial_balance').notNull().default(0),
+export const flowTypeEnum = pgEnum('flow_type', ['expense', 'income'])
+
+export const users = pgTable('users', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash').notNull(),
+  name: text('name'),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+    .notNull()
+    .default(sql`now()`),
 })
 
-export const categories = sqliteTable('categories', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  key: text('key').notNull().unique(),
-  label: text('label').notNull(),
-  color: text('color').notNull(),
-  type: text('type', { enum: ['expense', 'income'] }).notNull(),
-  parentId: integer('parent_id').references((): AnySQLiteColumn => categories.id, {
-    onDelete: 'set null',
-  }),
-})
+export const accounts = pgTable(
+  'accounts',
+  {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    key: text('key').notNull(),
+    label: text('label').notNull(),
+    color: text('color').notNull(),
+    name: text('name').notNull(),
+    /** Céntimos */
+    initialBalance: integer('initial_balance').notNull().default(0),
+  },
+  (t) => [uniqueIndex('accounts_user_key').on(t.userId, t.key)],
+)
 
-export const transactions = sqliteTable('transactions', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
+export const categories = pgTable(
+  'categories',
+  {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    key: text('key').notNull(),
+    label: text('label').notNull(),
+    color: text('color').notNull(),
+    type: flowTypeEnum('type').notNull(),
+    parentId: integer('parent_id').references((): AnyPgColumn => categories.id, {
+      onDelete: 'set null',
+    }),
+  },
+  (t) => [uniqueIndex('categories_user_key').on(t.userId, t.key)],
+)
+
+export const transactions = pgTable('transactions', {
+  id: serial('id').primaryKey(),
+  userId: integer('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
   /** ISO `YYYY-MM-DD` */
   date: text('date').notNull(),
   /** Céntimos */
   amount: integer('amount').notNull(),
-  type: text('type', { enum: ['expense', 'income'] }).notNull(),
+  type: flowTypeEnum('type').notNull(),
   categoryId: integer('category_id')
     .notNull()
     .references(() => categories.id, { onDelete: 'restrict' }),
@@ -36,13 +75,16 @@ export const transactions = sqliteTable('transactions', {
     .notNull()
     .references(() => accounts.id, { onDelete: 'restrict' }),
   note: text('note'),
-  tags: text('tags', { mode: 'json' }).$type<string[] | null>(),
+  tags: jsonb('tags').$type<string[] | null>(),
 })
 
-export const budgets = sqliteTable(
+export const budgets = pgTable(
   'budgets',
   {
-    id: integer('id').primaryKey({ autoIncrement: true }),
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
     categoryId: integer('category_id')
       .notNull()
       .references(() => categories.id, { onDelete: 'cascade' }),
@@ -51,5 +93,5 @@ export const budgets = sqliteTable(
     /** Céntimos */
     limit: integer('limit_cents').notNull(),
   },
-  (t) => [uniqueIndex('budgets_category_period').on(t.categoryId, t.period)],
+  (t) => [uniqueIndex('budgets_user_category_period').on(t.userId, t.categoryId, t.period)],
 )
