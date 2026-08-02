@@ -12,8 +12,6 @@ const { getDatabaseUrl } = await import('../db/client.js')
 const { authRoutes } = await import('./routes/auth.js')
 const { accountsRoutes } = await import('./routes/accounts.js')
 const { categoriesRoutes } = await import('./routes/categories.js')
-const { transactionsRoutes } = await import('./routes/transactions.js')
-const { budgetsRoutes } = await import('./routes/budgets.js')
 
 export type {
   Account,
@@ -33,14 +31,9 @@ app.get('/api/health', (c) => c.json({ ok: true }))
 app.route('/api/auth', authRoutes)
 app.route('/api/accounts', accountsRoutes)
 app.route('/api/categories', categoriesRoutes)
-app.route('/api/transactions', transactionsRoutes)
-app.route('/api/budgets', budgetsRoutes)
 
-// ponytail: solo monta estáticos si hay build de web (dev API-only no tiene public/)
 if (existsSync('./public')) {
   app.use('/*', serveStatic({ root: './public' }))
-  // SPA fallback para rutas del cliente (/{locale}/…)
-  app.get('*', serveStatic({ root: './public', path: './index.html' }))
 }
 
 const port = env.port()
