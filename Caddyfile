@@ -1,0 +1,8 @@
+# HTTPS para savetowin.app (Let's Encrypt vía Caddy).
+# Uso: docker compose --profile https up -d
+# Asegura DNS A/AAAA de savetowin.app → tu servidor y puertos 80/443 abiertos.
+
+savetowin.app, www.savetowin.app {
+	encode gzip
+	reverse_proxy app:3010
+}
