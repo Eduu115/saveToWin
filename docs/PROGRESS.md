@@ -6,15 +6,15 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ## Cursor
 
-- **Fase actual:** Fase 1 — Dominio y datos (retrabajo Postgres + multi-usuario)
-- **Próxima tarea:** `P1.5` — seed por usuario (12 categorías + 7 cuentas)
+- **Fase actual:** Fase 2 — Auth multi-usuario
+- **Próxima tarea:** `P2.1` — JWT helpers + env (`JWT_SECRET`, `DATABASE_URL`)
 
 ## Tablero de fases
 
 | Fase | Estado |
 |------|--------|
 | 0 · Scaffold y tooling | ✅ hecha |
-| 1 · Dominio y datos | 🔄 en curso (P1.1 ok; P1.2–P1.5 a rehacer) |
+| 1 · Dominio y datos | ✅ hecha |
 | 2 · Auth multi-usuario | ⬜ pendiente |
 | 3 · API CRUD (scoped) | ⬜ pendiente |
 | 4 · Frontend base + i18n | ⬜ pendiente |
@@ -39,7 +39,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P1.2 · shared/types.ts (`User` + entidades con `userId`)
 - [x] P1.3 · Drizzle schema **Postgres** (users + FKs + userId)
 - [x] P1.4 · db client `DATABASE_URL` + migrate al arrancar
-- [ ] P1.5 · seed **por usuario** (12 categorías + 7 cuentas)
+- [x] P1.5 · seed **por usuario** (12 categorías + 7 cuentas)
 
 ### Fase 2 — Auth multi-usuario
 - [ ] P2.1 · JWT helpers + env (`JWT_SECRET`, `DATABASE_URL`)
@@ -107,3 +107,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P1.2: types con `User` + `userId` en entidades de dominio.
 - 2026-08-02 · P1.3: schema Drizzle Postgres + migración; SQLite eliminado.
 - 2026-08-02 · P1.4: client Postgres (`DATABASE_URL`) + migrate al arrancar; compose `db` en :5433.
+- 2026-08-02 · P1.5: seed por usuario idempotente + aislamiento. Fase 1 (pivot) hecha.
