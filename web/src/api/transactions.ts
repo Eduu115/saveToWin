@@ -32,6 +32,26 @@ export function createTransaction(body: {
   })
 }
 
+export function createTransactionsBatch(body: {
+  items: {
+    date: string
+    amount: number
+    type: 'expense' | 'income'
+    categoryId: number
+    accountId: number
+    note?: string | null
+  }[]
+  skipDuplicates?: boolean
+}) {
+  return api<{ inserted: number; skippedDuplicates: number; items: Transaction[] }>(
+    '/api/transactions/batch',
+    {
+      method: 'POST',
+      body: JSON.stringify(body),
+    },
+  )
+}
+
 export function updateTransaction(
   id: number,
   body: Partial<{

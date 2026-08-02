@@ -5,6 +5,7 @@ import { accounts, categories, transactions } from '../../db/schema.js'
 import type { AuthVariables } from '../lib/auth.js'
 import { apiError } from '../lib/errors.js'
 import {
+  transactionBatchSchema,
   transactionCreateSchema,
   transactionListQuerySchema,
   transactionPatchSchema,
@@ -82,6 +83,90 @@ transactionsRoutes.post('/', async (c) => {
     })
     .returning()
   return c.json(row, 201)
+})
+
+transactionsRoutes.post('/batch', async (c) => {
+  const userId = c.get('userId')
+  const body = await parseBody(c, transactionBatchSchema)
+  if (body instanceof Response) return body
+
+  const accountIds = new Set(body.items.map((i) => i.accountId))
+  const categoryIds = new Set(body.items.map((i) => i.categoryId))
+  for (const id of accountIds) {
+    if (!(await ownedAccount(userId, id))) {
+      return c.json(apiError('VALIDATION_ERROR', 'accountId no válido'), 400)
+    }
+  }
+  for (const id of categoryIds) {
+    if (!(await ownedCategory(userId, id))) {
+      return c.json(apiError('VALIDATION_ERROR', 'categoryId no válido'), 400)
+    }
+  }
+
+  let existing = new Set<string>()
+  if (body.skipDuplicates) {
+    const dates = body.items.map((i) => i.date).sort()
+    const from = dates[0]!
+    const to = dates[dates.length - 1]!
+    const rows = await db
+      .select({
+        date: transactions.date,
+        amount: transactions.amount,
+        note: transactions.note,
+      })
+      .from(transactions)
+      .where(
+        and(
+          eq(transactions.userId, userId),
+          gte(transactions.date, from),
+          lte(transactions.date, to),
+        ),
+      )
+    existing = new Set(
+      rows.map((r) => `${r.date}|${r.amount}|${(r.note ?? '').trim().toLowerCase()}`),
+    )
+  }
+
+  const toInsert: (typeof body.items)[number][] = []
+  let skippedDuplicates = 0
+  const seenBatch = new Set<string>()
+  for (const item of body.items) {
+    if (item.amount < 0) {
+      return c.json(apiError('VALIDATION_ERROR', 'amount debe ser ≥ 0'), 400)
+    }
+    const key = `${item.date}|${item.amount}|${(item.note ?? '').trim().toLowerCase()}`
+    if (body.skipDuplicates && (existing.has(key) || seenBatch.has(key))) {
+      skippedDuplicates++
+      continue
+    }
+    seenBatch.add(key)
+    toInsert.push(item)
+  }
+
+  const inserted =
+    toInsert.length === 0
+      ? []
+      : await db
+          .insert(transactions)
+          .values(
+            toInsert.map((item) => ({
+              userId,
+              date: item.date,
+              amount: item.amount,
+              type: item.type,
+              categoryId: item.categoryId,
+              accountId: item.accountId,
+              note: item.note ?? null,
+              tags: item.tags ?? null,
+            })),
+          )
+          .returning()
+
+  return c.json({
+    inserted: inserted.length,
+    skippedDuplicates,
+    items: inserted,
+  })
 })
 
 transactionsRoutes.patch('/:id', async (c) => {

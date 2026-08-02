@@ -57,6 +57,11 @@ export const transactionCreateSchema = z.object({
   tags: z.array(z.string()).nullable().optional(),
 })
 
+export const transactionBatchSchema = z.object({
+  items: z.array(transactionCreateSchema).min(1).max(2000),
+  skipDuplicates: z.boolean().optional().default(true),
+})
+
 export const transactionPatchSchema = transactionCreateSchema.partial()
 
 export const transactionListQuerySchema = z.object({
