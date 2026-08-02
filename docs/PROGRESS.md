@@ -7,7 +7,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 7 — Import CSV
-- **Próxima tarea:** `P7.1` — subida + PapaParse + mapeo de columnas
+- **Próxima tarea:** `P7.2` — previsualización + inserción en lote
 
 ## Tablero de fases
 
@@ -20,7 +20,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 | 4 · Frontend base + i18n | ✅ hecha |
 | 5 · Dashboard / stats / logo | ✅ hecha |
 | 6 · Presupuestos y ahorro | ✅ hecha |
-| 7 · Import CSV | ⬜ pendiente |
+| 7 · Import CSV | 🔄 en curso |
 | 8 · Despliegue (app + Postgres) | ⬜ pendiente |
 | 9 · Opcionales | ⬜ pendiente |
 
@@ -72,7 +72,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P6.2 · objetivo de ahorro + seguimiento
 
 ### Fase 7 — Import CSV
-- [ ] P7.1 · subida + PapaParse + mapeo de columnas
+- [x] P7.1 · subida + PapaParse + mapeo de columnas
 - [ ] P7.2 · previsualización + inserción en lote
 - [ ] P7.3 · deduplicado
 - [ ] P7.4 · auto-categorización por reglas
@@ -131,3 +131,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P5.4: conclusiones por reglas (over / heads-up / on-track); Fase 5 hecha.
 - 2026-08-02 · P6.1: UI presupuestos Envelopes (12a) con estados Over/Justo/% + alta/edición.
 - 2026-08-02 · P6.2: objetivo editable + progreso real (Savings) + mover sobrante; Fase 6 hecha.
+- 2026-08-02 · P7.1: PapaParse + detección CSV (ES/US) + UI subida/mapeo (Directions 7a/7b).
