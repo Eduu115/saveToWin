@@ -6,8 +6,8 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ## Cursor
 
-- **Fase actual:** Fase 7 — Import CSV
-- **Próxima tarea:** `P7.2` — previsualización + inserción en lote
+- **Fase actual:** Fase 9 — Opcionales (solo si se piden)
+- **Próxima tarea:** ninguna obligatoria; plan core cerrado
 
 ## Tablero de fases
 
@@ -20,8 +20,8 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 | 4 · Frontend base + i18n | ✅ hecha |
 | 5 · Dashboard / stats / logo | ✅ hecha |
 | 6 · Presupuestos y ahorro | ✅ hecha |
-| 7 · Import CSV | 🔄 en curso |
-| 8 · Despliegue (app + Postgres) | ⬜ pendiente |
+| 7 · Import CSV | ✅ hecha |
+| 8 · Despliegue (app + Postgres) | ✅ hecha |
 | 9 · Opcionales | ⬜ pendiente |
 
 ## Checklist (detalle en `docs/IMPLEMENTATION_PLAN.md` por ID)
@@ -73,14 +73,14 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ### Fase 7 — Import CSV
 - [x] P7.1 · subida + PapaParse + mapeo de columnas
-- [ ] P7.2 · previsualización + inserción en lote
-- [ ] P7.3 · deduplicado
-- [ ] P7.4 · auto-categorización por reglas
+- [x] P7.2 · previsualización + inserción en lote
+- [x] P7.3 · deduplicado
+- [x] P7.4 · auto-categorización por reglas
 
 ### Fase 8 — Despliegue
-- [ ] P8.1 · Dockerfile multi-stage
-- [ ] P8.2 · docker-compose app + postgres + .env.example
-- [ ] P8.3 · verificación end-to-end (móvil + persistencia + aislamiento)
+- [x] P8.1 · Dockerfile multi-stage
+- [x] P8.2 · docker-compose app + postgres + .env.example
+- [x] P8.3 · verificación end-to-end (móvil + persistencia + aislamiento)
 
 ### Fase 9 — Opcionales
 - [ ] P9.1 · PWA
@@ -132,3 +132,5 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P6.1: UI presupuestos Envelopes (12a) con estados Over/Justo/% + alta/edición.
 - 2026-08-02 · P6.2: objetivo editable + progreso real (Savings) + mover sobrante; Fase 6 hecha.
 - 2026-08-02 · P7.1: PapaParse + detección CSV (ES/US) + UI subida/mapeo (Directions 7a/7b).
+- 2026-08-02 · P7.2–P7.4: preview + batch + dedupe + reglas; Fase 7 hecha.
+- 2026-08-02 · P8.1–P8.3: Dockerfile + compose app/db; e2e health, aislamiento, persistencia, dedupe; plan core cerrado.

@@ -227,6 +227,7 @@ requieren cookie JWT.
 | GET/POST/PATCH/DELETE | `/categories[/:id]` | scoped `userId` |
 | GET | `/transactions` | `?from&to&…` → `{items,total}` scoped |
 | POST/PATCH/DELETE | `/transactions[/:id]` | scoped |
+| POST | `/transactions/batch` | `{ items, skipDuplicates? }` → insert scoped + dedupe |
 | GET/POST/PATCH/DELETE | `/budgets[/:id]` | scoped |
 | GET | `/stats` | `?period=YYYY-MM` → KPIs + objetivo + racha |
 | GET | `/health` | `{ ok: true }` (sin auth) |
