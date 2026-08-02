@@ -3,6 +3,8 @@ import { serve } from '@hono/node-server'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { Hono } from 'hono'
 
+export type { Account, Budget, Category, Transaction } from '@savetowin/shared/types'
+
 const app = new Hono()
 
 app.get('/api/health', (c) => c.json({ ok: true }))
