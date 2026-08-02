@@ -7,7 +7,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 3 — API CRUD (scoped)
-- **Próxima tarea:** `P3.4` — /api/transactions
+- **Próxima tarea:** `P3.5` — /api/budgets
 
 ## Tablero de fases
 
@@ -50,7 +50,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P3.1 · zod + forma de error única
 - [x] P3.2 · /api/accounts (aislado)
 - [x] P3.3 · /api/categories (aislado)
-- [ ] P3.4 · /api/transactions (+ filtros/paginación, aislado)
+- [x] P3.4 · /api/transactions (+ filtros/paginación, aislado)
 - [ ] P3.5 · /api/budgets (aislado)
 
 ### Fase 4 — Frontend base + i18n
@@ -114,3 +114,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P3.1: schemas zod + parseBody → 400 `{ error }`.
 - 2026-08-02 · P3.2: `/api/accounts` CRUD scoped por usuario.
 - 2026-08-02 · P3.3: `/api/categories` CRUD scoped por usuario.
+- 2026-08-02 · P3.4: `/api/transactions` con filtros y paginación.

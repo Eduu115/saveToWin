@@ -12,6 +12,7 @@ const { getDatabaseUrl } = await import('../db/client.js')
 const { authRoutes } = await import('./routes/auth.js')
 const { accountsRoutes } = await import('./routes/accounts.js')
 const { categoriesRoutes } = await import('./routes/categories.js')
+const { transactionsRoutes } = await import('./routes/transactions.js')
 
 export type {
   Account,
@@ -31,6 +32,7 @@ app.get('/api/health', (c) => c.json({ ok: true }))
 app.route('/api/auth', authRoutes)
 app.route('/api/accounts', accountsRoutes)
 app.route('/api/categories', categoriesRoutes)
+app.route('/api/transactions', transactionsRoutes)
 
 if (existsSync('./public')) {
   app.use('/*', serveStatic({ root: './public' }))
