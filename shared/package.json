@@ -6,7 +6,8 @@
   "exports": {
     "./money": "./money.ts",
     "./types": "./types.ts",
-    "./stats": "./stats.ts"
+    "./stats": "./stats.ts",
+    "./insights": "./insights.ts"
   },
   "scripts": {
     "test": "vitest run"

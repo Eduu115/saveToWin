@@ -6,6 +6,7 @@ import {
   previousPeriod,
   type StatsTransaction,
 } from '@savetowin/shared/stats'
+import { evaluateInsights } from '@savetowin/shared/insights'
 import { db } from '../../db/client.js'
 import {
   accounts,
@@ -209,9 +210,11 @@ statsRoutes.get('/', async (c) => {
 
   const catById = new Map(cats.map((c) => [c.id, c]))
   const spendByCat = new Map<number, number>()
+  const txCountByCat = new Map<number, number>()
   for (const tx of txs) {
     if (tx.type !== 'expense') continue
     spendByCat.set(tx.categoryId, (spendByCat.get(tx.categoryId) ?? 0) + tx.amount)
+    txCountByCat.set(tx.categoryId, (txCountByCat.get(tx.categoryId) ?? 0) + 1)
   }
 
   const byCategory = [...spendByCat.entries()]
@@ -228,6 +231,40 @@ statsRoutes.get('/', async (c) => {
     .filter((x): x is NonNullable<typeof x> => x != null)
     .sort((a, b) => b.expenseCents - a.expenseCents)
 
+  const budgetRows = await db
+    .select({
+      categoryId: budgets.categoryId,
+      limit: budgets.limit,
+    })
+    .from(budgets)
+    .where(and(eq(budgets.userId, userId), eq(budgets.period, period)))
+
+  const insightCategories = budgetRows.map((b) => {
+    const cat = catById.get(b.categoryId)
+    return {
+      categoryKey: cat?.key ?? `id:${b.categoryId}`,
+      categoryLabel: cat?.label ?? `id:${b.categoryId}`,
+      limitCents: b.limit,
+      spentCents: spendByCat.get(b.categoryId) ?? 0,
+      txCount: txCountByCat.get(b.categoryId) ?? 0,
+    }
+  })
+
+  const today = new Date()
+  const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
+  const asOfDate =
+    todayIso.startsWith(period)
+      ? todayIso
+      : periodBounds(period).to
+
+  const insights = evaluateInsights({
+    period,
+    asOfDate,
+    savedCents,
+    savingsGoalCents: user.savingsGoalCents,
+    categories: insightCategories,
+  })
+
   return c.json({
     ...stats,
     savingsStreakMonths,
@@ -236,5 +273,6 @@ statsRoutes.get('/', async (c) => {
       incomeReferenceCents,
       byCategory,
     },
+    insights,
   })
 })

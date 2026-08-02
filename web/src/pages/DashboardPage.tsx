@@ -12,6 +12,7 @@ import { DEFAULT_LOCALE } from '../i18n/locales'
 import { t } from '../i18n/t'
 import { CategorySpendRanking } from '../ui/CategorySpendRanking'
 import { ChartPanel } from '../ui/ChartPanel'
+import { InsightsColumn } from '../ui/InsightCard'
 import { MonthlySpendChart } from '../ui/MonthlySpendChart'
 import { ProgressRing } from '../ui/ProgressRing'
 
@@ -325,6 +326,13 @@ export function DashboardPage() {
           <CategorySpendRanking items={data.charts.byCategory} />
         </ChartPanel>
       </div>
+
+      {data.insights.length > 0 && (
+        <div className="lg:grid lg:grid-cols-[1.55fr_1fr] lg:gap-4">
+          <div className="hidden lg:block" aria-hidden />
+          <InsightsColumn insights={data.insights} />
+        </div>
+      )}
     </div>
   )
 }

@@ -6,8 +6,8 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ## Cursor
 
-- **Fase actual:** Fase 5 — Dashboard / stats / logo
-- **Próxima tarea:** `P5.4` — conclusiones por reglas
+- **Fase actual:** Fase 6 — Presupuestos y ahorro
+- **Próxima tarea:** `P6.1` — UI presupuestos (over/under con icono+texto)
 
 ## Tablero de fases
 
@@ -18,7 +18,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 | 2 · Auth multi-usuario | ✅ hecha |
 | 3 · API CRUD (scoped) | ✅ hecha |
 | 4 · Frontend base + i18n | ✅ hecha |
-| 5 · Dashboard / stats / logo | 🔄 en curso |
+| 5 · Dashboard / stats / logo | ✅ hecha |
 | 6 · Presupuestos y ahorro | ⬜ pendiente |
 | 7 · Import CSV | ⬜ pendiente |
 | 8 · Despliegue (app + Postgres) | ⬜ pendiente |
@@ -65,7 +65,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P5.1 · módulo stats + stats.test.ts (dataset canónico)
 - [x] P5.2 · KPIs + anillo generativo (logo/favicon/objetivo)
 - [x] P5.3 · gráficos Recharts + estados
-- [ ] P5.4 · conclusiones por reglas
+- [x] P5.4 · conclusiones por reglas
 
 ### Fase 6 — Presupuestos y ahorro
 - [ ] P6.1 · UI presupuestos (over/under con icono+texto)
@@ -128,3 +128,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P5.2: anillo generativo 14a (logo/favicon/KPI), GET `/api/stats`, dashboard 1b (hero+objetivo+KPIs).
 - 2026-08-02 · fix(dev): API en :3010 (proxy Vite); evita choque con ApiArena en :3000.
 - 2026-08-02 · P5.3: Recharts gasto mensual + ranking categorías; estados vacío/carga/un punto (11b).
+- 2026-08-02 · P5.4: conclusiones por reglas (over / heads-up / on-track); Fase 5 hecha.

@@ -1,3 +1,4 @@
+import type { Insight } from '@savetowin/shared/insights'
 import type { ColorToken } from '@savetowin/shared/types'
 import type { PeriodStats } from '@savetowin/shared/stats'
 import { api } from './client'
@@ -25,6 +26,7 @@ export type DashboardStats = PeriodStats & {
     incomeReferenceCents: number
     byCategory: CategorySpend[]
   }
+  insights: Insight[]
 }
 
 export function fetchStats(period?: string) {
