@@ -7,14 +7,14 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 1 — Dominio y datos
-- **Próxima tarea:** `P1.1` — money.ts + money.test.ts
+- **Próxima tarea:** `P1.2` — shared/types.ts (key EN + label ES)
 
 ## Tablero de fases
 
 | Fase | Estado |
 |------|--------|
 | 0 · Scaffold y tooling | ✅ hecha |
-| 1 · Dominio y datos | ⬜ pendiente |
+| 1 · Dominio y datos | 🔄 en curso |
 | 2 · API CRUD | ⬜ pendiente |
 | 3 · Auth | ⬜ pendiente |
 | 4 · Frontend base + i18n | ⬜ pendiente |
@@ -35,7 +35,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P0.6 · Tailwind + tokens + Public Sans/Lucide self-hosted + toggle tema
 
 ### Fase 1 — Dominio y datos
-- [ ] P1.1 · money.ts + money.test.ts
+- [x] P1.1 · money.ts + money.test.ts
 - [ ] P1.2 · shared/types.ts (key EN + label ES)
 - [ ] P1.3 · Drizzle schema (céntimos, fecha ISO, FKs)
 - [ ] P1.4 · db client + migrate al arrancar
@@ -96,3 +96,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P0.4: server Hono con GET /api/health → `{ ok: true }`.
 - 2026-08-02 · P0.5: Vite proxy `/api` → server; build web → `server/public`; App muestra health.
 - 2026-08-02 · P0.6: Tailwind + tokens + Public Sans/Lucide auto-alojados + toggle `[data-theme]`. Fase 0 hecha.
+- 2026-08-02 · P1.1: `shared/money.ts` + vitest (`parse`/`format`/`add`/`sum`, es-ES, céntimos).

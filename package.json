@@ -10,6 +10,10 @@
   "scripts": {
     "dev": "npm run dev -w server & npm run dev -w web & wait",
     "build": "npm run build -w web && npm run build -w server",
-    "start": "npm run start -w server"
+    "start": "npm run start -w server",
+    "test": "npm run test -w @savetowin/shared"
+  },
+  "devDependencies": {
+    "vitest": "^4.1.10"
   }
 }
