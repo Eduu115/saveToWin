@@ -7,7 +7,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 0 — Scaffold y tooling
-- **Próxima tarea:** `P0.4` — server: Hono + GET /api/health
+- **Próxima tarea:** `P0.5` — cablear dev (proxy) y prod (server sirve build de web)
 
 ## Tablero de fases
 
@@ -30,7 +30,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P0.1 · git init + .gitignore
 - [x] P0.2 · package.json raíz (workspaces) + scripts + tsconfig.base
 - [x] P0.3 · web: Vite + React + TS
-- [ ] P0.4 · server: Hono + GET /api/health
+- [x] P0.4 · server: Hono + GET /api/health
 - [ ] P0.5 · cablear dev (proxy) y prod (server sirve build de web)
 - [ ] P0.6 · Tailwind + tokens + Public Sans/Lucide self-hosted + toggle tema
 
@@ -93,3 +93,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P0.1: git init + .gitignore (`node_modules`, `dist`, `*.db`, `.env`, `.DS_Store`).
 - 2026-08-02 · P0.2: monorepo npm workspaces (`shared`, `server`, `web`) + scripts + tsconfig.base.
 - 2026-08-02 · P0.3: workspace web con Vite + React + TS; página mínima.
+- 2026-08-02 · P0.4: server Hono con GET /api/health → `{ ok: true }`.
