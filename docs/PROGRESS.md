@@ -7,7 +7,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 1 — Dominio y datos
-- **Próxima tarea:** `P1.3` — Drizzle schema (céntimos, fecha ISO, FKs)
+- **Próxima tarea:** `P1.4` — db client + migrate al arrancar
 
 ## Tablero de fases
 
@@ -37,7 +37,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ### Fase 1 — Dominio y datos
 - [x] P1.1 · money.ts + money.test.ts
 - [x] P1.2 · shared/types.ts (key EN + label ES)
-- [ ] P1.3 · Drizzle schema (céntimos, fecha ISO, FKs)
+- [x] P1.3 · Drizzle schema (céntimos, fecha ISO, FKs)
 - [ ] P1.4 · db client + migrate al arrancar
 - [ ] P1.5 · seed idempotente (12 categorías + 7 cuentas)
 
@@ -98,3 +98,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P0.6: Tailwind + tokens + Public Sans/Lucide auto-alojados + toggle `[data-theme]`. Fase 0 hecha.
 - 2026-08-02 · P1.1: `shared/money.ts` + vitest (`parse`/`format`/`add`/`sum`, es-ES, céntimos).
 - 2026-08-02 · P1.2: `shared/types.ts` (Account/Category/Transaction/Budget; key EN + label ES + color).
+- 2026-08-02 · P1.3: Drizzle schema + migración `0000` (céntimos, fecha ISO, FKs).
