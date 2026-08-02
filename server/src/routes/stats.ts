@@ -3,14 +3,36 @@ import { Hono } from 'hono'
 import {
   computePeriodStats,
   computeSavingsStreak,
+  previousPeriod,
   type StatsTransaction,
 } from '@savetowin/shared/stats'
 import { db } from '../../db/client.js'
-import { accounts, budgets, transactions, users } from '../../db/schema.js'
+import {
+  accounts,
+  budgets,
+  categories,
+  transactions,
+  users,
+} from '../../db/schema.js'
 import type { AuthVariables } from '../lib/auth.js'
 import { apiError } from '../lib/errors.js'
 
 export const statsRoutes = new Hono<{ Variables: AuthVariables }>()
+
+const MONTH_SHORT_ES = [
+  'Ene',
+  'Feb',
+  'Mar',
+  'Abr',
+  'May',
+  'Jun',
+  'Jul',
+  'Ago',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dic',
+]
 
 function currentPeriod(d = new Date()): string {
   const y = d.getFullYear()
@@ -22,6 +44,30 @@ function parsePeriod(raw: string | undefined): string | null {
   if (!raw) return currentPeriod()
   if (!/^\d{4}-\d{2}$/.test(raw)) return null
   return raw
+}
+
+function periodBounds(period: string): { from: string; to: string } {
+  const from = `${period}-01`
+  const toDay = new Date(
+    Date.UTC(Number(period.slice(0, 4)), Number(period.slice(5, 7)), 0),
+  )
+  const to = `${period}-${String(toDay.getUTCDate()).padStart(2, '0')}`
+  return { from, to }
+}
+
+function lastNPeriods(end: string, n: number): string[] {
+  const out: string[] = []
+  let p = end
+  for (let i = 0; i < n; i++) {
+    out.unshift(p)
+    p = previousPeriod(p)
+  }
+  return out
+}
+
+function shortLabel(period: string): string {
+  const month = Number(period.slice(5, 7))
+  return MONTH_SHORT_ES[month - 1] ?? period
 }
 
 /** Ahorrado = saldo de la cuenta Savings (initial + ingresos − gastos). */
@@ -60,15 +106,14 @@ statsRoutes.get('/', async (c) => {
   const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1)
   if (!user) return c.json(apiError('UNAUTHORIZED', 'No autenticado'), 401)
 
-  const from = `${period}-01`
-  const toDay = new Date(Date.UTC(Number(period.slice(0, 4)), Number(period.slice(5, 7)), 0))
-  const to = `${period}-${String(toDay.getUTCDate()).padStart(2, '0')}`
+  const { from, to } = periodBounds(period)
 
   const txs = await db
     .select({
       date: transactions.date,
       amount: transactions.amount,
       type: transactions.type,
+      categoryId: transactions.categoryId,
     })
     .from(transactions)
     .where(
@@ -80,11 +125,13 @@ statsRoutes.get('/', async (c) => {
     )
 
   const periodBudgets = await db
-    .select({ limit: budgets.limit })
+    .select({ limit: budgets.limit, period: budgets.period })
     .from(budgets)
-    .where(and(eq(budgets.userId, userId), eq(budgets.period, period)))
+    .where(eq(budgets.userId, userId))
 
-  const budgetLimitCents = periodBudgets.reduce((s, b) => s + b.limit, 0)
+  const budgetLimitCents = periodBudgets
+    .filter((b) => b.period === period)
+    .reduce((s, b) => s + b.limit, 0)
   const savedCents = await savedFromSavingsAccount(userId)
 
   const stats = computePeriodStats({
@@ -95,7 +142,6 @@ statsRoutes.get('/', async (c) => {
     savedCents,
   })
 
-  // Streak: balances mensuales de todos los movimientos del user
   const allTxs = await db
     .select({
       date: transactions.date,
@@ -105,16 +151,90 @@ statsRoutes.get('/', async (c) => {
     .from(transactions)
     .where(eq(transactions.userId, userId))
 
-  const monthly = new Map<string, number>()
+  const monthlyBalance = new Map<string, number>()
+  const monthlyIncome = new Map<string, number>()
+  const monthlyExpense = new Map<string, number>()
   for (const tx of allTxs) {
     const p = tx.date.slice(0, 7)
-    const delta = tx.type === 'income' ? tx.amount : -tx.amount
-    monthly.set(p, (monthly.get(p) ?? 0) + delta)
+    if (tx.type === 'income') {
+      monthlyIncome.set(p, (monthlyIncome.get(p) ?? 0) + tx.amount)
+      monthlyBalance.set(p, (monthlyBalance.get(p) ?? 0) + tx.amount)
+    } else {
+      monthlyExpense.set(p, (monthlyExpense.get(p) ?? 0) + tx.amount)
+      monthlyBalance.set(p, (monthlyBalance.get(p) ?? 0) - tx.amount)
+    }
   }
-  const savingsStreakMonths = computeSavingsStreak(monthly, period)
+  const savingsStreakMonths = computeSavingsStreak(monthlyBalance, period)
+
+  const budgetByPeriod = new Map<string, number>()
+  for (const b of periodBudgets) {
+    budgetByPeriod.set(b.period, (budgetByPeriod.get(b.period) ?? 0) + b.limit)
+  }
+
+  const months = lastNPeriods(period, 6)
+  const monthly = months.map((p) => {
+    const expenseCents = monthlyExpense.get(p) ?? 0
+    const incomeCents = monthlyIncome.get(p) ?? 0
+    const limit = budgetByPeriod.get(p) ?? 0
+    return {
+      period: p,
+      label: shortLabel(p),
+      expenseCents,
+      incomeCents,
+      overBudget: limit > 0 && expenseCents > limit,
+      isCurrent: p === period,
+    }
+  })
+
+  const incomeWithData = monthly.filter((m) => m.incomeCents > 0)
+  const incomeReferenceCents =
+    (monthlyIncome.get(period) ?? 0) > 0
+      ? (monthlyIncome.get(period) ?? 0)
+      : incomeWithData.length > 0
+        ? Math.round(
+            incomeWithData.reduce((s, m) => s + m.incomeCents, 0) /
+              incomeWithData.length,
+          )
+        : 0
+
+  const cats = await db
+    .select({
+      id: categories.id,
+      key: categories.key,
+      label: categories.label,
+      color: categories.color,
+    })
+    .from(categories)
+    .where(eq(categories.userId, userId))
+
+  const catById = new Map(cats.map((c) => [c.id, c]))
+  const spendByCat = new Map<number, number>()
+  for (const tx of txs) {
+    if (tx.type !== 'expense') continue
+    spendByCat.set(tx.categoryId, (spendByCat.get(tx.categoryId) ?? 0) + tx.amount)
+  }
+
+  const byCategory = [...spendByCat.entries()]
+    .map(([categoryId, expenseCents]) => {
+      const cat = catById.get(categoryId)
+      if (!cat) return null
+      return {
+        key: cat.key,
+        label: cat.label,
+        color: cat.color as import('@savetowin/shared/types').ColorToken,
+        expenseCents,
+      }
+    })
+    .filter((x): x is NonNullable<typeof x> => x != null)
+    .sort((a, b) => b.expenseCents - a.expenseCents)
 
   return c.json({
     ...stats,
     savingsStreakMonths,
+    charts: {
+      monthly,
+      incomeReferenceCents,
+      byCategory,
+    },
   })
 })

@@ -6,8 +6,13 @@ import {
   Flag,
   TrendingUp,
 } from 'lucide-react'
+import { Link, useParams } from 'react-router-dom'
 import { fetchStats } from '../api/stats'
+import { DEFAULT_LOCALE } from '../i18n/locales'
 import { t } from '../i18n/t'
+import { CategorySpendRanking } from '../ui/CategorySpendRanking'
+import { ChartPanel } from '../ui/ChartPanel'
+import { MonthlySpendChart } from '../ui/MonthlySpendChart'
 import { ProgressRing } from '../ui/ProgressRing'
 
 const MONTHS_ES = [
@@ -48,8 +53,9 @@ function formatRateTenths(tenths: number): string {
   return `${whole},${frac} %`
 }
 
-/** Dashboard 1b — hero + objetivo + KPIs (gráficos en P5.3). */
+/** Dashboard 1b — hero + objetivo + KPIs + gráficos. */
 export function DashboardPage() {
+  const { locale = DEFAULT_LOCALE } = useParams()
   const period = currentPeriod()
   const { data, isLoading, isError } = useQuery({
     queryKey: ['stats', period],
@@ -57,7 +63,13 @@ export function DashboardPage() {
   })
 
   if (isLoading) {
-    return <p className="text-ink-2">{t('common.loading')}</p>
+    return (
+      <div className="flex flex-col gap-4">
+        <ChartPanel title={t('dashboard.chart.spendTitle')} state="loading">
+          {null}
+        </ChartPanel>
+      </div>
+    )
   }
   if (isError || !data) {
     return <p className="text-danger">{t('common.error')}</p>
@@ -66,6 +78,15 @@ export function DashboardPage() {
   const empty = data.transactionCount === 0
   const remainingToGoal = Math.max(0, data.savingsGoalCents - data.savedCents)
   const streakSlots = 6
+  const monthsWithSpend = data.charts.monthly.filter((m) => m.expenseCents > 0)
+  const chartState =
+    monthsWithSpend.length === 0
+      ? ('empty' as const)
+      : ('ready' as const)
+  const catState =
+    data.charts.byCategory.length === 0
+      ? ('empty' as const)
+      : ('ready' as const)
 
   return (
     <div className="flex flex-col gap-4">
@@ -273,6 +294,36 @@ export function DashboardPage() {
             ))}
           </div>
         </article>
+      </div>
+
+      {/* Gráficos — Directions 1b / 11a / 11b */}
+      <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr]">
+        <ChartPanel
+          title={t('dashboard.chart.spendTitle')}
+          state={chartState}
+        >
+          <MonthlySpendChart
+            monthly={data.charts.monthly}
+            incomeReferenceCents={data.charts.incomeReferenceCents}
+          />
+        </ChartPanel>
+
+        <ChartPanel
+          title={t('dashboard.chart.whereTitle')}
+          state={catState}
+          headerRight={
+            data.charts.byCategory.length > 5 ? (
+              <Link
+                to={`/${locale}/transactions`}
+                className="text-[12.5px] font-semibold text-accent focus-visible:shadow-focus focus-visible:outline-none"
+              >
+                {t('dashboard.chart.allCategories')}
+              </Link>
+            ) : null
+          }
+        >
+          <CategorySpendRanking items={data.charts.byCategory} />
+        </ChartPanel>
       </div>
     </div>
   )

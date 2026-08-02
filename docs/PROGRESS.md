@@ -7,7 +7,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 5 — Dashboard / stats / logo
-- **Próxima tarea:** `P5.3` — gráficos Recharts + estados
+- **Próxima tarea:** `P5.4` — conclusiones por reglas
 
 ## Tablero de fases
 
@@ -64,7 +64,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ### Fase 5 — Dashboard / stats / logo
 - [x] P5.1 · módulo stats + stats.test.ts (dataset canónico)
 - [x] P5.2 · KPIs + anillo generativo (logo/favicon/objetivo)
-- [ ] P5.3 · gráficos Recharts + estados
+- [x] P5.3 · gráficos Recharts + estados
 - [ ] P5.4 · conclusiones por reglas
 
 ### Fase 6 — Presupuestos y ahorro
@@ -126,3 +126,5 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · Regla dura: UI solo según Directions (CLAUDE.md).
 - 2026-08-02 · P5.1: `shared/stats.ts` + vitest dataset canónico julio 2026 (todos los KPIs cuadran).
 - 2026-08-02 · P5.2: anillo generativo 14a (logo/favicon/KPI), GET `/api/stats`, dashboard 1b (hero+objetivo+KPIs).
+- 2026-08-02 · fix(dev): API en :3010 (proxy Vite); evita choque con ApiArena en :3000.
+- 2026-08-02 · P5.3: Recharts gasto mensual + ranking categorías; estados vacío/carga/un punto (11b).
