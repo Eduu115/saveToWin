@@ -7,6 +7,7 @@ import { assertAuthEnv, env } from './lib/env.js'
 assertAuthEnv()
 
 const { getDatabaseUrl } = await import('../db/client.js')
+const { authRoutes } = await import('./routes/auth.js')
 
 export type {
   Account,
@@ -19,6 +20,7 @@ export type {
 const app = new Hono()
 
 app.get('/api/health', (c) => c.json({ ok: true }))
+app.route('/api/auth', authRoutes)
 
 // ponytail: solo monta estáticos si hay build de web (dev API-only no tiene public/)
 if (existsSync('./public')) {

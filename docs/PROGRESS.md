@@ -7,7 +7,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 2 — Auth multi-usuario
-- **Próxima tarea:** `P2.2` — register/login/logout/me + cookie JWT
+- **Próxima tarea:** `P2.3` — middleware /api/* + rate-limit auth
 
 ## Tablero de fases
 
@@ -43,7 +43,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ### Fase 2 — Auth multi-usuario
 - [x] P2.1 · JWT helpers + env (`JWT_SECRET`, `DATABASE_URL`)
-- [ ] P2.2 · register/login/logout/me + cookie JWT httpOnly + seed al registrar
+- [x] P2.2 · register/login/logout/me + cookie JWT httpOnly + seed al registrar
 - [ ] P2.3 · middleware protege /api/* + rate-limit auth
 
 ### Fase 3 — API CRUD (scoped por usuario)
@@ -109,3 +109,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P1.4: client Postgres (`DATABASE_URL`) + migrate al arrancar; compose `db` en :5433.
 - 2026-08-02 · P1.5: seed por usuario idempotente + aislamiento. Fase 1 (pivot) hecha.
 - 2026-08-02 · P2.1: env fail-fast + sign/verify JWT (`sub` = userId).
+- 2026-08-02 · P2.2: register/login/logout/me + cookie JWT + seed al registrar.
