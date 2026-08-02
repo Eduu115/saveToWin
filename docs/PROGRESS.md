@@ -7,7 +7,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 2 — Auth multi-usuario
-- **Próxima tarea:** `P2.1` — JWT helpers + env (`JWT_SECRET`, `DATABASE_URL`)
+- **Próxima tarea:** `P2.2` — register/login/logout/me + cookie JWT
 
 ## Tablero de fases
 
@@ -15,7 +15,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 |------|--------|
 | 0 · Scaffold y tooling | ✅ hecha |
 | 1 · Dominio y datos | ✅ hecha |
-| 2 · Auth multi-usuario | ⬜ pendiente |
+| 2 · Auth multi-usuario | 🔄 en curso |
 | 3 · API CRUD (scoped) | ⬜ pendiente |
 | 4 · Frontend base + i18n | ⬜ pendiente |
 | 5 · Dashboard / stats / logo | ⬜ pendiente |
@@ -42,7 +42,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P1.5 · seed **por usuario** (12 categorías + 7 cuentas)
 
 ### Fase 2 — Auth multi-usuario
-- [ ] P2.1 · JWT helpers + env (`JWT_SECRET`, `DATABASE_URL`)
+- [x] P2.1 · JWT helpers + env (`JWT_SECRET`, `DATABASE_URL`)
 - [ ] P2.2 · register/login/logout/me + cookie JWT httpOnly + seed al registrar
 - [ ] P2.3 · middleware protege /api/* + rate-limit auth
 
@@ -108,3 +108,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P1.3: schema Drizzle Postgres + migración; SQLite eliminado.
 - 2026-08-02 · P1.4: client Postgres (`DATABASE_URL`) + migrate al arrancar; compose `db` en :5433.
 - 2026-08-02 · P1.5: seed por usuario idempotente + aislamiento. Fase 1 (pivot) hecha.
+- 2026-08-02 · P2.1: env fail-fast + sign/verify JWT (`sub` = userId).

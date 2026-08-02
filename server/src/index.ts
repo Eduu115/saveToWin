@@ -2,7 +2,11 @@ import { existsSync } from 'node:fs'
 import { serve } from '@hono/node-server'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { Hono } from 'hono'
-import { getDatabaseUrl } from '../db/client.js'
+import { assertAuthEnv, env } from './lib/env.js'
+
+assertAuthEnv()
+
+const { getDatabaseUrl } = await import('../db/client.js')
 
 export type {
   Account,
@@ -21,7 +25,7 @@ if (existsSync('./public')) {
   app.use('/*', serveStatic({ root: './public' }))
 }
 
-const port = Number(process.env.PORT) || 3000
+const port = env.port()
 
 serve({ fetch: app.fetch, port }, (info) => {
   console.log(`server listening on http://localhost:${info.port}`)
