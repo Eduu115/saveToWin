@@ -7,7 +7,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 1 — Dominio y datos
-- **Próxima tarea:** `P1.4` — db client + migrate al arrancar
+- **Próxima tarea:** `P1.5` — seed idempotente (12 categorías + 7 cuentas)
 
 ## Tablero de fases
 
@@ -38,7 +38,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P1.1 · money.ts + money.test.ts
 - [x] P1.2 · shared/types.ts (key EN + label ES)
 - [x] P1.3 · Drizzle schema (céntimos, fecha ISO, FKs)
-- [ ] P1.4 · db client + migrate al arrancar
+- [x] P1.4 · db client + migrate al arrancar
 - [ ] P1.5 · seed idempotente (12 categorías + 7 cuentas)
 
 ### Fase 2 — API CRUD
@@ -99,3 +99,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P1.1: `shared/money.ts` + vitest (`parse`/`format`/`add`/`sum`, es-ES, céntimos).
 - 2026-08-02 · P1.2: `shared/types.ts` (Account/Category/Transaction/Budget; key EN + label ES + color).
 - 2026-08-02 · P1.3: Drizzle schema + migración `0000` (céntimos, fecha ISO, FKs).
+- 2026-08-02 · P1.4: client better-sqlite3 + migrate al arrancar (`DATABASE_PATH`).
