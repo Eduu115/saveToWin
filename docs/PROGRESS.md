@@ -6,15 +6,15 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ## Cursor
 
-- **Fase actual:** Fase 1 — Dominio y datos
-- **Próxima tarea:** `P1.5` — seed idempotente (12 categorías + 7 cuentas)
+- **Fase actual:** Fase 2 — API CRUD
+- **Próxima tarea:** `P2.1` — zod + forma de error única
 
 ## Tablero de fases
 
 | Fase | Estado |
 |------|--------|
 | 0 · Scaffold y tooling | ✅ hecha |
-| 1 · Dominio y datos | 🔄 en curso |
+| 1 · Dominio y datos | ✅ hecha |
 | 2 · API CRUD | ⬜ pendiente |
 | 3 · Auth | ⬜ pendiente |
 | 4 · Frontend base + i18n | ⬜ pendiente |
@@ -39,7 +39,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P1.2 · shared/types.ts (key EN + label ES)
 - [x] P1.3 · Drizzle schema (céntimos, fecha ISO, FKs)
 - [x] P1.4 · db client + migrate al arrancar
-- [ ] P1.5 · seed idempotente (12 categorías + 7 cuentas)
+- [x] P1.5 · seed idempotente (12 categorías + 7 cuentas)
 
 ### Fase 2 — API CRUD
 - [ ] P2.1 · zod + forma de error única
@@ -100,3 +100,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P1.2: `shared/types.ts` (Account/Category/Transaction/Budget; key EN + label ES + color).
 - 2026-08-02 · P1.3: Drizzle schema + migración `0000` (céntimos, fecha ISO, FKs).
 - 2026-08-02 · P1.4: client better-sqlite3 + migrate al arrancar (`DATABASE_PATH`).
+- 2026-08-02 · P1.5: seed idempotente (12 categorías + 7 cuentas). Fase 1 hecha.

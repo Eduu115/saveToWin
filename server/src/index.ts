@@ -3,6 +3,9 @@ import { serve } from '@hono/node-server'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { Hono } from 'hono'
 import { getDbPath } from '../db/client.js'
+import { seed } from '../db/seed.js'
+
+seed()
 
 export type { Account, Budget, Category, Transaction } from '@savetowin/shared/types'
 
