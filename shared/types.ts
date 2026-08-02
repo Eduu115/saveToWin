@@ -16,8 +16,18 @@ export type ColorToken =
 
 export type FlowType = 'expense' | 'income'
 
+/** Usuario autenticado (sin hash de password en respuestas API). */
+export interface User {
+  id: number
+  email: string
+  name: string | null
+  /** ISO datetime */
+  createdAt: string
+}
+
 export interface Account {
   id: number
+  userId: number
   key: string
   label: string
   color: ColorToken
@@ -28,6 +38,7 @@ export interface Account {
 
 export interface Category {
   id: number
+  userId: number
   key: string
   label: string
   color: ColorToken
@@ -37,6 +48,7 @@ export interface Category {
 
 export interface Transaction {
   id: number
+  userId: number
   /** ISO `YYYY-MM-DD` */
   date: string
   /** Céntimos */
@@ -50,6 +62,7 @@ export interface Transaction {
 
 export interface Budget {
   id: number
+  userId: number
   categoryId: number
   /** Periodo `YYYY-MM` */
   period: string

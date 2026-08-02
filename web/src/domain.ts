@@ -1,1 +1,7 @@
-export type { Account, Budget, Category, Transaction } from '@savetowin/shared/types'
+export type {
+  Account,
+  Budget,
+  Category,
+  Transaction,
+  User,
+} from '@savetowin/shared/types'
