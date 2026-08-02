@@ -6,14 +6,14 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ## Cursor
 
-- **Fase actual:** Fase 0 — Scaffold y tooling
-- **Próxima tarea:** `P0.6` — Tailwind + tokens + Public Sans/Lucide self-hosted + toggle tema
+- **Fase actual:** Fase 1 — Dominio y datos
+- **Próxima tarea:** `P1.1` — money.ts + money.test.ts
 
 ## Tablero de fases
 
 | Fase | Estado |
 |------|--------|
-| 0 · Scaffold y tooling | 🔄 en curso |
+| 0 · Scaffold y tooling | ✅ hecha |
 | 1 · Dominio y datos | ⬜ pendiente |
 | 2 · API CRUD | ⬜ pendiente |
 | 3 · Auth | ⬜ pendiente |
@@ -32,7 +32,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P0.3 · web: Vite + React + TS
 - [x] P0.4 · server: Hono + GET /api/health
 - [x] P0.5 · cablear dev (proxy) y prod (server sirve build de web)
-- [ ] P0.6 · Tailwind + tokens + Public Sans/Lucide self-hosted + toggle tema
+- [x] P0.6 · Tailwind + tokens + Public Sans/Lucide self-hosted + toggle tema
 
 ### Fase 1 — Dominio y datos
 - [ ] P1.1 · money.ts + money.test.ts
@@ -95,3 +95,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P0.3: workspace web con Vite + React + TS; página mínima.
 - 2026-08-02 · P0.4: server Hono con GET /api/health → `{ ok: true }`.
 - 2026-08-02 · P0.5: Vite proxy `/api` → server; build web → `server/public`; App muestra health.
+- 2026-08-02 · P0.6: Tailwind + tokens + Public Sans/Lucide auto-alojados + toggle `[data-theme]`. Fase 0 hecha.
