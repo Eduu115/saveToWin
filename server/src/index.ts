@@ -10,6 +10,7 @@ assertAuthEnv()
 
 const { getDatabaseUrl } = await import('../db/client.js')
 const { authRoutes } = await import('./routes/auth.js')
+const { accountsRoutes } = await import('./routes/accounts.js')
 
 export type {
   Account,
@@ -27,6 +28,7 @@ app.use('/api/*', requireAuth)
 
 app.get('/api/health', (c) => c.json({ ok: true }))
 app.route('/api/auth', authRoutes)
+app.route('/api/accounts', accountsRoutes)
 
 // ponytail: solo monta estáticos si hay build de web (dev API-only no tiene public/)
 if (existsSync('./public')) {

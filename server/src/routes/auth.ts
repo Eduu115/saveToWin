@@ -1,24 +1,14 @@
 import { hash, verify } from 'argon2'
 import { eq } from 'drizzle-orm'
 import { Hono } from 'hono'
-import { z } from 'zod'
 import { db } from '../../db/client.js'
 import { users } from '../../db/schema.js'
 import { seedForUser } from '../../db/seed.js'
 import { clearAuthCookie, readAuthCookie, setAuthCookie } from '../lib/cookies.js'
 import { apiError } from '../lib/errors.js'
 import { signAccessToken, verifyAccessToken } from '../lib/jwt.js'
-
-const registerSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  name: z.string().min(1).optional(),
-})
-
-const loginSchema = z.object({
-  email: z.string().email(),
-  password: z.string().min(1),
-})
+import { loginSchema, registerSchema } from '../lib/schemas.js'
+import { parseBody } from '../lib/validate.js'
 
 function toPublicUser(row: typeof users.$inferSelect) {
   return {
@@ -32,24 +22,22 @@ function toPublicUser(row: typeof users.$inferSelect) {
 export const authRoutes = new Hono()
 
 authRoutes.post('/register', async (c) => {
-  const parsed = registerSchema.safeParse(await c.req.json().catch(() => null))
-  if (!parsed.success) {
-    return c.json(apiError('VALIDATION_ERROR', 'Datos inválidos', parsed.error.flatten()), 400)
-  }
+  const parsed = await parseBody(c, registerSchema)
+  if (parsed instanceof Response) return parsed
 
-  const email = parsed.data.email.trim().toLowerCase()
+  const email = parsed.email.trim().toLowerCase()
   const existing = await db.select({ id: users.id }).from(users).where(eq(users.email, email)).limit(1)
   if (existing.length > 0) {
     return c.json(apiError('CONFLICT', 'El email ya está registrado'), 409)
   }
 
-  const passwordHash = await hash(parsed.data.password)
+  const passwordHash = await hash(parsed.password)
   const [user] = await db
     .insert(users)
     .values({
       email,
       passwordHash,
-      name: parsed.data.name ?? null,
+      name: parsed.name ?? null,
     })
     .returning()
 
@@ -60,18 +48,16 @@ authRoutes.post('/register', async (c) => {
 })
 
 authRoutes.post('/login', async (c) => {
-  const parsed = loginSchema.safeParse(await c.req.json().catch(() => null))
-  if (!parsed.success) {
-    return c.json(apiError('VALIDATION_ERROR', 'Datos inválidos', parsed.error.flatten()), 400)
-  }
+  const parsed = await parseBody(c, loginSchema)
+  if (parsed instanceof Response) return parsed
 
-  const email = parsed.data.email.trim().toLowerCase()
+  const email = parsed.email.trim().toLowerCase()
   const [user] = await db.select().from(users).where(eq(users.email, email)).limit(1)
   if (!user) {
     return c.json(apiError('UNAUTHORIZED', 'Credenciales incorrectas'), 401)
   }
 
-  const ok = await verify(user.passwordHash, parsed.data.password)
+  const ok = await verify(user.passwordHash, parsed.password)
   if (!ok) {
     return c.json(apiError('UNAUTHORIZED', 'Credenciales incorrectas'), 401)
   }

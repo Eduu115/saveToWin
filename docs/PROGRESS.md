@@ -7,7 +7,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 3 — API CRUD (scoped)
-- **Próxima tarea:** `P3.1` — zod + forma de error única
+- **Próxima tarea:** `P3.2` — /api/accounts (aislado)
 
 ## Tablero de fases
 
@@ -16,7 +16,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 | 0 · Scaffold y tooling | ✅ hecha |
 | 1 · Dominio y datos | ✅ hecha |
 | 2 · Auth multi-usuario | ✅ hecha |
-| 3 · API CRUD (scoped) | ⬜ pendiente |
+| 3 · API CRUD (scoped) | 🔄 en curso |
 | 4 · Frontend base + i18n | ⬜ pendiente |
 | 5 · Dashboard / stats / logo | ⬜ pendiente |
 | 6 · Presupuestos y ahorro | ⬜ pendiente |
@@ -47,7 +47,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P2.3 · middleware protege /api/* + rate-limit auth
 
 ### Fase 3 — API CRUD (scoped por usuario)
-- [ ] P3.1 · zod + forma de error única
+- [x] P3.1 · zod + forma de error única
 - [ ] P3.2 · /api/accounts (aislado)
 - [ ] P3.3 · /api/categories (aislado)
 - [ ] P3.4 · /api/transactions (+ filtros/paginación, aislado)
@@ -111,3 +111,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P2.1: env fail-fast + sign/verify JWT (`sub` = userId).
 - 2026-08-02 · P2.2: register/login/logout/me + cookie JWT + seed al registrar.
 - 2026-08-02 · P2.3: middleware auth + rate-limit login/register. Fase 2 hecha.
+- 2026-08-02 · P3.1: schemas zod + parseBody → 400 `{ error }`.
