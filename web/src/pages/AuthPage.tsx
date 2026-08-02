@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { ArrowRight, CircleAlert, Eye, EyeOff, Lock, Server } from 'lucide-react'
 import { useEffect, useState, type FormEvent } from 'react'
-import { Link, useNavigate, useParams } from 'react-router-dom'
-import { login, register } from '../api/auth'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
+import { fetchRegistration, login, register } from '../api/auth'
 import { ApiClientError } from '../api/client'
 import { DEFAULT_LOCALE } from '../i18n/locales'
 import { t } from '../i18n/t'
@@ -20,6 +20,12 @@ export function AuthPage({ mode }: { mode: Mode }) {
   const [name, setName] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
+
+  const registration = useQuery({
+    queryKey: ['auth', 'registration'],
+    queryFn: fetchRegistration,
+    staleTime: 60_000,
+  })
 
   useEffect(() => {
     setFaviconPercent(70)
@@ -42,6 +48,10 @@ export function AuthPage({ mode }: { mode: Mode }) {
       )
     },
   })
+
+  if (mode === 'register' && registration.data && !registration.data.open) {
+    return <Navigate to={`/${locale}/login`} replace />
+  }
 
   function onSubmit(e: FormEvent) {
     e.preventDefault()
@@ -205,12 +215,16 @@ export function AuthPage({ mode }: { mode: Mode }) {
 
         <p className="text-center text-sm text-ink-2">
           {mode === 'login' ? (
-            <>
-              {t('auth.noAccount')}{' '}
-              <Link className="font-semibold text-accent" to={`/${locale}/register`}>
-                {t('auth.register')}
-              </Link>
-            </>
+            registration.data?.open === false ? (
+              <span>{t('auth.registrationClosed')}</span>
+            ) : (
+              <>
+                {t('auth.noAccount')}{' '}
+                <Link className="font-semibold text-accent" to={`/${locale}/register`}>
+                  {t('auth.register')}
+                </Link>
+              </>
+            )
           ) : (
             <>
               {t('auth.hasAccount')}{' '}

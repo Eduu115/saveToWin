@@ -1,6 +1,10 @@
 import { api } from './client'
 import type { User } from '../domain'
 
+export function fetchRegistration() {
+  return api<{ open: boolean }>('/api/auth/registration')
+}
+
 export function fetchMe() {
   return api<{ user: User }>('/api/auth/me')
 }

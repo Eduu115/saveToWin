@@ -5,6 +5,7 @@ import { db } from '../../db/client.js'
 import { users } from '../../db/schema.js'
 import { seedForUser } from '../../db/seed.js'
 import { clearAuthCookie, readAuthCookie, setAuthCookie } from '../lib/cookies.js'
+import { env } from '../lib/env.js'
 import { apiError } from '../lib/errors.js'
 import { signAccessToken, verifyAccessToken } from '../lib/jwt.js'
 import { loginSchema, registerSchema, updateMeSchema } from '../lib/schemas.js'
@@ -22,7 +23,14 @@ function toPublicUser(row: typeof users.$inferSelect) {
 
 export const authRoutes = new Hono()
 
+authRoutes.get('/registration', (c) => {
+  return c.json({ open: env.registrationOpen() })
+})
+
 authRoutes.post('/register', async (c) => {
+  if (!env.registrationOpen()) {
+    return c.json(apiError('FORBIDDEN', 'El registro está cerrado'), 403)
+  }
   const parsed = await parseBody(c, registerSchema)
   if (parsed instanceof Response) return parsed
 

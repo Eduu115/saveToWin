@@ -11,6 +11,7 @@ const PUBLIC_API = new Set([
   '/api/health',
   '/api/auth/login',
   '/api/auth/register',
+  '/api/auth/registration',
 ])
 
 export const requireAuth = createMiddleware<{ Variables: AuthVariables }>(async (c, next) => {

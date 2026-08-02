@@ -11,6 +11,8 @@ export const env = {
   jwtExpiresIn: () => process.env.JWT_EXPIRES_IN ?? '1d',
   port: () => Number(process.env.PORT) || 3000,
   isProd: () => process.env.NODE_ENV === 'production',
+  /** Default abierto. `REGISTRATION_OPEN=false` cierra altas nuevas. */
+  registrationOpen: () => process.env.REGISTRATION_OPEN !== 'false',
 }
 
 export function assertAuthEnv() {
