@@ -26,6 +26,12 @@ con `ponytail:` (nombra el techo y la vía de mejora).
 
 ## Reglas que no se negocian
 
+- **Diseño = Directions:** toda UI se maqueta contra
+  `docs/fintech-app-design-specifications/project/saveToWin Directions.dc.html`
+  (y tokens en `docs/tokens.css`). **Prohibido** inventar layouts, login,
+  dashboard, tablas o estados “parecidos”. Si el mockup existe, se replica
+  (estructura, jerarquía, copy vía `t()`, tokens). Ante duda: lee el HTML
+  del screen concreto **antes** de escribir JSX.
 - **Dinero en céntimos** (`integer`). `parseAmountToCents` al entrar,
   `formatCents` (formato **es-ES**, `1.234,56 €`) al salir. Nunca floats.
 - **Aislamiento por usuario:** toda fila de dominio lleva `userId`; queries y

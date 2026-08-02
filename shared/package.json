@@ -5,7 +5,8 @@
   "type": "module",
   "exports": {
     "./money": "./money.ts",
-    "./types": "./types.ts"
+    "./types": "./types.ts",
+    "./stats": "./stats.ts"
   },
   "scripts": {
     "test": "vitest run"

@@ -7,7 +7,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 ## Cursor
 
 - **Fase actual:** Fase 5 — Dashboard / stats / logo
-- **Próxima tarea:** `P5.1` — módulo stats + stats.test.ts
+- **Próxima tarea:** `P5.2` — KPIs + anillo generativo (logo/favicon/objetivo)
 
 ## Tablero de fases
 
@@ -18,7 +18,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 | 2 · Auth multi-usuario | ✅ hecha |
 | 3 · API CRUD (scoped) | ✅ hecha |
 | 4 · Frontend base + i18n | ✅ hecha |
-| 5 · Dashboard / stats / logo | ⬜ pendiente |
+| 5 · Dashboard / stats / logo | 🔄 en curso |
 | 6 · Presupuestos y ahorro | ⬜ pendiente |
 | 7 · Import CSV | ⬜ pendiente |
 | 8 · Despliegue (app + Postgres) | ⬜ pendiente |
@@ -62,7 +62,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - [x] P4.6 · Transacciones: tabla + alta/edición
 
 ### Fase 5 — Dashboard / stats / logo
-- [ ] P5.1 · módulo stats + stats.test.ts (dataset canónico)
+- [x] P5.1 · módulo stats + stats.test.ts (dataset canónico)
 - [ ] P5.2 · KPIs + anillo generativo (logo/favicon/objetivo)
 - [ ] P5.3 · gráficos Recharts + estados
 - [ ] P5.4 · conclusiones por reglas
@@ -123,3 +123,5 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P4.5: layout, nav, tema y logout.
 - 2026-08-02 · P4.6: UI transacciones (tabla + alta/edición). Fase 4 hecha.
 - 2026-08-02 · Fix UI: login/registro según Directions 8a/8b (split terracota + slogan).
+- 2026-08-02 · Regla dura: UI solo según Directions (CLAUDE.md).
+- 2026-08-02 · P5.1: `shared/stats.ts` + vitest dataset canónico julio 2026 (todos los KPIs cuadran).
