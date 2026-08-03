@@ -236,13 +236,13 @@ requieren cookie JWT.
 
 ## Definición de "hecho" (global)
 
-- [ ] `npm run dev` (+ Postgres) levanta web+API; `docker compose up` en prod.
-- [ ] Registro/login multi-usuario + JWT httpOnly + rate-limit.
-- [ ] CRUD de las 4 entidades **aislado por usuario**.
-- [ ] UI en español, rutas `/{locale}/…`, tokens claro/oscuro.
-- [ ] Dashboard, presupuestos, import CSV operativos.
-- [ ] Dos usuarios en el mismo server no ven los datos del otro.
-- [ ] `npm test` (money, stats) en verde.
+- [x] `npm run dev` (+ Postgres) levanta web+API; `docker compose up` en prod.
+- [x] Registro/login multi-usuario + JWT httpOnly + rate-limit.
+- [x] CRUD de las 4 entidades **aislado por usuario**.
+- [x] UI en español, rutas `/{locale}/…`, tokens claro/oscuro.
+- [x] Dashboard, presupuestos, import CSV operativos.
+- [x] Dos usuarios en el mismo server no ven los datos del otro.
+- [x] `npm test` (money, stats) en verde.
 
 ## Fuera de alcance (no construir sin pedirlo)
 

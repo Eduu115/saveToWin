@@ -69,18 +69,31 @@ Al registrarse, se siembran 12 categorías + 7 cuentas por defecto para ese usua
 ## Puesta en marcha (desarrollo)
 
 ```bash
+cp .env.example .env   # JWT_SECRET, DATABASE_URL, PORT=3010
 npm install
-# Postgres local o: docker compose up db -d
-npm run dev        # web (Vite) + server en paralelo
+docker compose up db -d
+npm run dev            # web (Vite) + API; proxy /api → :3010
+npm test               # money + stats (+ insights)
 ```
+
+UI: `http://localhost:5173` → `/es/…`.
 
 ## Despliegue (servidor casero)
 
 ```bash
+cp .env.example .env   # JWT_SECRET fuerte; REGISTRATION_OPEN=true|false
 docker compose up -d --build
+# App en :3010 (o APP_PORT). Postgres en :5433 solo para admin local.
 ```
 
-Datos en volumen Postgres. Acceso LAN por IP; hacia internet, **Caddy** (HTTPS).
+HTTPS en `savetowin.app` (DNS apuntando al server, 80/443 abiertos):
+
+```bash
+docker compose --profile https up -d --build
+```
+
+Datos en volumen `pgdata`. Backup JSON desde **Ajustes** (`GET/POST /api/backup`).
+PWA instalable en build de producción (manifest + service worker).
 
 ---
 
@@ -90,15 +103,16 @@ Datos en volumen Postgres. Acceso LAN por IP; hacia internet, **Caddy** (HTTPS).
 - **JWT** de acceso en cookie **httpOnly + SameSite** (+ Secure en prod).
 - Rate-limit en register/login.
 - Aislamiento estricto por `userId` en toda la API.
-- Si se expone a internet: **HTTPS obligatorio**.
+- Cerrar altas: `REGISTRATION_OPEN=false`.
+- Si se expone a internet: **HTTPS** (perfil `https` / Caddy).
 
 ---
 
-## Roadmap
+## Estado
 
-Ver `docs/IMPLEMENTATION_PLAN.md` y `docs/PROGRESS.md`.
+Plan implementado (fases 0–9). Tracker: `docs/PROGRESS.md`. Spec: `docs/IMPLEMENTATION_PLAN.md`.
 
-Fuera de alcance por ahora: OAuth, 2FA, billing, sync realtime, categorización con IA.
+Fuera de alcance: OAuth, 2FA, billing, sync realtime, categorización con IA.
 
 ---
 

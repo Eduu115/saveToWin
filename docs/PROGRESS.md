@@ -135,3 +135,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P7.2–P7.4: preview + batch + dedupe + reglas; Fase 7 hecha.
 - 2026-08-02 · P8.1–P8.3: Dockerfile + compose app/db; e2e health, aislamiento, persistencia, dedupe; plan core cerrado.
 - 2026-08-02 · P9.1–P9.4: PWA, backup JSON, Caddy HTTPS, REGISTRATION_OPEN; plan completo.
+- 2026-08-03 · README operativo (dev/prod/HTTPS/registro) + definición de hecho marcada.
