@@ -22,6 +22,13 @@
       "when": 1787244312251,
       "tag": "0002_minor_tigra",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1787245200000,
+      "tag": "0003_category_refresh",
+      "breakpoints": true
     }
   ]
 }
