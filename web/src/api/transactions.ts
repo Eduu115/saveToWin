@@ -21,7 +21,7 @@ export function listTransactions(params: {
 export function createTransaction(body: {
   date: string
   amount: number
-  type: 'expense' | 'income'
+  type: 'expense' | 'income' | 'savings'
   categoryId: number
   accountId: number
   note?: string | null
@@ -36,7 +36,7 @@ export function createTransactionsBatch(body: {
   items: {
     date: string
     amount: number
-    type: 'expense' | 'income'
+    type: 'expense' | 'income' | 'savings'
     categoryId: number
     accountId: number
     note?: string | null
@@ -57,7 +57,7 @@ export function updateTransaction(
   body: Partial<{
     date: string
     amount: number
-    type: 'expense' | 'income'
+    type: 'expense' | 'income' | 'savings'
     categoryId: number
     accountId: number
     note: string | null

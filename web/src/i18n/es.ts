@@ -70,6 +70,7 @@ export const es = {
   'transactions.delete': 'Eliminar',
   'transactions.type.expense': 'Gasto',
   'transactions.type.income': 'Ingreso',
+  'transactions.type.savings': 'Movimiento a ahorro',
   'common.loading': 'Cargando…',
   'common.error': 'Algo salió mal',
   'dashboard.title': 'Dashboard',

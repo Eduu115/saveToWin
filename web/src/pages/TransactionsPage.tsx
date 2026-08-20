@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatCents, parseAmountToCents } from '@savetowin/shared/money'
-import { useState, type FormEvent } from 'react'
+import { useMemo, useState, type FormEvent } from 'react'
 import {
   createTransaction,
   deleteTransaction,
@@ -13,10 +13,12 @@ import { ApiClientError } from '../api/client'
 import type { Transaction } from '../domain'
 import { t } from '../i18n/t'
 
+type FlowDraft = 'expense' | 'income' | 'savings'
+
 type Draft = {
   date: string
   amount: string
-  type: 'expense' | 'income'
+  type: FlowDraft
   categoryId: string
   accountId: string
   note: string
@@ -45,6 +47,24 @@ function fromTx(tx: Transaction): Draft {
   }
 }
 
+function typeLabel(type: FlowDraft): string {
+  if (type === 'expense') return `↓ ${t('transactions.type.expense')}`
+  if (type === 'income') return `↑ ${t('transactions.type.income')}`
+  return `→ ${t('transactions.type.savings')}`
+}
+
+function amountClass(type: FlowDraft): string {
+  if (type === 'income') return 'text-income'
+  if (type === 'savings') return 'text-savings'
+  return 'text-expense'
+}
+
+function amountSign(type: FlowDraft): string {
+  if (type === 'expense') return '−'
+  if (type === 'income') return '+'
+  return '→'
+}
+
 export function TransactionsPage() {
   const qc = useQueryClient()
   const [editing, setEditing] = useState<Transaction | null>(null)
@@ -58,6 +78,25 @@ export function TransactionsPage() {
   })
   const cats = useQuery({ queryKey: ['categories'], queryFn: listCategories })
   const accs = useQuery({ queryKey: ['accounts'], queryFn: listAccounts })
+
+  const activeCats = useMemo(
+    () => (cats.data?.items ?? []).filter((c) => !c.archived),
+    [cats.data],
+  )
+
+  const catsForSelect = useMemo(() => {
+    const byId = new Map((cats.data?.items ?? []).map((c) => [c.id, c]))
+    const selected = draft.categoryId ? byId.get(Number(draft.categoryId)) : undefined
+    let list = activeCats.filter((c) => {
+      if (draft.type === 'savings') return c.type === 'savings'
+      if (draft.type === 'income') return c.type === 'expense' || c.type === 'income'
+      return c.type === 'expense'
+    })
+    if (selected?.archived && !list.some((c) => c.id === selected.id)) {
+      list = [...list, selected]
+    }
+    return list
+  }, [activeCats, cats.data, draft.categoryId, draft.type])
 
   const save = useMutation({
     mutationFn: async () => {
@@ -75,6 +114,7 @@ export function TransactionsPage() {
     },
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ['transactions'] })
+      await qc.invalidateQueries({ queryKey: ['stats'] })
       setOpen(false)
       setEditing(null)
       setDraft(emptyDraft())
@@ -95,13 +135,32 @@ export function TransactionsPage() {
     mutationFn: (id: number) => deleteTransaction(id),
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ['transactions'] })
+      await qc.invalidateQueries({ queryKey: ['stats'] })
     },
   })
+
+  function applyTypeDefaults(type: FlowDraft, base: Draft): Draft {
+    const next = { ...base, type }
+    if (type === 'savings') {
+      const savingsAcc = accs.data?.items.find((a) => a.key === 'Savings')
+      const savingsCat = activeCats.find((c) => c.key === 'Savings transfer')
+      if (savingsAcc) next.accountId = String(savingsAcc.id)
+      if (savingsCat) next.categoryId = String(savingsCat.id)
+    } else {
+      const first = activeCats.find((c) => c.type === 'expense')
+      const cur = activeCats.find((c) => String(c.id) === next.categoryId)
+      if (first && (!next.categoryId || cur?.type === 'savings')) {
+        next.categoryId = String(first.id)
+      }
+    }
+    return next
+  }
 
   function openNew() {
     setEditing(null)
     const d = emptyDraft()
-    if (cats.data?.items[0]) d.categoryId = String(cats.data.items[0].id)
+    const expense = activeCats.find((c) => c.type === 'expense')
+    if (expense) d.categoryId = String(expense.id)
     if (accs.data?.items[0]) d.accountId = String(accs.data.items[0].id)
     setDraft(d)
     setFormError(null)
@@ -172,19 +231,13 @@ export function TransactionsPage() {
                       {tx.date}
                     </button>
                   </td>
-                  <td className="px-4 py-3 text-ink-2">
-                    {tx.type === 'expense'
-                      ? `↓ ${t('transactions.type.expense')}`
-                      : `↑ ${t('transactions.type.income')}`}
-                  </td>
+                  <td className="px-4 py-3 text-ink-2">{typeLabel(tx.type)}</td>
                   <td className="px-4 py-3">{catMap.get(tx.categoryId) ?? tx.categoryId}</td>
                   <td className="px-4 py-3">{accMap.get(tx.accountId) ?? tx.accountId}</td>
                   <td
-                    className={`px-4 py-3 text-right font-medium tabular-nums ${
-                      tx.type === 'income' ? 'text-income' : 'text-expense'
-                    }`}
+                    className={`px-4 py-3 text-right font-medium tabular-nums ${amountClass(tx.type)}`}
                   >
-                    {tx.type === 'expense' ? '−' : '+'}
+                    {amountSign(tx.type)}
                     {formatCents(tx.amount)}
                   </td>
                 </tr>
@@ -231,11 +284,12 @@ export function TransactionsPage() {
                   className={field}
                   value={draft.type}
                   onChange={(e) =>
-                    setDraft({ ...draft, type: e.target.value as 'expense' | 'income' })
+                    setDraft(applyTypeDefaults(e.target.value as FlowDraft, draft))
                   }
                 >
                   <option value="expense">{t('transactions.type.expense')}</option>
                   <option value="income">{t('transactions.type.income')}</option>
+                  <option value="savings">{t('transactions.type.savings')}</option>
                 </select>
               </label>
               <label>
@@ -246,7 +300,7 @@ export function TransactionsPage() {
                   value={draft.categoryId}
                   onChange={(e) => setDraft({ ...draft, categoryId: e.target.value })}
                 >
-                  {cats.data?.items.map((c) => (
+                  {catsForSelect.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.label}
                     </option>
@@ -261,7 +315,7 @@ export function TransactionsPage() {
                   value={draft.accountId}
                   onChange={(e) => setDraft({ ...draft, accountId: e.target.value })}
                 >
-                  {accs.data?.items.map((a) => (
+                  {(accs.data?.items ?? []).map((a) => (
                     <option key={a.id} value={a.id}>
                       {a.label}
                     </option>

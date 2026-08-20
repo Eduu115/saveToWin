@@ -329,7 +329,9 @@ export function ImportReview(props: {
                       onChange={(e) => setCategory(d.localId, Number(e.target.value))}
                     >
                       <option value="">{t('import.pickCategory')}</option>
-                      {categories.map((c) => (
+                      {categories
+                        .filter((c) => !c.archived && c.type === 'expense')
+                        .map((c) => (
                         <option key={c.id} value={c.id}>
                           {c.label}
                         </option>

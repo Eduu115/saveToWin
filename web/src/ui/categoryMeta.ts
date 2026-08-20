@@ -1,18 +1,19 @@
 import type { ColorToken } from '@savetowin/shared/types'
 import {
   Bus,
-  Cpu,
   Gamepad2,
   GraduationCap,
   HeartPulse,
   House,
   type LucideIcon,
   MoreHorizontal,
+  PiggyBank,
   Plane,
   Repeat,
-  ShoppingBag,
+  Shirt,
   ShoppingCart,
   Utensils,
+  Wine,
 } from 'lucide-react'
 
 /** Directions 10a — icono Lucide por clave de categoría. */
@@ -20,15 +21,19 @@ export const CATEGORY_ICONS: Record<string, LucideIcon> = {
   Groceries: ShoppingCart,
   'Dining out': Utensils,
   Transport: Bus,
-  Tech: Cpu,
+  Leisure: Wine,
   Subscriptions: Repeat,
   'Digital & games': Gamepad2,
-  Shopping: ShoppingBag,
+  Clothing: Shirt,
   'Home & bills': House,
   Health: HeartPulse,
   Education: GraduationCap,
   Travel: Plane,
   Other: MoreHorizontal,
+  'Savings transfer': PiggyBank,
+  // archivadas (por si se muestran en histórico)
+  Tech: Gamepad2,
+  Shopping: Shirt,
 }
 
 export function categoryIcon(key: string): LucideIcon {

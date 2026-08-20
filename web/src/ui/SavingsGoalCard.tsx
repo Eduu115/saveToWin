@@ -87,14 +87,17 @@ export function SavingsGoalCard({
   const moveMut = useMutation({
     mutationFn: async () => {
       const savings = accounts.data?.items.find((a) => a.key === 'Savings')
-      const other = categories.data?.items.find((c) => c.key === 'Other')
-      if (!savings || !other) throw new Error('missing seed')
+      const savingsCat =
+        categories.data?.items.find(
+          (c) => c.key === 'Savings transfer' && !c.archived,
+        ) ?? categories.data?.items.find((c) => c.key === 'Other' && !c.archived)
+      if (!savings || !savingsCat) throw new Error('missing seed')
       if (rollOverCents <= 0) throw new Error('nothing to move')
       return createTransaction({
         date: new Date().toISOString().slice(0, 10),
         amount: rollOverCents,
-        type: 'income',
-        categoryId: other.id,
+        type: 'savings',
+        categoryId: savingsCat.id,
         accountId: savings.id,
         note: t('budgets.moveNote'),
       })

@@ -15,12 +15,12 @@ export type BackupPayload = {
     key: string
     label: string
     color: string
-    type: 'expense' | 'income'
+    type: 'expense' | 'income' | 'savings'
   }[]
   transactions: {
     date: string
     amount: number
-    type: 'expense' | 'income'
+    type: 'expense' | 'income' | 'savings'
     categoryKey: string
     accountKey: string
     note?: string | null

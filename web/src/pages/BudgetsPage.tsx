@@ -120,7 +120,8 @@ export function BudgetsPage() {
   })
 
   const expenseCats = useMemo(
-    () => (cats.data?.items ?? []).filter((c) => c.type === 'expense'),
+    () =>
+      (cats.data?.items ?? []).filter((c) => c.type === 'expense' && !c.archived),
     [cats.data],
   )
 
