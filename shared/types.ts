@@ -61,6 +61,35 @@ export interface Category {
   archived: boolean
 }
 
+export type SubscriptionRecurrence =
+  | 'weekly'
+  | 'monthly'
+  | 'quarterly'
+  | 'yearly'
+  | 'custom'
+
+export type SubscriptionCustomUnit = 'weeks' | 'months' | 'years'
+
+export type SubscriptionStatus = 'active' | 'cancelled'
+
+export interface Subscription {
+  id: number
+  userId: number
+  categoryId: number
+  accountId: number
+  cardId: number | null
+  /** Céntimos */
+  amount: number
+  recurrence: SubscriptionRecurrence
+  customEvery: number | null
+  customUnit: SubscriptionCustomUnit | null
+  /** Próxima fecha a materializar (`YYYY-MM-DD`). */
+  nextDate: string
+  note: string | null
+  status: SubscriptionStatus
+  cancelledAt: string | null
+}
+
 export interface Transaction {
   id: number
   userId: number
@@ -73,6 +102,8 @@ export interface Transaction {
   accountId: number
   /** Tarjeta opcional (pertenece a accountId). */
   cardId: number | null
+  /** Suscripción origen (si se materializó automáticamente). */
+  subscriptionId: number | null
   note: string | null
   tags: string[] | null
 }
