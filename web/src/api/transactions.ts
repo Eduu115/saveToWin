@@ -1,5 +1,8 @@
 import { api } from './client'
-import type { Account, Category, Transaction } from '../domain'
+import type { Category, Transaction } from '../domain'
+import { listAccounts } from './accounts'
+
+export { listAccounts }
 
 export function listTransactions(params: {
   from?: string
@@ -24,6 +27,7 @@ export function createTransaction(body: {
   type: 'expense' | 'income' | 'savings'
   categoryId: number
   accountId: number
+  cardId?: number | null
   note?: string | null
 }) {
   return api<Transaction>('/api/transactions', {
@@ -39,6 +43,7 @@ export function createTransactionsBatch(body: {
     type: 'expense' | 'income' | 'savings'
     categoryId: number
     accountId: number
+    cardId?: number | null
     note?: string | null
   }[]
   skipDuplicates?: boolean
@@ -60,6 +65,7 @@ export function updateTransaction(
     type: 'expense' | 'income' | 'savings'
     categoryId: number
     accountId: number
+    cardId: number | null
     note: string | null
   }>,
 ) {
@@ -75,8 +81,4 @@ export function deleteTransaction(id: number) {
 
 export function listCategories() {
   return api<{ items: Category[] }>('/api/categories')
-}
-
-export function listAccounts() {
-  return api<{ items: Account[] }>('/api/accounts')
 }

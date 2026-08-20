@@ -6,7 +6,7 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 
 ## Cursor
 
-- **Fase actual:** — (plan completo)
+- **Fase actual:** — (plan completo + post-plan)
 - **Próxima tarea:** ninguna
 
 ## Tablero de fases
@@ -136,3 +136,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P8.1–P8.3: Dockerfile + compose app/db; e2e health, aislamiento, persistencia, dedupe; plan core cerrado.
 - 2026-08-02 · P9.1–P9.4: PWA, backup JSON, Caddy HTTPS, REGISTRATION_OPEN; plan completo.
 - 2026-08-03 · README operativo (dev/prod/HTTPS/registro) + definición de hecho marcada.
+- 2026-08-20 · Post-plan: Cuentas propias (entidad opcional) + tarjetas por cuenta; pestaña `/accounts`; tarjeta opcional en movimientos; soft-archive.

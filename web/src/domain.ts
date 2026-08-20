@@ -1,6 +1,7 @@
 export type {
   Account,
   Budget,
+  Card,
   Category,
   Transaction,
   User,

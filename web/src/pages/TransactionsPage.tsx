@@ -9,9 +9,11 @@ import {
   listTransactions,
   updateTransaction,
 } from '../api/transactions'
+import { listCards } from '../api/accounts'
 import { ApiClientError } from '../api/client'
 import type { Transaction } from '../domain'
 import { t } from '../i18n/t'
+import { sortCategoriesByDisplayOrder } from '../ui/categoryMeta'
 
 type FlowDraft = 'expense' | 'income' | 'savings'
 
@@ -21,6 +23,7 @@ type Draft = {
   type: FlowDraft
   categoryId: string
   accountId: string
+  cardId: string
   note: string
 }
 
@@ -30,6 +33,7 @@ const emptyDraft = (): Draft => ({
   type: 'expense',
   categoryId: '',
   accountId: '',
+  cardId: '',
   note: '',
 })
 
@@ -43,6 +47,7 @@ function fromTx(tx: Transaction): Draft {
     type: tx.type,
     categoryId: String(tx.categoryId),
     accountId: String(tx.accountId),
+    cardId: tx.cardId != null ? String(tx.cardId) : '',
     note: tx.note ?? '',
   }
 }
@@ -78,11 +83,28 @@ export function TransactionsPage() {
   })
   const cats = useQuery({ queryKey: ['categories'], queryFn: listCategories })
   const accs = useQuery({ queryKey: ['accounts'], queryFn: listAccounts })
+  const cardsQ = useQuery({ queryKey: ['cards'], queryFn: () => listCards() })
 
   const activeCats = useMemo(
     () => (cats.data?.items ?? []).filter((c) => !c.archived),
     [cats.data],
   )
+
+  const activeAccounts = useMemo(() => {
+    const items = accs.data?.items ?? []
+    const selectedId = draft.accountId ? Number(draft.accountId) : null
+    return items.filter((a) => !a.archived || a.id === selectedId)
+  }, [accs.data, draft.accountId])
+
+  const cardsForSelect = useMemo(() => {
+    const accountId = draft.accountId ? Number(draft.accountId) : null
+    if (accountId == null) return []
+    const selectedCardId = draft.cardId ? Number(draft.cardId) : null
+    return (cardsQ.data?.items ?? []).filter(
+      (c) =>
+        c.accountId === accountId && (!c.archived || c.id === selectedCardId),
+    )
+  }, [cardsQ.data, draft.accountId, draft.cardId])
 
   const catsForSelect = useMemo(() => {
     const byId = new Map((cats.data?.items ?? []).map((c) => [c.id, c]))
@@ -95,7 +117,7 @@ export function TransactionsPage() {
     if (selected?.archived && !list.some((c) => c.id === selected.id)) {
       list = [...list, selected]
     }
-    return list
+    return sortCategoriesByDisplayOrder(list)
   }, [activeCats, cats.data, draft.categoryId, draft.type])
 
   const save = useMutation({
@@ -107,6 +129,7 @@ export function TransactionsPage() {
         type: draft.type,
         categoryId: Number(draft.categoryId),
         accountId: Number(draft.accountId),
+        cardId: draft.cardId ? Number(draft.cardId) : null,
         note: draft.note || null,
       }
       if (editing) return updateTransaction(editing.id, body)
@@ -147,7 +170,9 @@ export function TransactionsPage() {
       if (savingsAcc) next.accountId = String(savingsAcc.id)
       if (savingsCat) next.categoryId = String(savingsCat.id)
     } else {
-      const first = activeCats.find((c) => c.type === 'expense')
+      const first = sortCategoriesByDisplayOrder(
+        activeCats.filter((c) => c.type === 'expense'),
+      )[0]
       const cur = activeCats.find((c) => String(c.id) === next.categoryId)
       if (first && (!next.categoryId || cur?.type === 'savings')) {
         next.categoryId = String(first.id)
@@ -159,9 +184,12 @@ export function TransactionsPage() {
   function openNew() {
     setEditing(null)
     const d = emptyDraft()
-    const expense = activeCats.find((c) => c.type === 'expense')
+    const expense = sortCategoriesByDisplayOrder(
+      activeCats.filter((c) => c.type === 'expense'),
+    )[0]
     if (expense) d.categoryId = String(expense.id)
-    if (accs.data?.items[0]) d.accountId = String(accs.data.items[0].id)
+    const firstAcc = (accs.data?.items ?? []).find((a) => !a.archived)
+    if (firstAcc) d.accountId = String(firstAcc.id)
     setDraft(d)
     setFormError(null)
     setOpen(true)
@@ -182,7 +210,8 @@ export function TransactionsPage() {
   const field =
     'h-field w-full rounded-field border border-line bg-surface px-3 text-ink focus-visible:shadow-focus focus-visible:outline-none'
   const catMap = new Map(cats.data?.items.map((c) => [c.id, c.label]) ?? [])
-  const accMap = new Map(accs.data?.items.map((a) => [a.id, a.label]) ?? [])
+  const accMap = new Map(accs.data?.items.map((a) => [a.id, a.name]) ?? [])
+  const cardMap = new Map(cardsQ.data?.items.map((c) => [c.id, c.name]) ?? [])
 
   return (
     <div>
@@ -233,7 +262,14 @@ export function TransactionsPage() {
                   </td>
                   <td className="px-4 py-3 text-ink-2">{typeLabel(tx.type)}</td>
                   <td className="px-4 py-3">{catMap.get(tx.categoryId) ?? tx.categoryId}</td>
-                  <td className="px-4 py-3">{accMap.get(tx.accountId) ?? tx.accountId}</td>
+                  <td className="px-4 py-3">
+                    {accMap.get(tx.accountId) ?? tx.accountId}
+                    {tx.cardId != null && cardMap.has(tx.cardId) && (
+                      <span className="mt-0.5 block text-[11px] text-ink-2">
+                        {cardMap.get(tx.cardId)}
+                      </span>
+                    )}
+                  </td>
                   <td
                     className={`px-4 py-3 text-right font-medium tabular-nums ${amountClass(tx.type)}`}
                   >
@@ -313,11 +349,28 @@ export function TransactionsPage() {
                   className={field}
                   required
                   value={draft.accountId}
-                  onChange={(e) => setDraft({ ...draft, accountId: e.target.value })}
+                  onChange={(e) =>
+                    setDraft({ ...draft, accountId: e.target.value, cardId: '' })
+                  }
                 >
-                  {(accs.data?.items ?? []).map((a) => (
+                  {activeAccounts.map((a) => (
                     <option key={a.id} value={a.id}>
-                      {a.label}
+                      {a.name}
+                    </option>
+                  ))}
+                </select>
+              </label>
+              <label>
+                <span className="mb-1 block text-sm text-ink-2">{t('transactions.card')}</span>
+                <select
+                  className={field}
+                  value={draft.cardId}
+                  onChange={(e) => setDraft({ ...draft, cardId: e.target.value })}
+                >
+                  <option value="">{t('transactions.cardNone')}</option>
+                  {cardsForSelect.map((c) => (
+                    <option key={c.id} value={c.id}>
+                      {c.name}
                     </option>
                   ))}
                 </select>

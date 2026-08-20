@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowLeftRight, LayoutDashboard, LogOut, Moon, Settings, Sun, Target, Upload } from 'lucide-react'
+import { ArrowLeftRight, Landmark, LayoutDashboard, LogOut, Moon, Settings, Sun, Target, Upload } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useNavigate, useParams } from 'react-router-dom'
 import { logout } from '../api/auth'
@@ -37,7 +37,8 @@ function ThemeToggle() {
 const nav = [
   { to: 'dashboard', label: 'nav.dashboard' as const, Icon: LayoutDashboard },
   { to: 'transactions', label: 'nav.transactions' as const, Icon: ArrowLeftRight },
-  { to: 'budgets', label: 'nav.budgets' as const, Icon: Target },
+  { to: 'accounts', label: 'nav.accounts' as const, Icon: Landmark },
+  { to: 'limits', label: 'nav.limits' as const, Icon: Target },
   { to: 'import', label: 'nav.import' as const, Icon: Upload },
   { to: 'settings', label: 'nav.settings' as const, Icon: Settings },
 ]
