@@ -14,7 +14,7 @@ export type EnvelopeBar = {
   overCents: number
 }
 
-/** Directions 9b / 12a — barra y estado de un sobre. */
+/** Directions 9b / 12a — barra y estado de un límite por categoría. */
 export function computeEnvelopeBar(
   spentCents: number,
   limitCents: number,

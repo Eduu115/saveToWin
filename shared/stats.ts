@@ -14,7 +14,7 @@ export interface ComputePeriodStatsInput {
   transactions: readonly StatsTransaction[]
   /** Periodo `YYYY-MM` */
   period: string
-  /** Tope de presupuesto del periodo (céntimos) */
+  /** Tope de límite del periodo (céntimos) */
   budgetLimitCents: number
   /** Objetivo de ahorro (céntimos) */
   savingsGoalCents: number
@@ -39,7 +39,7 @@ export interface PeriodStats {
   goalProgressPercent: number
   budgetLimitCents: number
   budgetRemainingCents: number
-  /** % del presupuesto usado (entero). */
+  /** % del límite usado (entero). */
   budgetUsedPercent: number
   /** Media diaria de gasto (céntimos), redondeada. */
   dailyAverageCents: number

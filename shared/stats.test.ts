@@ -87,7 +87,7 @@ describe('computePeriodStats — dataset canónico julio 2026', () => {
     expect(stats.goalProgressPercent).toBe(70)
   })
 
-  it('presupuesto 2.300 con 386,55 restantes (83 % usado)', () => {
+  it('límite 2.300 con 386,55 restantes (83 % usado)', () => {
     expect(stats.budgetLimitCents).toBe(230_000)
     expect(stats.budgetRemainingCents).toBe(38_655)
     expect(stats.budgetUsedPercent).toBe(83)

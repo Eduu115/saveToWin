@@ -39,7 +39,8 @@ budgetsRoutes.post('/', async (c) => {
       .returning()
     return c.json(row, 201)
   } catch {
-    return c.json(apiError('CONFLICT', 'Ya existe presupuesto para esa categoría y periodo'), 409)
+    // ponytail: tabla/API `budgets`; mensaje de usuario habla de límite
+    return c.json(apiError('CONFLICT', 'Ya existe un límite para esa categoría y periodo'), 409)
   }
 })
 
@@ -69,7 +70,7 @@ budgetsRoutes.patch('/:id', async (c) => {
     .set(body)
     .where(and(eq(budgets.id, id), eq(budgets.userId, userId)))
     .returning()
-  if (!row) return c.json(apiError('NOT_FOUND', 'Presupuesto no encontrado'), 404)
+  if (!row) return c.json(apiError('NOT_FOUND', 'Límite no encontrado'), 404)
   return c.json(row)
 })
 
@@ -84,6 +85,6 @@ budgetsRoutes.delete('/:id', async (c) => {
     .delete(budgets)
     .where(and(eq(budgets.id, id), eq(budgets.userId, userId)))
     .returning()
-  if (!row) return c.json(apiError('NOT_FOUND', 'Presupuesto no encontrado'), 404)
+  if (!row) return c.json(apiError('NOT_FOUND', 'Límite no encontrado'), 404)
   return c.json({ ok: true })
 })

@@ -137,3 +137,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-02 · P9.1–P9.4: PWA, backup JSON, Caddy HTTPS, REGISTRATION_OPEN; plan completo.
 - 2026-08-03 · README operativo (dev/prod/HTTPS/registro) + definición de hecho marcada.
 - 2026-08-20 · Post-plan: Cuentas propias (entidad opcional) + tarjetas por cuenta; pestaña `/accounts`; tarjeta opcional en movimientos; soft-archive.
+- 2026-08-20 · Post-plan: Presupuestos → Límites (nav/ruta `/limits`, copy orientativo; API `budgets` intacta).

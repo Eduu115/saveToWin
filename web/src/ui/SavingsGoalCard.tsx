@@ -42,7 +42,7 @@ export function SavingsGoalCard({
   rollOverCents,
 }: {
   stats: DashboardStats
-  /** Sobrante de sobres del periodo (si >0, habilita mover a ahorro). */
+  /** Sobrante bajo límites del periodo (si >0, habilita mover a ahorro). */
   rollOverCents: number
 }) {
   const qc = useQueryClient()

@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { evaluateInsights } from './insights.ts'
 
 describe('evaluateInsights', () => {
-  it('no emite nada sin presupuestos ni ahorro', () => {
+  it('no emite nada sin límites ni ahorro', () => {
     expect(
       evaluateInsights({
         period: '2026-07',
