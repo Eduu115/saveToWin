@@ -1,6 +1,6 @@
 /** Estadísticas de periodo. Todo en céntimos (integer). Nunca floats de dinero. */
 
-export type StatsFlow = 'expense' | 'income'
+export type StatsFlow = 'expense' | 'income' | 'savings'
 
 export interface StatsTransaction {
   /** ISO `YYYY-MM-DD` */
@@ -145,7 +145,8 @@ export function computePeriodStats(input: ComputePeriodStatsInput): PeriodStats 
     if (tx.amount < 0) throw new Error('amount debe ser ≥ 0')
     transactionCount += 1
     if (tx.type === 'income') incomeCents += tx.amount
-    else expenseCents += tx.amount
+    else if (tx.type === 'expense') expenseCents += tx.amount
+    // type === 'savings': transferencia a hucha; no cuenta como gasto ni ingreso del periodo
   }
 
   const balanceCents = incomeCents - expenseCents

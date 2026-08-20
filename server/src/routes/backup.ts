@@ -30,14 +30,14 @@ const backupSchema = z.object({
       key: z.string().min(1),
       label: z.string().min(1),
       color: z.string().min(1),
-      type: z.enum(['expense', 'income']),
+      type: z.enum(['expense', 'income', 'savings']),
     }),
   ),
   transactions: z.array(
     z.object({
       date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
       amount: z.number().int().nonnegative(),
-      type: z.enum(['expense', 'income']),
+      type: z.enum(['expense', 'income', 'savings']),
       categoryKey: z.string().min(1),
       accountKey: z.string().min(1),
       note: z.string().nullable().optional(),

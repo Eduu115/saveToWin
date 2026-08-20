@@ -71,7 +71,7 @@ function shortLabel(period: string): string {
   return MONTH_SHORT_ES[month - 1] ?? period
 }
 
-/** Ahorrado = saldo de la cuenta Savings (initial + ingresos − gastos). */
+/** Ahorrado = saldo de la cuenta Savings (initial + ingresos + movimientos ahorro − gastos). */
 async function savedFromSavingsAccount(userId: number): Promise<number> {
   const [savings] = await db
     .select()
@@ -85,6 +85,9 @@ async function savedFromSavingsAccount(userId: number): Promise<number> {
       income: sql<number>`coalesce(sum(case when ${transactions.type} = 'income' then ${transactions.amount} else 0 end), 0)`.mapWith(
         Number,
       ),
+      savingsIn: sql<number>`coalesce(sum(case when ${transactions.type} = 'savings' then ${transactions.amount} else 0 end), 0)`.mapWith(
+        Number,
+      ),
       expense: sql<number>`coalesce(sum(case when ${transactions.type} = 'expense' then ${transactions.amount} else 0 end), 0)`.mapWith(
         Number,
       ),
@@ -94,7 +97,12 @@ async function savedFromSavingsAccount(userId: number): Promise<number> {
       and(eq(transactions.userId, userId), eq(transactions.accountId, savings.id)),
     )
 
-  return savings.initialBalance + (agg?.income ?? 0) - (agg?.expense ?? 0)
+  return (
+    savings.initialBalance +
+    (agg?.income ?? 0) +
+    (agg?.savingsIn ?? 0) -
+    (agg?.expense ?? 0)
+  )
 }
 
 statsRoutes.get('/', async (c) => {
@@ -160,10 +168,11 @@ statsRoutes.get('/', async (c) => {
     if (tx.type === 'income') {
       monthlyIncome.set(p, (monthlyIncome.get(p) ?? 0) + tx.amount)
       monthlyBalance.set(p, (monthlyBalance.get(p) ?? 0) + tx.amount)
-    } else {
+    } else if (tx.type === 'expense') {
       monthlyExpense.set(p, (monthlyExpense.get(p) ?? 0) + tx.amount)
       monthlyBalance.set(p, (monthlyBalance.get(p) ?? 0) - tx.amount)
     }
+    // savings: no afecta balance mensual ni gráficos de gasto/ingreso
   }
   const savingsStreakMonths = computeSavingsStreak(monthlyBalance, period)
 

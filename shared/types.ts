@@ -14,7 +14,7 @@ export type ColorToken =
   | 'c11'
   | 'c12'
 
-export type FlowType = 'expense' | 'income'
+export type FlowType = 'expense' | 'income' | 'savings'
 
 /** Usuario autenticado (sin hash de password en respuestas API). */
 export interface User {
@@ -46,6 +46,8 @@ export interface Category {
   color: ColorToken
   type: FlowType
   parentId: number | null
+  /** Soft-archive; UI oculta archived. */
+  archived: boolean
 }
 
 export interface Transaction {

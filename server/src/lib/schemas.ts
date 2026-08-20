@@ -15,7 +15,7 @@ export const colorTokenSchema = z.enum([
   'c12',
 ])
 
-export const flowTypeSchema = z.enum(['expense', 'income'])
+export const flowTypeSchema = z.enum(['expense', 'income', 'savings'])
 
 export const isoDateSchema = z
   .string()
