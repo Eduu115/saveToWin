@@ -16,10 +16,12 @@ const { transactionsRoutes } = await import('./routes/transactions.js')
 const { budgetsRoutes } = await import('./routes/budgets.js')
 const { statsRoutes } = await import('./routes/stats.js')
 const { backupRoutes } = await import('./routes/backup.js')
+const { cardsRoutes } = await import('./routes/cards.js')
 
 export type {
   Account,
   Budget,
+  Card,
   Category,
   Transaction,
   User,
@@ -34,6 +36,7 @@ app.use('/api/*', requireAuth)
 app.get('/api/health', (c) => c.json({ ok: true }))
 app.route('/api/auth', authRoutes)
 app.route('/api/accounts', accountsRoutes)
+app.route('/api/cards', cardsRoutes)
 app.route('/api/categories', categoriesRoutes)
 app.route('/api/transactions', transactionsRoutes)
 app.route('/api/budgets', budgetsRoutes)

@@ -1,7 +1,7 @@
 import { and, count, eq, gte, lte, sql } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { db } from '../../db/client.js'
-import { accounts, categories, transactions } from '../../db/schema.js'
+import { accounts, cards, categories, transactions } from '../../db/schema.js'
 import type { AuthVariables } from '../lib/auth.js'
 import { apiError } from '../lib/errors.js'
 import {
@@ -30,6 +30,27 @@ async function ownedAccount(userId: number, accountId: number) {
     .where(and(eq(accounts.id, accountId), eq(accounts.userId, userId)))
     .limit(1)
   return row
+}
+
+/** cardId null/undefined OK; si hay id, debe ser de ese account + user. */
+async function ownedCardForAccount(
+  userId: number,
+  accountId: number,
+  cardId: number | null | undefined,
+) {
+  if (cardId == null) return true
+  const [row] = await db
+    .select({ id: cards.id })
+    .from(cards)
+    .where(
+      and(
+        eq(cards.id, cardId),
+        eq(cards.userId, userId),
+        eq(cards.accountId, accountId),
+      ),
+    )
+    .limit(1)
+  return Boolean(row)
 }
 
 transactionsRoutes.get('/', async (c) => {
@@ -68,6 +89,9 @@ transactionsRoutes.post('/', async (c) => {
   if (!(await ownedAccount(userId, body.accountId))) {
     return c.json(apiError('VALIDATION_ERROR', 'accountId no válido'), 400)
   }
+  if (!(await ownedCardForAccount(userId, body.accountId, body.cardId))) {
+    return c.json(apiError('VALIDATION_ERROR', 'cardId no válido para esa cuenta'), 400)
+  }
 
   const [row] = await db
     .insert(transactions)
@@ -78,6 +102,7 @@ transactionsRoutes.post('/', async (c) => {
       type: body.type,
       categoryId: body.categoryId,
       accountId: body.accountId,
+      cardId: body.cardId ?? null,
       note: body.note ?? null,
       tags: body.tags ?? null,
     })
@@ -156,6 +181,7 @@ transactionsRoutes.post('/batch', async (c) => {
               type: item.type,
               categoryId: item.categoryId,
               accountId: item.accountId,
+              cardId: item.cardId ?? null,
               note: item.note ?? null,
               tags: item.tags ?? null,
             })),
@@ -188,10 +214,29 @@ transactionsRoutes.patch('/:id', async (c) => {
     return c.json(apiError('VALIDATION_ERROR', 'accountId no válido'), 400)
   }
 
+  const [current] = await db
+    .select()
+    .from(transactions)
+    .where(and(eq(transactions.id, id), eq(transactions.userId, userId)))
+    .limit(1)
+  if (!current) return c.json(apiError('NOT_FOUND', 'Movimiento no encontrado'), 404)
+
+  const nextAccountId = body.accountId ?? current.accountId
+  const nextCardId =
+    body.cardId !== undefined
+      ? body.cardId
+      : body.accountId !== undefined && body.accountId !== current.accountId
+        ? null
+        : current.cardId
+  if (!(await ownedCardForAccount(userId, nextAccountId, nextCardId))) {
+    return c.json(apiError('VALIDATION_ERROR', 'cardId no válido para esa cuenta'), 400)
+  }
+
   const [row] = await db
     .update(transactions)
     .set({
       ...body,
+      cardId: nextCardId,
       note: body.note === undefined ? undefined : body.note,
       tags: body.tags === undefined ? undefined : body.tags,
     })

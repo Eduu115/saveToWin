@@ -28,14 +28,32 @@ export const periodSchema = z
 export const centsSchema = z.number().int()
 
 export const accountCreateSchema = z.object({
-  key: z.string().min(1),
-  label: z.string().min(1),
-  color: colorTokenSchema,
   name: z.string().min(1),
+  entity: z.string().min(1).nullable().optional(),
+  key: z.string().min(1).optional(),
+  label: z.string().min(1).optional(),
+  color: colorTokenSchema.optional().default('c1'),
   initialBalance: centsSchema.optional().default(0),
 })
 
-export const accountPatchSchema = accountCreateSchema.partial()
+export const accountPatchSchema = z.object({
+  name: z.string().min(1).optional(),
+  entity: z.string().min(1).nullable().optional(),
+  label: z.string().min(1).optional(),
+  color: colorTokenSchema.optional(),
+  initialBalance: centsSchema.optional(),
+  archived: z.boolean().optional(),
+})
+
+export const cardCreateSchema = z.object({
+  accountId: z.number().int().positive(),
+  name: z.string().min(1),
+})
+
+export const cardPatchSchema = z.object({
+  name: z.string().min(1).optional(),
+  archived: z.boolean().optional(),
+})
 
 export const categoryCreateSchema = z.object({
   key: z.string().min(1),
@@ -53,6 +71,7 @@ export const transactionCreateSchema = z.object({
   type: flowTypeSchema,
   categoryId: z.number().int().positive(),
   accountId: z.number().int().positive(),
+  cardId: z.number().int().positive().nullable().optional(),
   note: z.string().nullable().optional(),
   tags: z.array(z.string()).nullable().optional(),
 })
