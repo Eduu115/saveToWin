@@ -4,3 +4,6 @@ server/public/
 *.db
 .env
 .DS_Store
+
+# Guía de deploy local (Tunnel/server casero); no publicar en el repo
+docs/DEPLOY_TUNNEL.md
