@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { db } from '../../db/client.js'
-import { accounts, budgets, cards, categories, transactions, users } from '../../db/schema.js'
+import { accounts, budgets, cards, categories, subscriptions, transactions, users } from '../../db/schema.js'
 import type { AuthVariables } from '../lib/auth.js'
 import { apiError } from '../lib/errors.js'
 import { parseBody } from '../lib/validate.js'
@@ -224,6 +224,11 @@ backupRoutes.post('/', async (c) => {
     }
   }
 
+  await db
+    .update(subscriptions)
+    .set({ status: 'cancelled', cancelledAt: new Date().toISOString() })
+    .where(eq(subscriptions.userId, userId))
+  // ponytail: backup no serializa subscriptions; cancelar evita re-materializar tras wipe
   await db.delete(transactions).where(eq(transactions.userId, userId))
   await db.delete(budgets).where(eq(budgets.userId, userId))
 

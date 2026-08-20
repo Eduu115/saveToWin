@@ -10,6 +10,7 @@ import {
   transactionListQuerySchema,
   transactionPatchSchema,
 } from '../lib/schemas.js'
+import { ensureSubscriptionOccurrences } from '../lib/subscriptions.js'
 import { parseBody, parseQuery } from '../lib/validate.js'
 
 export const transactionsRoutes = new Hono<{ Variables: AuthVariables }>()
@@ -55,6 +56,8 @@ async function ownedCardForAccount(
 
 transactionsRoutes.get('/', async (c) => {
   const userId = c.get('userId')
+  // ponytail: materializa vencidas al listar (sin cron)
+  await ensureSubscriptionOccurrences(userId)
   const query = parseQuery(c, transactionListQuerySchema)
   if (query instanceof Response) return query
 
