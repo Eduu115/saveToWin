@@ -14,6 +14,25 @@ import {
 
 export const flowTypeEnum = pgEnum('flow_type', ['expense', 'income', 'savings'])
 
+export const subscriptionRecurrenceEnum = pgEnum('subscription_recurrence', [
+  'weekly',
+  'monthly',
+  'quarterly',
+  'yearly',
+  'custom',
+])
+
+export const subscriptionCustomUnitEnum = pgEnum('subscription_custom_unit', [
+  'weeks',
+  'months',
+  'years',
+])
+
+export const subscriptionStatusEnum = pgEnum('subscription_status', [
+  'active',
+  'cancelled',
+])
+
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
   email: text('email').notNull().unique(),
@@ -84,27 +103,61 @@ export const categories = pgTable(
   (t) => [uniqueIndex('categories_user_key').on(t.userId, t.key)],
 )
 
-export const transactions = pgTable('transactions', {
+export const subscriptions = pgTable('subscriptions', {
   id: serial('id').primaryKey(),
   userId: integer('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  /** ISO `YYYY-MM-DD` */
-  date: text('date').notNull(),
-  /** Céntimos */
-  amount: integer('amount').notNull(),
-  type: flowTypeEnum('type').notNull(),
   categoryId: integer('category_id')
     .notNull()
     .references(() => categories.id, { onDelete: 'restrict' }),
   accountId: integer('account_id')
     .notNull()
     .references(() => accounts.id, { onDelete: 'restrict' }),
-  /** Tarjeta usada (opcional); debe pertenecer a accountId. */
   cardId: integer('card_id').references(() => cards.id, { onDelete: 'set null' }),
+  /** Céntimos */
+  amount: integer('amount').notNull(),
+  recurrence: subscriptionRecurrenceEnum('recurrence').notNull(),
+  customEvery: integer('custom_every'),
+  customUnit: subscriptionCustomUnitEnum('custom_unit'),
+  /** Próxima fecha a materializar (`YYYY-MM-DD`). */
+  nextDate: text('next_date').notNull(),
   note: text('note'),
-  tags: jsonb('tags').$type<string[] | null>(),
+  status: subscriptionStatusEnum('status').notNull().default('active'),
+  cancelledAt: timestamp('cancelled_at', { withTimezone: true, mode: 'string' }),
 })
+
+export const transactions = pgTable(
+  'transactions',
+  {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    /** ISO `YYYY-MM-DD` */
+    date: text('date').notNull(),
+    /** Céntimos */
+    amount: integer('amount').notNull(),
+    type: flowTypeEnum('type').notNull(),
+    categoryId: integer('category_id')
+      .notNull()
+      .references(() => categories.id, { onDelete: 'restrict' }),
+    accountId: integer('account_id')
+      .notNull()
+      .references(() => accounts.id, { onDelete: 'restrict' }),
+    /** Tarjeta usada (opcional); debe pertenecer a accountId. */
+    cardId: integer('card_id').references(() => cards.id, { onDelete: 'set null' }),
+    /** Origen de suscripción (idempotencia al materializar). */
+    subscriptionId: integer('subscription_id').references(() => subscriptions.id, {
+      onDelete: 'set null',
+    }),
+    note: text('note'),
+    tags: jsonb('tags').$type<string[] | null>(),
+  },
+  (t) => [
+    uniqueIndex('transactions_subscription_date').on(t.subscriptionId, t.date),
+  ],
+)
 
 export const budgets = pgTable(
   'budgets',
