@@ -12,7 +12,11 @@ const CATEGORY_SEED: {
   { key: 'Groceries', label: 'Alimentación', color: 'c1', type: 'expense' },
   { key: 'Dining out', label: 'Restaurantes', color: 'c2', type: 'expense' },
   { key: 'Transport', label: 'Transporte', color: 'c3', type: 'expense' },
+  { key: 'Home & bills', label: 'Hogar y facturas', color: 'c8', type: 'expense' },
+  { key: 'Health', label: 'Salud', color: 'c9', type: 'expense' },
+  { key: 'Clothing', label: 'Prendas', color: 'c7', type: 'expense' },
   { key: 'Leisure', label: 'Ocio', color: 'c4', type: 'expense' },
+  { key: 'Travel', label: 'Viajes', color: 'c11', type: 'expense' },
   { key: 'Subscriptions', label: 'Suscripciones', color: 'c5', type: 'expense' },
   {
     key: 'Digital & games',
@@ -20,11 +24,7 @@ const CATEGORY_SEED: {
     color: 'c6',
     type: 'expense',
   },
-  { key: 'Clothing', label: 'Prendas', color: 'c7', type: 'expense' },
-  { key: 'Home & bills', label: 'Hogar y facturas', color: 'c8', type: 'expense' },
-  { key: 'Health', label: 'Salud', color: 'c9', type: 'expense' },
   { key: 'Education', label: 'Educación', color: 'c10', type: 'expense' },
-  { key: 'Travel', label: 'Viajes', color: 'c11', type: 'expense' },
   { key: 'Other', label: 'Otros', color: 'c12', type: 'expense' },
   {
     key: 'Savings transfer',

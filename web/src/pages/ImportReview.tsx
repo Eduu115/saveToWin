@@ -14,7 +14,7 @@ import type { Account, Category } from '../domain'
 import type { ImportDraft } from '../import/mapRows'
 import { learnRule } from '../import/rulesStore'
 import { t } from '../i18n/t'
-import { categoryBgClass, categoryIcon } from '../ui/categoryMeta'
+import { categoryBgClass, categoryIcon, sortCategoriesByDisplayOrder } from '../ui/categoryMeta'
 
 type Filter = 'all' | 'review' | 'duplicates' | 'uncategorized'
 
@@ -143,7 +143,7 @@ export function ImportReview(props: {
     )
   }
 
-  const accountLabel = (id: number) => accounts.find((a) => a.id === id)?.label ?? '—'
+  const accountLabel = (id: number) => accounts.find((a) => a.id === id)?.name ?? '—'
 
   return (
     <div className="flex flex-col gap-4 pb-8">
@@ -329,9 +329,9 @@ export function ImportReview(props: {
                       onChange={(e) => setCategory(d.localId, Number(e.target.value))}
                     >
                       <option value="">{t('import.pickCategory')}</option>
-                      {categories
-                        .filter((c) => !c.archived && c.type === 'expense')
-                        .map((c) => (
+                      {sortCategoriesByDisplayOrder(
+                        categories.filter((c) => !c.archived && c.type === 'expense'),
+                      ).map((c) => (
                         <option key={c.id} value={c.id}>
                           {c.label}
                         </option>
