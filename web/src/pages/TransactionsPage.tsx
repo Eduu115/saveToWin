@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatCents, parseAmountToCents } from '@savetowin/shared/money'
 import { useMemo, useState, type FormEvent } from 'react'
+import { Link, useParams } from 'react-router-dom'
 import {
   createTransaction,
   deleteTransaction,
@@ -10,8 +11,13 @@ import {
   updateTransaction,
 } from '../api/transactions'
 import { listCards } from '../api/accounts'
+import { createSubscription } from '../api/subscriptions'
 import { ApiClientError } from '../api/client'
-import type { Transaction } from '../domain'
+import type {
+  SubscriptionCustomUnit,
+  SubscriptionRecurrence,
+  Transaction,
+} from '../domain'
 import { t } from '../i18n/t'
 import { sortCategoriesByDisplayOrder } from '../ui/categoryMeta'
 
@@ -25,6 +31,9 @@ type Draft = {
   accountId: string
   cardId: string
   note: string
+  recurrence: SubscriptionRecurrence
+  customEvery: string
+  customUnit: SubscriptionCustomUnit
 }
 
 const emptyDraft = (): Draft => ({
@@ -35,6 +44,9 @@ const emptyDraft = (): Draft => ({
   accountId: '',
   cardId: '',
   note: '',
+  recurrence: 'monthly',
+  customEvery: '1',
+  customUnit: 'months',
 })
 
 function fromTx(tx: Transaction): Draft {
@@ -49,6 +61,9 @@ function fromTx(tx: Transaction): Draft {
     accountId: String(tx.accountId),
     cardId: tx.cardId != null ? String(tx.cardId) : '',
     note: tx.note ?? '',
+    recurrence: 'monthly',
+    customEvery: '1',
+    customUnit: 'months',
   }
 }
 
@@ -71,6 +86,7 @@ function amountSign(type: FlowDraft): string {
 }
 
 export function TransactionsPage() {
+  const { locale = 'es' } = useParams()
   const qc = useQueryClient()
   const [editing, setEditing] = useState<Transaction | null>(null)
   const [open, setOpen] = useState(false)
@@ -89,6 +105,14 @@ export function TransactionsPage() {
     () => (cats.data?.items ?? []).filter((c) => !c.archived),
     [cats.data],
   )
+
+  const selectedCat = useMemo(() => {
+    if (!draft.categoryId) return undefined
+    return (cats.data?.items ?? []).find((c) => String(c.id) === draft.categoryId)
+  }, [cats.data, draft.categoryId])
+
+  const isSubscriptionForm =
+    !editing && selectedCat?.key === 'Subscriptions' && draft.type === 'expense'
 
   const activeAccounts = useMemo(() => {
     const items = accs.data?.items ?? []
@@ -123,6 +147,20 @@ export function TransactionsPage() {
   const save = useMutation({
     mutationFn: async () => {
       const amount = parseAmountToCents(draft.amount)
+      if (isSubscriptionForm) {
+        return createSubscription({
+          categoryId: Number(draft.categoryId),
+          accountId: Number(draft.accountId),
+          cardId: draft.cardId ? Number(draft.cardId) : null,
+          amount,
+          recurrence: draft.recurrence,
+          customEvery:
+            draft.recurrence === 'custom' ? Number(draft.customEvery) || 1 : null,
+          customUnit: draft.recurrence === 'custom' ? draft.customUnit : null,
+          nextDate: draft.date,
+          note: draft.note || null,
+        })
+      }
       const body = {
         date: draft.date,
         amount,
@@ -137,6 +175,7 @@ export function TransactionsPage() {
     },
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ['transactions'] })
+      await qc.invalidateQueries({ queryKey: ['subscriptions'] })
       await qc.invalidateQueries({ queryKey: ['stats'] })
       setOpen(false)
       setEditing(null)
@@ -217,13 +256,21 @@ export function TransactionsPage() {
     <div>
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <h1 className="text-2xl font-extrabold tracking-tight">{t('transactions.title')}</h1>
-        <button
-          type="button"
-          onClick={openNew}
-          className="inline-flex h-tap items-center rounded-pill bg-accent px-4 font-semibold text-accent-fg focus-visible:shadow-focus focus-visible:outline-none"
-        >
-          {t('transactions.new')}
-        </button>
+        <div className="flex flex-wrap gap-2">
+          <Link
+            to={`/${locale}/subscriptions`}
+            className="inline-flex h-tap items-center rounded-pill bg-surface-2 px-4 font-semibold text-ink focus-visible:shadow-focus focus-visible:outline-none"
+          >
+            {t('transactions.subscriptions')}
+          </Link>
+          <button
+            type="button"
+            onClick={openNew}
+            className="inline-flex h-tap items-center rounded-pill bg-accent px-4 font-semibold text-accent-fg focus-visible:shadow-focus focus-visible:outline-none"
+          >
+            {t('transactions.new')}
+          </button>
+        </div>
       </div>
 
       {txs.isPending && <p className="text-ink-2">{t('common.loading')}</p>}
@@ -290,11 +337,19 @@ export function TransactionsPage() {
             className="w-full max-w-lg rounded-sheet bg-surface p-5 shadow-raised"
           >
             <h2 className="mb-4 text-lg font-bold">
-              {editing ? t('transactions.edit') : t('transactions.new')}
+              {editing
+                ? t('transactions.edit')
+                : isSubscriptionForm
+                  ? t('transactions.newSubscription')
+                  : t('transactions.new')}
             </h2>
             <div className="grid gap-3">
               <label>
-                <span className="mb-1 block text-sm text-ink-2">{t('transactions.date')}</span>
+                <span className="mb-1 block text-sm text-ink-2">
+                  {isSubscriptionForm
+                    ? t('subscriptions.firstCharge')
+                    : t('transactions.date')}
+                </span>
                 <input
                   className={field}
                   type="date"
@@ -314,20 +369,22 @@ export function TransactionsPage() {
                   onChange={(e) => setDraft({ ...draft, amount: e.target.value })}
                 />
               </label>
-              <label>
-                <span className="mb-1 block text-sm text-ink-2">{t('transactions.type')}</span>
-                <select
-                  className={field}
-                  value={draft.type}
-                  onChange={(e) =>
-                    setDraft(applyTypeDefaults(e.target.value as FlowDraft, draft))
-                  }
-                >
-                  <option value="expense">{t('transactions.type.expense')}</option>
-                  <option value="income">{t('transactions.type.income')}</option>
-                  <option value="savings">{t('transactions.type.savings')}</option>
-                </select>
-              </label>
+              {!isSubscriptionForm && (
+                <label>
+                  <span className="mb-1 block text-sm text-ink-2">{t('transactions.type')}</span>
+                  <select
+                    className={field}
+                    value={draft.type}
+                    onChange={(e) =>
+                      setDraft(applyTypeDefaults(e.target.value as FlowDraft, draft))
+                    }
+                  >
+                    <option value="expense">{t('transactions.type.expense')}</option>
+                    <option value="income">{t('transactions.type.income')}</option>
+                    <option value="savings">{t('transactions.type.savings')}</option>
+                  </select>
+                </label>
+              )}
               <label>
                 <span className="mb-1 block text-sm text-ink-2">{t('transactions.category')}</span>
                 <select
@@ -343,6 +400,79 @@ export function TransactionsPage() {
                   ))}
                 </select>
               </label>
+              {isSubscriptionForm && (
+                <>
+                  <label>
+                    <span className="mb-1 block text-sm text-ink-2">
+                      {t('subscriptions.recurrence')}
+                    </span>
+                    <select
+                      className={field}
+                      value={draft.recurrence}
+                      onChange={(e) =>
+                        setDraft({
+                          ...draft,
+                          recurrence: e.target.value as SubscriptionRecurrence,
+                        })
+                      }
+                    >
+                      <option value="weekly">
+                        {t('subscriptions.recurrence.weekly')}
+                      </option>
+                      <option value="monthly">
+                        {t('subscriptions.recurrence.monthly')}
+                      </option>
+                      <option value="quarterly">
+                        {t('subscriptions.recurrence.quarterly')}
+                      </option>
+                      <option value="yearly">
+                        {t('subscriptions.recurrence.yearly')}
+                      </option>
+                      <option value="custom">
+                        {t('subscriptions.recurrence.other')}
+                      </option>
+                    </select>
+                  </label>
+                  {draft.recurrence === 'custom' && (
+                    <div className="grid grid-cols-[1fr_1fr] gap-2">
+                      <label>
+                        <span className="mb-1 block text-sm text-ink-2">
+                          {t('subscriptions.every')}
+                        </span>
+                        <input
+                          className={`${field} tabular-nums`}
+                          type="number"
+                          min={1}
+                          required
+                          value={draft.customEvery}
+                          onChange={(e) =>
+                            setDraft({ ...draft, customEvery: e.target.value })
+                          }
+                        />
+                      </label>
+                      <label>
+                        <span className="mb-1 block text-sm text-ink-2">
+                          {t('subscriptions.unit')}
+                        </span>
+                        <select
+                          className={field}
+                          value={draft.customUnit}
+                          onChange={(e) =>
+                            setDraft({
+                              ...draft,
+                              customUnit: e.target.value as SubscriptionCustomUnit,
+                            })
+                          }
+                        >
+                          <option value="weeks">{t('subscriptions.unit.weeks')}</option>
+                          <option value="months">{t('subscriptions.unit.months')}</option>
+                          <option value="years">{t('subscriptions.unit.years')}</option>
+                        </select>
+                      </label>
+                    </div>
+                  )}
+                </>
+              )}
               <label>
                 <span className="mb-1 block text-sm text-ink-2">{t('transactions.account')}</span>
                 <select
@@ -376,10 +506,17 @@ export function TransactionsPage() {
                 </select>
               </label>
               <label>
-                <span className="mb-1 block text-sm text-ink-2">{t('transactions.note')}</span>
+                <span className="mb-1 block text-sm text-ink-2">
+                  {isSubscriptionForm
+                    ? t('subscriptions.noteLabel')
+                    : t('transactions.note')}
+                </span>
                 <input
                   className={field}
                   value={draft.note}
+                  placeholder={
+                    isSubscriptionForm ? t('subscriptions.notePlaceholder') : undefined
+                  }
                   onChange={(e) => setDraft({ ...draft, note: e.target.value })}
                 />
               </label>

@@ -10,6 +10,7 @@ import { DashboardPage } from './pages/DashboardPage'
 import { ImportPage } from './pages/ImportPage'
 import { LocaleLayout } from './pages/LocaleLayout'
 import { SettingsPage } from './pages/SettingsPage'
+import { SubscriptionsPage } from './pages/SubscriptionsPage'
 import { TransactionsPage } from './pages/TransactionsPage'
 
 const queryClient = new QueryClient({
@@ -35,6 +36,7 @@ export function App() {
                 <Route index element={<Navigate to="dashboard" replace />} />
                 <Route path="dashboard" element={<DashboardPage />} />
                 <Route path="transactions" element={<TransactionsPage />} />
+                <Route path="subscriptions" element={<SubscriptionsPage />} />
                 <Route path="accounts" element={<AccountsPage />} />
                 <Route path="limits" element={<BudgetsPage />} />
                 <Route path="budgets" element={<Navigate to="../limits" replace />} />
