@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm'
 import {
+  boolean,
   integer,
   jsonb,
   pgEnum,
@@ -11,7 +12,7 @@ import {
   type AnyPgColumn,
 } from 'drizzle-orm/pg-core'
 
-export const flowTypeEnum = pgEnum('flow_type', ['expense', 'income'])
+export const flowTypeEnum = pgEnum('flow_type', ['expense', 'income', 'savings'])
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -56,6 +57,8 @@ export const categories = pgTable(
     parentId: integer('parent_id').references((): AnyPgColumn => categories.id, {
       onDelete: 'set null',
     }),
+    /** Soft-archive: nunca borrar filas; UI oculta archived. */
+    archived: boolean('archived').notNull().default(false),
   },
   (t) => [uniqueIndex('categories_user_key').on(t.userId, t.key)],
 )
