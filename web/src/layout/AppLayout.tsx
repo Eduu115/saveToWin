@@ -27,7 +27,7 @@ function ThemeToggle() {
       type="button"
       aria-label={theme === 'dark' ? t('theme.toLight') : t('theme.toDark')}
       onClick={() => setTheme(next)}
-      className="inline-flex h-tap w-tap items-center justify-center rounded-pill bg-surface-2 text-ink-2 focus-visible:shadow-focus focus-visible:outline-none"
+      className="inline-flex size-tap min-h-tap min-w-tap shrink-0 items-center justify-center rounded-full bg-surface-2 text-ink-2 focus-visible:shadow-focus focus-visible:outline-none"
     >
       {theme === 'dark' ? <Sun size={17} strokeWidth={2} aria-hidden /> : <Moon size={17} strokeWidth={2} aria-hidden />}
     </button>
