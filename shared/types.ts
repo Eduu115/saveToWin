@@ -34,8 +34,19 @@ export interface Account {
   label: string
   color: ColorToken
   name: string
+  /** Banco / entidad (opcional). */
+  entity: string | null
   /** Céntimos */
   initialBalance: number
+  archived: boolean
+}
+
+export interface Card {
+  id: number
+  userId: number
+  accountId: number
+  name: string
+  archived: boolean
 }
 
 export interface Category {
@@ -60,6 +71,8 @@ export interface Transaction {
   type: FlowType
   categoryId: number
   accountId: number
+  /** Tarjeta opcional (pertenece a accountId). */
+  cardId: number | null
   note: string | null
   tags: string[] | null
 }

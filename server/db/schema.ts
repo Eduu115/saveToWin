@@ -37,10 +37,31 @@ export const accounts = pgTable(
     label: text('label').notNull(),
     color: text('color').notNull(),
     name: text('name').notNull(),
+    /** Banco / entidad (opcional). */
+    entity: text('entity'),
     /** Céntimos */
     initialBalance: integer('initial_balance').notNull().default(0),
+    /** Soft-archive: UI oculta; histórico intacto. */
+    archived: boolean('archived').notNull().default(false),
   },
   (t) => [uniqueIndex('accounts_user_key').on(t.userId, t.key)],
+)
+
+/** Tarjetas ligadas a una cuenta (pago opcional en movimientos). */
+export const cards = pgTable(
+  'cards',
+  {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    accountId: integer('account_id')
+      .notNull()
+      .references(() => accounts.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    archived: boolean('archived').notNull().default(false),
+  },
+  (t) => [uniqueIndex('cards_account_name').on(t.accountId, t.name)],
 )
 
 export const categories = pgTable(
@@ -79,6 +100,8 @@ export const transactions = pgTable('transactions', {
   accountId: integer('account_id')
     .notNull()
     .references(() => accounts.id, { onDelete: 'restrict' }),
+  /** Tarjeta usada (opcional); debe pertenecer a accountId. */
+  cardId: integer('card_id').references(() => cards.id, { onDelete: 'set null' }),
   note: text('note'),
   tags: jsonb('tags').$type<string[] | null>(),
 })
