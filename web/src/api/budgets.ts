@@ -1,6 +1,8 @@
 import type { Budget } from '../domain'
 import { api } from './client'
 
+// ponytail: UI «Límites»; endpoint/tabla siguen `/api/budgets` para no migrar dominio.
+
 export function listBudgets() {
   return api<{ items: Budget[] }>('/api/budgets')
 }

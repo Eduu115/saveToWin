@@ -35,6 +35,10 @@ export default {
         },
         fontFamily: { sans: 'var(--font-sans)' },
         height: { row: 'var(--h-row)', field: 'var(--h-field)', tap: 'var(--h-tap)' },
+        width: { tap: 'var(--h-tap)' },
+        minHeight: { tap: 'var(--h-tap)' },
+        minWidth: { tap: 'var(--h-tap)' },
+        size: { tap: 'var(--h-tap)' },
       },
     },
   }

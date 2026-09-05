@@ -3,12 +3,14 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthGuard } from './auth/AuthGuard'
 import { DEFAULT_LOCALE } from './i18n/locales'
 import { AppLayout } from './layout/AppLayout'
+import { AccountsPage } from './pages/AccountsPage'
 import { AuthPage } from './pages/AuthPage'
 import { BudgetsPage } from './pages/BudgetsPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { ImportPage } from './pages/ImportPage'
 import { LocaleLayout } from './pages/LocaleLayout'
 import { SettingsPage } from './pages/SettingsPage'
+import { SubscriptionsPage } from './pages/SubscriptionsPage'
 import { TransactionsPage } from './pages/TransactionsPage'
 
 const queryClient = new QueryClient({
@@ -34,7 +36,10 @@ export function App() {
                 <Route index element={<Navigate to="dashboard" replace />} />
                 <Route path="dashboard" element={<DashboardPage />} />
                 <Route path="transactions" element={<TransactionsPage />} />
-                <Route path="budgets" element={<BudgetsPage />} />
+                <Route path="subscriptions" element={<SubscriptionsPage />} />
+                <Route path="accounts" element={<AccountsPage />} />
+                <Route path="limits" element={<BudgetsPage />} />
+                <Route path="budgets" element={<Navigate to="../limits" replace />} />
                 <Route path="import" element={<ImportPage />} />
                 <Route path="settings" element={<SettingsPage />} />
               </Route>

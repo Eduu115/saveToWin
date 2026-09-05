@@ -1,6 +1,6 @@
 /** Estadísticas de periodo. Todo en céntimos (integer). Nunca floats de dinero. */
 
-export type StatsFlow = 'expense' | 'income'
+export type StatsFlow = 'expense' | 'income' | 'savings'
 
 export interface StatsTransaction {
   /** ISO `YYYY-MM-DD` */
@@ -14,7 +14,7 @@ export interface ComputePeriodStatsInput {
   transactions: readonly StatsTransaction[]
   /** Periodo `YYYY-MM` */
   period: string
-  /** Tope de presupuesto del periodo (céntimos) */
+  /** Tope de límite del periodo (céntimos) */
   budgetLimitCents: number
   /** Objetivo de ahorro (céntimos) */
   savingsGoalCents: number
@@ -39,7 +39,7 @@ export interface PeriodStats {
   goalProgressPercent: number
   budgetLimitCents: number
   budgetRemainingCents: number
-  /** % del presupuesto usado (entero). */
+  /** % del límite usado (entero). */
   budgetUsedPercent: number
   /** Media diaria de gasto (céntimos), redondeada. */
   dailyAverageCents: number
@@ -145,7 +145,8 @@ export function computePeriodStats(input: ComputePeriodStatsInput): PeriodStats 
     if (tx.amount < 0) throw new Error('amount debe ser ≥ 0')
     transactionCount += 1
     if (tx.type === 'income') incomeCents += tx.amount
-    else expenseCents += tx.amount
+    else if (tx.type === 'expense') expenseCents += tx.amount
+    // type === 'savings': transferencia a hucha; no cuenta como gasto ni ingreso del periodo
   }
 
   const balanceCents = incomeCents - expenseCents

@@ -16,11 +16,15 @@ const { transactionsRoutes } = await import('./routes/transactions.js')
 const { budgetsRoutes } = await import('./routes/budgets.js')
 const { statsRoutes } = await import('./routes/stats.js')
 const { backupRoutes } = await import('./routes/backup.js')
+const { cardsRoutes } = await import('./routes/cards.js')
+const { subscriptionsRoutes } = await import('./routes/subscriptions.js')
 
 export type {
   Account,
   Budget,
+  Card,
   Category,
+  Subscription,
   Transaction,
   User,
 } from '@savetowin/shared/types'
@@ -34,8 +38,10 @@ app.use('/api/*', requireAuth)
 app.get('/api/health', (c) => c.json({ ok: true }))
 app.route('/api/auth', authRoutes)
 app.route('/api/accounts', accountsRoutes)
+app.route('/api/cards', cardsRoutes)
 app.route('/api/categories', categoriesRoutes)
 app.route('/api/transactions', transactionsRoutes)
+app.route('/api/subscriptions', subscriptionsRoutes)
 app.route('/api/budgets', budgetsRoutes)
 app.route('/api/stats', statsRoutes)
 app.route('/api/backup', backupRoutes)

@@ -8,7 +8,8 @@
     "./types": "./types.ts",
     "./stats": "./stats.ts",
     "./insights": "./insights.ts",
-    "./categorize": "./categorize.ts"
+    "./categorize": "./categorize.ts",
+    "./subscription": "./subscription.ts"
   },
   "scripts": {
     "test": "vitest run"

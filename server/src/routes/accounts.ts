@@ -9,6 +9,17 @@ import { parseBody } from '../lib/validate.js'
 
 export const accountsRoutes = new Hono<{ Variables: AuthVariables }>()
 
+function slugKey(name: string): string {
+  const base = name
+    .normalize('NFD')
+    .replace(/\p{M}/gu, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 40)
+  return `${base || 'account'}-${Date.now().toString(36)}`
+}
+
 accountsRoutes.get('/', async (c) => {
   const userId = c.get('userId')
   const items = await db.select().from(accounts).where(eq(accounts.userId, userId))
@@ -23,7 +34,15 @@ accountsRoutes.post('/', async (c) => {
   try {
     const [row] = await db
       .insert(accounts)
-      .values({ ...body, userId })
+      .values({
+        userId,
+        name: body.name,
+        entity: body.entity ?? null,
+        key: body.key ?? slugKey(body.name),
+        label: body.label ?? body.name,
+        color: body.color,
+        initialBalance: body.initialBalance,
+      })
       .returning()
     return c.json(row, 201)
   } catch {
@@ -43,15 +62,21 @@ accountsRoutes.patch('/:id', async (c) => {
     return c.json(apiError('VALIDATION_ERROR', 'Nada que actualizar'), 400)
   }
 
+  const patch: Record<string, unknown> = { ...body }
+  if (body.name !== undefined && body.label === undefined) {
+    patch.label = body.name
+  }
+
   const [row] = await db
     .update(accounts)
-    .set(body)
+    .set(patch)
     .where(and(eq(accounts.id, id), eq(accounts.userId, userId)))
     .returning()
   if (!row) return c.json(apiError('NOT_FOUND', 'Cuenta no encontrada'), 404)
   return c.json(row)
 })
 
+/** Soft-archive (nunca borrar filas de dominio con histórico). */
 accountsRoutes.delete('/:id', async (c) => {
   const userId = c.get('userId')
   const id = Number(c.req.param('id'))
@@ -60,9 +85,10 @@ accountsRoutes.delete('/:id', async (c) => {
   }
 
   const [row] = await db
-    .delete(accounts)
+    .update(accounts)
+    .set({ archived: true })
     .where(and(eq(accounts.id, id), eq(accounts.userId, userId)))
     .returning()
   if (!row) return c.json(apiError('NOT_FOUND', 'Cuenta no encontrada'), 404)
-  return c.json({ ok: true })
+  return c.json(row)
 })

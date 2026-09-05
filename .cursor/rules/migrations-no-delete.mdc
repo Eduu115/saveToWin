@@ -1,0 +1,13 @@
+---
+description: Migraciones de datos — nunca borrar filas de dominio
+alwaysApply: true
+---
+
+# Migraciones sin pérdida de datos
+
+Cualquier cambio de esquema o de taxonomía (categorías, tipos, cuentas) **debe** ir en una migración SQL/Drizzle.
+
+- **NUNCA** `DELETE` de filas de dominio (categorías, cuentas, movimientos, presupuestos, usuarios) como parte de un cambio de modelo.
+- Para retirar una categoría u opción: **reasignar FKs** a la categoría destino y **archivar** la fila (`archived = true` o equivalente). La UI oculta archivadas; el histórico sigue intacto.
+- Renombres = `UPDATE` de `label`/`key` (si hace falta clave nueva, insertar y reasignar; no borrar la vieja).
+- Enums nuevos: `ALTER TYPE … ADD VALUE`; no recrear el enum tirando datos.

@@ -15,7 +15,7 @@ export const colorTokenSchema = z.enum([
   'c12',
 ])
 
-export const flowTypeSchema = z.enum(['expense', 'income'])
+export const flowTypeSchema = z.enum(['expense', 'income', 'savings'])
 
 export const isoDateSchema = z
   .string()
@@ -28,14 +28,32 @@ export const periodSchema = z
 export const centsSchema = z.number().int()
 
 export const accountCreateSchema = z.object({
-  key: z.string().min(1),
-  label: z.string().min(1),
-  color: colorTokenSchema,
   name: z.string().min(1),
+  entity: z.string().min(1).nullable().optional(),
+  key: z.string().min(1).optional(),
+  label: z.string().min(1).optional(),
+  color: colorTokenSchema.optional().default('c1'),
   initialBalance: centsSchema.optional().default(0),
 })
 
-export const accountPatchSchema = accountCreateSchema.partial()
+export const accountPatchSchema = z.object({
+  name: z.string().min(1).optional(),
+  entity: z.string().min(1).nullable().optional(),
+  label: z.string().min(1).optional(),
+  color: colorTokenSchema.optional(),
+  initialBalance: centsSchema.optional(),
+  archived: z.boolean().optional(),
+})
+
+export const cardCreateSchema = z.object({
+  accountId: z.number().int().positive(),
+  name: z.string().min(1),
+})
+
+export const cardPatchSchema = z.object({
+  name: z.string().min(1).optional(),
+  archived: z.boolean().optional(),
+})
 
 export const categoryCreateSchema = z.object({
   key: z.string().min(1),
@@ -53,6 +71,7 @@ export const transactionCreateSchema = z.object({
   type: flowTypeSchema,
   categoryId: z.number().int().positive(),
   accountId: z.number().int().positive(),
+  cardId: z.number().int().positive().nullable().optional(),
   note: z.string().nullable().optional(),
   tags: z.array(z.string()).nullable().optional(),
 })
@@ -97,3 +116,79 @@ export const updateMeSchema = z.object({
   savingsGoalCents: centsSchema.positive().optional(),
   name: z.string().min(1).nullable().optional(),
 })
+
+export const subscriptionRecurrenceSchema = z.enum([
+  'weekly',
+  'monthly',
+  'quarterly',
+  'yearly',
+  'custom',
+])
+
+export const subscriptionCustomUnitSchema = z.enum(['weeks', 'months', 'years'])
+
+const subscriptionFields = {
+  categoryId: z.number().int().positive(),
+  accountId: z.number().int().positive(),
+  cardId: z.number().int().positive().nullable().optional(),
+  amount: centsSchema.positive(),
+  recurrence: subscriptionRecurrenceSchema,
+  customEvery: z.number().int().positive().nullable().optional(),
+  customUnit: subscriptionCustomUnitSchema.nullable().optional(),
+  /** Primera cargo / próxima fecha (`YYYY-MM-DD`). */
+  nextDate: isoDateSchema,
+  note: z.string().nullable().optional(),
+}
+
+export const subscriptionCreateSchema = z
+  .object(subscriptionFields)
+  .superRefine((val, ctx) => {
+    if (val.recurrence === 'custom') {
+      if (val.customEvery == null || val.customEvery < 1) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'customEvery obligatorio si recurrence=custom',
+          path: ['customEvery'],
+        })
+      }
+      if (!val.customUnit) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'customUnit obligatorio si recurrence=custom',
+          path: ['customUnit'],
+        })
+      }
+    }
+  })
+
+export const subscriptionPatchSchema = z
+  .object({
+    categoryId: z.number().int().positive().optional(),
+    accountId: z.number().int().positive().optional(),
+    cardId: z.number().int().positive().nullable().optional(),
+    amount: centsSchema.positive().optional(),
+    recurrence: subscriptionRecurrenceSchema.optional(),
+    customEvery: z.number().int().positive().nullable().optional(),
+    customUnit: subscriptionCustomUnitSchema.nullable().optional(),
+    nextDate: isoDateSchema.optional(),
+    note: z.string().nullable().optional(),
+    status: z.enum(['active', 'cancelled']).optional(),
+  })
+  .superRefine((val, ctx) => {
+    if (val.recurrence === 'custom') {
+      if (val.customEvery == null || val.customEvery < 1) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'customEvery obligatorio si recurrence=custom',
+          path: ['customEvery'],
+        })
+      }
+      if (!val.customUnit) {
+        ctx.addIssue({
+          code: 'custom',
+          message: 'customUnit obligatorio si recurrence=custom',
+          path: ['customUnit'],
+        })
+      }
+    }
+  })

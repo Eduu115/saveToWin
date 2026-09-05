@@ -1,5 +1,6 @@
 import { sql } from 'drizzle-orm'
 import {
+  boolean,
   integer,
   jsonb,
   pgEnum,
@@ -11,7 +12,26 @@ import {
   type AnyPgColumn,
 } from 'drizzle-orm/pg-core'
 
-export const flowTypeEnum = pgEnum('flow_type', ['expense', 'income'])
+export const flowTypeEnum = pgEnum('flow_type', ['expense', 'income', 'savings'])
+
+export const subscriptionRecurrenceEnum = pgEnum('subscription_recurrence', [
+  'weekly',
+  'monthly',
+  'quarterly',
+  'yearly',
+  'custom',
+])
+
+export const subscriptionCustomUnitEnum = pgEnum('subscription_custom_unit', [
+  'weeks',
+  'months',
+  'years',
+])
+
+export const subscriptionStatusEnum = pgEnum('subscription_status', [
+  'active',
+  'cancelled',
+])
 
 export const users = pgTable('users', {
   id: serial('id').primaryKey(),
@@ -36,10 +56,31 @@ export const accounts = pgTable(
     label: text('label').notNull(),
     color: text('color').notNull(),
     name: text('name').notNull(),
+    /** Banco / entidad (opcional). */
+    entity: text('entity'),
     /** Céntimos */
     initialBalance: integer('initial_balance').notNull().default(0),
+    /** Soft-archive: UI oculta; histórico intacto. */
+    archived: boolean('archived').notNull().default(false),
   },
   (t) => [uniqueIndex('accounts_user_key').on(t.userId, t.key)],
+)
+
+/** Tarjetas ligadas a una cuenta (pago opcional en movimientos). */
+export const cards = pgTable(
+  'cards',
+  {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    accountId: integer('account_id')
+      .notNull()
+      .references(() => accounts.id, { onDelete: 'cascade' }),
+    name: text('name').notNull(),
+    archived: boolean('archived').notNull().default(false),
+  },
+  (t) => [uniqueIndex('cards_account_name').on(t.accountId, t.name)],
 )
 
 export const categories = pgTable(
@@ -56,29 +97,67 @@ export const categories = pgTable(
     parentId: integer('parent_id').references((): AnyPgColumn => categories.id, {
       onDelete: 'set null',
     }),
+    /** Soft-archive: nunca borrar filas; UI oculta archived. */
+    archived: boolean('archived').notNull().default(false),
   },
   (t) => [uniqueIndex('categories_user_key').on(t.userId, t.key)],
 )
 
-export const transactions = pgTable('transactions', {
+export const subscriptions = pgTable('subscriptions', {
   id: serial('id').primaryKey(),
   userId: integer('user_id')
     .notNull()
     .references(() => users.id, { onDelete: 'cascade' }),
-  /** ISO `YYYY-MM-DD` */
-  date: text('date').notNull(),
-  /** Céntimos */
-  amount: integer('amount').notNull(),
-  type: flowTypeEnum('type').notNull(),
   categoryId: integer('category_id')
     .notNull()
     .references(() => categories.id, { onDelete: 'restrict' }),
   accountId: integer('account_id')
     .notNull()
     .references(() => accounts.id, { onDelete: 'restrict' }),
+  cardId: integer('card_id').references(() => cards.id, { onDelete: 'set null' }),
+  /** Céntimos */
+  amount: integer('amount').notNull(),
+  recurrence: subscriptionRecurrenceEnum('recurrence').notNull(),
+  customEvery: integer('custom_every'),
+  customUnit: subscriptionCustomUnitEnum('custom_unit'),
+  /** Próxima fecha a materializar (`YYYY-MM-DD`). */
+  nextDate: text('next_date').notNull(),
   note: text('note'),
-  tags: jsonb('tags').$type<string[] | null>(),
+  status: subscriptionStatusEnum('status').notNull().default('active'),
+  cancelledAt: timestamp('cancelled_at', { withTimezone: true, mode: 'string' }),
 })
+
+export const transactions = pgTable(
+  'transactions',
+  {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    /** ISO `YYYY-MM-DD` */
+    date: text('date').notNull(),
+    /** Céntimos */
+    amount: integer('amount').notNull(),
+    type: flowTypeEnum('type').notNull(),
+    categoryId: integer('category_id')
+      .notNull()
+      .references(() => categories.id, { onDelete: 'restrict' }),
+    accountId: integer('account_id')
+      .notNull()
+      .references(() => accounts.id, { onDelete: 'restrict' }),
+    /** Tarjeta usada (opcional); debe pertenecer a accountId. */
+    cardId: integer('card_id').references(() => cards.id, { onDelete: 'set null' }),
+    /** Origen de suscripción (idempotencia al materializar). */
+    subscriptionId: integer('subscription_id').references(() => subscriptions.id, {
+      onDelete: 'set null',
+    }),
+    note: text('note'),
+    tags: jsonb('tags').$type<string[] | null>(),
+  },
+  (t) => [
+    uniqueIndex('transactions_subscription_date').on(t.subscriptionId, t.date),
+  ],
+)
 
 export const budgets = pgTable(
   'budgets',

@@ -6,6 +6,7 @@ import {
   ChevronRight,
   CircleAlert,
   Plus,
+  Target,
   TriangleAlert,
   Wallet,
 } from 'lucide-react'
@@ -20,7 +21,7 @@ import { ApiClientError } from '../api/client'
 import { listCategories, listTransactions } from '../api/transactions'
 import { fetchStats } from '../api/stats'
 import { t } from '../i18n/t'
-import { categoryBgClass, categoryCssVar, categoryIcon } from '../ui/categoryMeta'
+import { categoryBgClass, categoryCssVar, categoryIcon, sortCategoriesByDisplayOrder } from '../ui/categoryMeta'
 import { computeEnvelopeBar, type EnvelopeStatus } from '../ui/envelopeBar'
 import { SavingsGoalCard } from '../ui/SavingsGoalCard'
 
@@ -92,7 +93,8 @@ function StatusPill({ status, usedPercent }: { status: EnvelopeStatus; usedPerce
   )
 }
 
-/** Directions 12a — sobres por categoría (over/under con icono + texto). */
+/** Directions 12a — límites por categoría (over/under con icono + texto).
+ * ponytail: componente/API siguen «budgets»; copy y ruta UI = Límites. */
 export function BudgetsPage() {
   const qc = useQueryClient()
   const [period, setPeriod] = useState(currentPeriod)
@@ -120,7 +122,10 @@ export function BudgetsPage() {
   })
 
   const expenseCats = useMemo(
-    () => (cats.data?.items ?? []).filter((c) => c.type === 'expense'),
+    () =>
+      sortCategoriesByDisplayOrder(
+        (cats.data?.items ?? []).filter((c) => c.type === 'expense' && !c.archived),
+      ),
     [cats.data],
   )
 
@@ -241,6 +246,8 @@ export function BudgetsPage() {
         <div className="flex flex-col gap-1.5">
           <h1 className="text-[26px] font-extrabold tracking-tight">{t('budgets.title')}</h1>
           <p className="text-[13px] font-medium text-ink-2">
+            {t('budgets.subtitle')}
+            {' · '}
             {periodLabel(period)}
             {rollsOver > 0 && totalBudgeted > 0
               ? ` · ${formatCents(rollsOver)} ${t('budgets.rollsOverHint')}`
@@ -250,14 +257,15 @@ export function BudgetsPage() {
         <div className="flex flex-wrap items-center gap-2">
           <div className="flex gap-0.5 rounded-pill bg-surface-2 p-0.5">
             <span className="inline-flex items-center gap-1.5 rounded-pill bg-surface px-3.5 py-2.5 text-[12.5px] font-bold shadow-sm">
-              <Wallet size={15} strokeWidth={2.2} aria-hidden />
-              {t('budgets.envelopes')}
+              <Target size={15} strokeWidth={2.2} aria-hidden />
+              {t('budgets.limits')}
             </span>
             <span
               className="inline-flex items-center gap-1.5 rounded-pill px-3.5 py-2.5 text-[12.5px] font-semibold text-ink-3"
-              title={t('budgets.limitsSoon')}
+              title={t('budgets.envelopesSoon')}
             >
-              {t('budgets.limits')}
+              <Wallet size={15} strokeWidth={2.2} aria-hidden />
+              {t('budgets.envelopes')}
             </span>
           </div>
           <div className="flex items-center gap-0.5 rounded-pill border border-line bg-surface p-0.5">

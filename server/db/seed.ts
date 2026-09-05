@@ -7,20 +7,31 @@ const CATEGORY_SEED: {
   key: string
   label: string
   color: ColorToken
-  type: 'expense' | 'income'
+  type: 'expense' | 'income' | 'savings'
 }[] = [
   { key: 'Groceries', label: 'Alimentación', color: 'c1', type: 'expense' },
   { key: 'Dining out', label: 'Restaurantes', color: 'c2', type: 'expense' },
   { key: 'Transport', label: 'Transporte', color: 'c3', type: 'expense' },
-  { key: 'Tech', label: 'Tecnología', color: 'c4', type: 'expense' },
-  { key: 'Subscriptions', label: 'Suscripciones', color: 'c5', type: 'expense' },
-  { key: 'Digital & games', label: 'Digital y juegos', color: 'c6', type: 'expense' },
-  { key: 'Shopping', label: 'Compras', color: 'c7', type: 'expense' },
   { key: 'Home & bills', label: 'Hogar y facturas', color: 'c8', type: 'expense' },
   { key: 'Health', label: 'Salud', color: 'c9', type: 'expense' },
-  { key: 'Education', label: 'Educación', color: 'c10', type: 'expense' },
+  { key: 'Clothing', label: 'Prendas', color: 'c7', type: 'expense' },
+  { key: 'Leisure', label: 'Ocio', color: 'c4', type: 'expense' },
   { key: 'Travel', label: 'Viajes', color: 'c11', type: 'expense' },
+  { key: 'Subscriptions', label: 'Suscripciones', color: 'c5', type: 'expense' },
+  {
+    key: 'Digital & games',
+    label: 'Tecnología, digital y juegos',
+    color: 'c6',
+    type: 'expense',
+  },
+  { key: 'Education', label: 'Educación', color: 'c10', type: 'expense' },
   { key: 'Other', label: 'Otros', color: 'c12', type: 'expense' },
+  {
+    key: 'Savings transfer',
+    label: 'Ahorro',
+    color: 'c11',
+    type: 'savings',
+  },
 ]
 
 const ACCOUNT_SEED: {
@@ -43,6 +54,17 @@ export async function seedForUser(userId: number) {
   for (const row of CATEGORY_SEED) {
     await db.insert(categories).values({ ...row, userId }).onConflictDoNothing()
   }
+  // Usuarios antiguos: asegurar label nuevo de Digital si sigue activa
+  await db
+    .update(categories)
+    .set({ label: 'Tecnología, digital y juegos' })
+    .where(
+      and(
+        eq(categories.userId, userId),
+        eq(categories.key, 'Digital & games'),
+        eq(categories.archived, false),
+      ),
+    )
   for (const row of ACCOUNT_SEED) {
     await db
       .insert(accounts)
@@ -56,15 +78,21 @@ export async function assertSeedIsolation(userA: number, userB: number) {
   await seedForUser(userA)
   await seedForUser(userA) // segunda vez, no duplica
 
-  const catsA = await db.select().from(categories).where(eq(categories.userId, userA))
-  if (catsA.length !== 12) throw new Error(`userA categories=${catsA.length}, expected 12`)
+  const catsA = await db
+    .select()
+    .from(categories)
+    .where(and(eq(categories.userId, userA), eq(categories.archived, false)))
+  if (catsA.length !== 13) throw new Error(`userA categories=${catsA.length}, expected 13`)
 
   const accsA = await db.select().from(accounts).where(eq(accounts.userId, userA))
   if (accsA.length !== 7) throw new Error(`userA accounts=${accsA.length}, expected 7`)
 
   await seedForUser(userB)
-  const catsB = await db.select().from(categories).where(eq(categories.userId, userB))
-  if (catsB.length !== 12) throw new Error(`userB categories=${catsB.length}, expected 12`)
+  const catsB = await db
+    .select()
+    .from(categories)
+    .where(and(eq(categories.userId, userB), eq(categories.archived, false)))
+  if (catsB.length !== 13) throw new Error(`userB categories=${catsB.length}, expected 13`)
 
   const other = catsA.find((c) => c.key === 'Other')
   const current = accsA.find((a) => a.key === 'Current')

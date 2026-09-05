@@ -9,20 +9,28 @@ export type BackupPayload = {
     label: string
     color: string
     name: string
+    entity?: string | null
     initialBalance: number
+    archived?: boolean
+  }[]
+  cards?: {
+    accountKey: string
+    name: string
+    archived?: boolean
   }[]
   categories: {
     key: string
     label: string
     color: string
-    type: 'expense' | 'income'
+    type: 'expense' | 'income' | 'savings'
   }[]
   transactions: {
     date: string
     amount: number
-    type: 'expense' | 'income'
+    type: 'expense' | 'income' | 'savings'
     categoryKey: string
     accountKey: string
+    cardName?: string | null
     note?: string | null
     tags?: string[] | null
   }[]
@@ -40,6 +48,7 @@ export function restoreBackup(body: BackupPayload) {
     budgets: number
     accounts: number
     categories: number
+    cards?: number
   }>('/api/backup', {
     method: 'POST',
     body: JSON.stringify(body),

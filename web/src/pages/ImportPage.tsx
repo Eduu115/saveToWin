@@ -110,7 +110,7 @@ export function ImportPage() {
         setRoles(nextRoles)
         setAccountId((prev) => {
           if (prev) return prev
-          const first = accounts.data?.items[0]
+          const first = accounts.data?.items.find((a) => !a.archived) ?? accounts.data?.items[0]
           return first ? String(first.id) : ''
         })
         if (saved) {
@@ -531,9 +531,11 @@ export function ImportPage() {
                   value={accountId}
                   onChange={(e) => setAccountId(e.target.value)}
                 >
-                  {(accounts.data?.items ?? []).map((a) => (
+                  {(accounts.data?.items ?? [])
+                    .filter((a) => !a.archived)
+                    .map((a) => (
                     <option key={a.id} value={a.id}>
-                      {a.label}
+                      {a.name}
                     </option>
                   ))}
                 </select>
