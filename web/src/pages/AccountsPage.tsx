@@ -1,5 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { CreditCard, Landmark, Plus, Trash2 } from 'lucide-react'
+import {
+  ArrowLeftRight,
+  Banknote,
+  CreditCard,
+  Landmark,
+  type LucideIcon,
+  Pencil,
+  PiggyBank,
+  Plus,
+  Smartphone,
+  Trash2,
+  WalletCards,
+  X,
+} from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import {
   archiveAccount,
@@ -18,18 +31,35 @@ import { t } from '../i18n/t'
 const field =
   'h-field w-full rounded-field border border-line bg-surface px-3 text-ink focus-visible:shadow-focus focus-visible:outline-none'
 
+/** Directions 10b — icono por cuenta sembrada; las propias usan landmark. */
+const ACCOUNT_ICONS: Record<string, LucideIcon> = {
+  Current: Landmark,
+  Savings: PiggyBank,
+  Transfer: ArrowLeftRight,
+  Bizum: Smartphone,
+  'Bank card': CreditCard,
+  'Prepaid card': WalletCards,
+  'e-cash card': Banknote,
+}
+
+const iconBtn =
+  'inline-flex size-tap items-center justify-center rounded-full text-ink-2 hover:bg-surface-2 hover:text-ink focus-visible:shadow-focus focus-visible:outline-none'
+
 export function AccountsPage() {
   const qc = useQueryClient()
   const accounts = useQuery({ queryKey: ['accounts'], queryFn: listAccounts })
   const cards = useQuery({ queryKey: ['cards'], queryFn: () => listCards() })
 
+  // null = cerrado · 'new' = alta · id = edición de esa cuenta
+  const [formFor, setFormFor] = useState<null | 'new' | number>(null)
   const [name, setName] = useState('')
   const [entity, setEntity] = useState('')
   const [formError, setFormError] = useState<string | null>(null)
-  const [editing, setEditing] = useState<Account | null>(null)
   const [cardDrafts, setCardDrafts] = useState<Record<number, string>>({})
 
-  const activeAccounts = (accounts.data?.items ?? []).filter((a) => !a.archived)
+  const activeAccounts = (accounts.data?.items ?? [])
+    .filter((a) => !a.archived)
+    .sort((a, b) => a.id - b.id)
   const cardsByAccount = new Map<number, Card[]>()
   for (const card of cards.data?.items ?? []) {
     if (card.archived) continue
@@ -40,23 +70,13 @@ export function AccountsPage() {
 
   const saveAccount = useMutation({
     mutationFn: async () => {
-      if (editing) {
-        return updateAccount(editing.id, {
-          name: name.trim(),
-          entity: entity.trim() || null,
-        })
-      }
-      return createAccount({
-        name: name.trim(),
-        entity: entity.trim() || null,
-      })
+      const body = { name: name.trim(), entity: entity.trim() || null }
+      if (typeof formFor === 'number') return updateAccount(formFor, body)
+      return createAccount(body)
     },
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ['accounts'] })
-      setName('')
-      setEntity('')
-      setEditing(null)
-      setFormError(null)
+      closeForm()
     },
     onError: (err) => {
       setFormError(
@@ -98,15 +118,15 @@ export function AccountsPage() {
     },
   })
 
-  function startEdit(a: Account) {
-    setEditing(a)
-    setName(a.name)
-    setEntity(a.entity ?? '')
+  function openForm(target: 'new' | Account) {
+    setFormFor(target === 'new' ? 'new' : target.id)
+    setName(target === 'new' ? '' : target.name)
+    setEntity(target === 'new' ? '' : target.entity ?? '')
     setFormError(null)
   }
 
-  function cancelEdit() {
-    setEditing(null)
+  function closeForm() {
+    setFormFor(null)
     setName('')
     setEntity('')
     setFormError(null)
@@ -121,129 +141,125 @@ export function AccountsPage() {
     saveAccount.mutate()
   }
 
-  return (
-    <div className="flex max-w-2xl flex-col gap-6">
-      <div className="flex flex-col gap-1.5">
-        <h1 className="text-[26px] font-extrabold tracking-tight">{t('accounts.title')}</h1>
-        <p className="text-[13px] text-ink-2">{t('accounts.hint')}</p>
-      </div>
+  function submitCard(accountId: number) {
+    const n = (cardDrafts[accountId] ?? '').trim()
+    if (n) addCard.mutate({ accountId, cardName: n })
+  }
 
-      <form
-        onSubmit={onSubmit}
-        className="flex flex-col gap-3 rounded-card border border-line bg-surface p-5 shadow-raised"
-      >
-        <h2 className="text-[15px] font-bold">
-          {editing ? t('accounts.edit') : t('accounts.add')}
-        </h2>
-        <label>
-          <span className="mb-1 block text-sm text-ink-2">{t('accounts.name')}</span>
-          <input
-            className={field}
-            required
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder={t('accounts.namePlaceholder')}
-          />
-        </label>
-        <label>
-          <span className="mb-1 block text-sm text-ink-2">{t('accounts.entity')}</span>
-          <input
-            className={field}
-            value={entity}
-            onChange={(e) => setEntity(e.target.value)}
-            placeholder={t('accounts.entityPlaceholder')}
-          />
-        </label>
-        {formError && <p className="text-sm text-danger">{formError}</p>}
-        <div className="flex flex-wrap gap-2">
-          <button
-            type="submit"
-            disabled={saveAccount.isPending}
-            className="inline-flex h-tap items-center gap-2 rounded-pill bg-accent px-4 text-sm font-bold text-accent-fg focus-visible:shadow-focus focus-visible:outline-none disabled:opacity-50"
-          >
-            <Plus size={15} strokeWidth={2.2} aria-hidden />
-            {editing ? t('accounts.save') : t('accounts.add')}
-          </button>
-          {editing && (
-            <button
-              type="button"
-              onClick={cancelEdit}
-              className="inline-flex h-tap items-center rounded-pill bg-surface-2 px-4 text-sm text-ink-2 focus-visible:shadow-focus focus-visible:outline-none"
-            >
-              {t('accounts.cancel')}
-            </button>
-          )}
-        </div>
-      </form>
+  const accountForm = (
+    <form onSubmit={onSubmit} className="flex flex-col gap-3">
+      <label>
+        <span className="mb-1 block text-[12.5px] font-medium text-ink-2">
+          {t('accounts.name')}
+        </span>
+        <input
+          className={field}
+          required
+          autoFocus
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder={t('accounts.namePlaceholder')}
+        />
+      </label>
+      <label>
+        <span className="mb-1 block text-[12.5px] font-medium text-ink-2">
+          {t('accounts.entity')}
+        </span>
+        <input
+          className={field}
+          value={entity}
+          onChange={(e) => setEntity(e.target.value)}
+          placeholder={t('accounts.entityPlaceholder')}
+        />
+      </label>
+      {formError && <p className="text-sm text-danger">{formError}</p>}
+      <div className="flex gap-2">
+        <button
+          type="submit"
+          disabled={saveAccount.isPending}
+          className="inline-flex h-tap flex-1 items-center justify-center rounded-pill bg-accent px-4 text-sm font-bold text-accent-fg focus-visible:shadow-focus focus-visible:outline-none disabled:opacity-50"
+        >
+          {formFor === 'new' ? t('accounts.add') : t('accounts.save')}
+        </button>
+        <button
+          type="button"
+          onClick={closeForm}
+          className="inline-flex h-tap items-center rounded-pill bg-surface-2 px-4 text-sm text-ink-2 focus-visible:shadow-focus focus-visible:outline-none"
+        >
+          {t('accounts.cancel')}
+        </button>
+      </div>
+    </form>
+  )
+
+  return (
+    <div className="flex flex-col gap-5">
+      <div>
+        <h1 className="text-[26px] font-extrabold tracking-tight">{t('accounts.title')}</h1>
+        <p className="mt-1 text-[13px] text-ink-2">{t('accounts.hint')}</p>
+      </div>
 
       {accounts.isPending && <p className="text-ink-2">{t('common.loading')}</p>}
       {accounts.isError && <p className="text-danger">{t('common.error')}</p>}
 
-      {activeAccounts.length === 0 && accounts.data && (
-        <p className="text-ink-2">{t('accounts.empty')}</p>
-      )}
-
-      <ul className="flex flex-col gap-3">
+      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {activeAccounts.map((a) => {
+          const Icon = ACCOUNT_ICONS[a.key] ?? Landmark
           const accountCards = cardsByAccount.get(a.id) ?? []
+          const isEditing = formFor === a.id
           return (
             <li
               key={a.id}
-              className="rounded-card border border-line bg-surface p-4 shadow-raised"
+              className="flex flex-col gap-3 rounded-card border border-line bg-surface p-4 shadow-raised"
             >
-              <div className="flex items-start gap-3">
-                <span className="flex size-[34px] shrink-0 items-center justify-center rounded-icon bg-surface-2 text-ink-2">
-                  <Landmark size={17} strokeWidth={2.2} aria-hidden />
+              <div className="flex items-center gap-3">
+                <span className="flex size-10 flex-none items-center justify-center rounded-tile bg-surface-2 text-ink-2">
+                  <Icon size={19} strokeWidth={2} aria-hidden />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <div className="flex flex-wrap items-start justify-between gap-2">
-                    <div>
-                      <p className="font-semibold">{a.name}</p>
-                      <p className="text-[12px] text-ink-2">
-                        {a.entity?.trim() || t('accounts.noEntity')}
-                      </p>
-                    </div>
-                    <div className="flex gap-1">
-                      <button
-                        type="button"
-                        onClick={() => startEdit(a)}
-                        className="inline-flex h-tap items-center rounded-pill px-3 text-sm text-ink-2 hover:bg-surface-2 focus-visible:shadow-focus focus-visible:outline-none"
-                      >
-                        {t('accounts.edit')}
-                      </button>
-                      <button
-                        type="button"
-                        aria-label={t('accounts.archive')}
-                        onClick={() => {
-                          if (window.confirm(t('accounts.archiveConfirm'))) {
-                            removeAccount.mutate(a.id)
-                          }
-                        }}
-                        className="inline-flex size-tap items-center justify-center rounded-full text-danger hover:bg-danger-weak focus-visible:shadow-focus focus-visible:outline-none"
-                      >
-                        <Trash2 size={15} strokeWidth={2.2} aria-hidden />
-                      </button>
-                    </div>
+                  <p className="truncate font-semibold">{a.name}</p>
+                  <p className="truncate text-[12px] text-ink-2">
+                    {a.entity?.trim() || t('accounts.noEntity')}
+                  </p>
+                </div>
+                {!isEditing && (
+                  <div className="-mr-2 flex">
+                    <button
+                      type="button"
+                      aria-label={`${t('accounts.edit')} ${a.name}`}
+                      onClick={() => openForm(a)}
+                      className={iconBtn}
+                    >
+                      <Pencil size={15} strokeWidth={2.2} aria-hidden />
+                    </button>
+                    <button
+                      type="button"
+                      aria-label={`${t('accounts.archive')} ${a.name}`}
+                      onClick={() => {
+                        if (window.confirm(t('accounts.archiveConfirm'))) {
+                          removeAccount.mutate(a.id)
+                        }
+                      }}
+                      className={`${iconBtn} hover:bg-danger-weak hover:text-danger`}
+                    >
+                      <Trash2 size={15} strokeWidth={2.2} aria-hidden />
+                    </button>
                   </div>
+                )}
+              </div>
 
-                  <div className="mt-4 border-t border-line pt-3">
-                    <p className="mb-2 text-[11px] font-bold uppercase tracking-wide text-ink-2">
-                      {t('accounts.cards')}
-                    </p>
-                    <ul className="flex flex-col gap-2">
+              {isEditing ? (
+                <>
+                  {accountForm}
+                  {accountCards.length > 0 && (
+                    <div className="flex flex-col gap-2 border-t border-line pt-3">
+                      <p className="text-[11px] font-bold uppercase tracking-wide text-ink-2">
+                        {t('accounts.cards')}
+                      </p>
                       {accountCards.map((card) => (
-                        <li
-                          key={card.id}
-                          className="flex items-center gap-2 rounded-[13px] border border-line bg-surface-2/60 px-3 py-2"
-                        >
-                          <CreditCard
-                            size={15}
-                            strokeWidth={2.2}
-                            className="shrink-0 text-ink-2"
-                            aria-hidden
-                          />
+                        <div key={card.id} className="flex items-center gap-2">
                           <input
-                            className="h-9 min-w-0 flex-1 rounded-field border-0 bg-transparent px-1 text-sm focus-visible:shadow-focus focus-visible:outline-none"
+                            className={field}
                             defaultValue={card.name}
                             aria-label={t('accounts.cardName')}
                             onBlur={(e) => {
@@ -257,50 +273,89 @@ export function AccountsPage() {
                           />
                           <button
                             type="button"
-                            aria-label={t('accounts.archiveCard')}
+                            aria-label={`${t('accounts.archiveCard')} ${card.name}`}
                             onClick={() => removeCard.mutate(card.id)}
-                            className="inline-flex size-9 shrink-0 items-center justify-center rounded-full text-ink-2 hover:bg-danger-weak hover:text-danger focus-visible:shadow-focus focus-visible:outline-none"
+                            className={`${iconBtn} flex-none hover:bg-danger-weak hover:text-danger`}
                           >
                             <Trash2 size={14} strokeWidth={2.2} aria-hidden />
                           </button>
-                        </li>
+                        </div>
                       ))}
-                    </ul>
-                    <div className="mt-2 flex gap-2">
-                      <input
-                        className={field}
-                        value={cardDrafts[a.id] ?? ''}
-                        onChange={(e) =>
-                          setCardDrafts((d) => ({ ...d, [a.id]: e.target.value }))
-                        }
-                        placeholder={t('accounts.cardPlaceholder')}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter') {
-                            e.preventDefault()
-                            const n = (cardDrafts[a.id] ?? '').trim()
-                            if (n) addCard.mutate({ accountId: a.id, cardName: n })
-                          }
-                        }}
-                      />
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="flex flex-wrap items-center gap-1.5 border-t border-line pt-3">
+                  {accountCards.map((card) => (
+                    <span
+                      key={card.id}
+                      className="inline-flex h-8 items-center gap-1.5 rounded-pill bg-surface-2 pl-2.5 pr-1 text-[12.5px] font-medium"
+                    >
+                      <CreditCard size={13} strokeWidth={2.2} className="text-ink-2" aria-hidden />
+                      {card.name}
                       <button
                         type="button"
-                        disabled={!(cardDrafts[a.id] ?? '').trim() || addCard.isPending}
-                        onClick={() => {
-                          const n = (cardDrafts[a.id] ?? '').trim()
-                          if (n) addCard.mutate({ accountId: a.id, cardName: n })
-                        }}
-                        className="inline-flex h-tap shrink-0 items-center gap-1 rounded-pill bg-surface-2 px-3 text-sm font-semibold text-ink-2 focus-visible:shadow-focus focus-visible:outline-none disabled:opacity-40"
+                        aria-label={`${t('accounts.archiveCard')} ${card.name}`}
+                        onClick={() => removeCard.mutate(card.id)}
+                        className="inline-flex size-6 items-center justify-center rounded-full text-ink-3 hover:bg-danger-weak hover:text-danger focus-visible:shadow-focus focus-visible:outline-none"
                       >
-                        <Plus size={14} strokeWidth={2.2} aria-hidden />
+                        <X size={12} strokeWidth={2.4} aria-hidden />
+                      </button>
+                    </span>
+                  ))}
+                  <span className="inline-flex h-8 min-w-0 flex-1 items-center gap-1 rounded-pill border border-dashed border-line pl-2.5 pr-1">
+                    <Plus size={13} strokeWidth={2.2} className="flex-none text-ink-3" aria-hidden />
+                    <input
+                      className="h-full min-w-0 flex-1 bg-transparent text-[12.5px] placeholder:text-ink-3 focus-visible:outline-none"
+                      value={cardDrafts[a.id] ?? ''}
+                      aria-label={`${t('accounts.cardName')} · ${a.name}`}
+                      placeholder={t('accounts.addCardPlaceholder')}
+                      onChange={(e) =>
+                        setCardDrafts((d) => ({ ...d, [a.id]: e.target.value }))
+                      }
+                      onKeyDown={(e) => {
+                        if (e.key === 'Enter') {
+                          e.preventDefault()
+                          submitCard(a.id)
+                        }
+                      }}
+                    />
+                    {(cardDrafts[a.id] ?? '').trim() && (
+                      <button
+                        type="button"
+                        disabled={addCard.isPending}
+                        onClick={() => submitCard(a.id)}
+                        className="inline-flex h-6 items-center rounded-pill bg-accent px-2.5 text-[11.5px] font-bold text-accent-fg focus-visible:shadow-focus focus-visible:outline-none"
+                      >
                         {t('accounts.addCard')}
                       </button>
-                    </div>
-                  </div>
+                    )}
+                  </span>
                 </div>
-              </div>
+              )}
             </li>
           )
         })}
+
+        <li>
+          {formFor === 'new' ? (
+            <div className="rounded-card border border-line bg-surface p-4 shadow-raised">
+              <p className="mb-3 font-semibold">{t('accounts.add')}</p>
+              {accountForm}
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => openForm('new')}
+              className="flex h-full min-h-[132px] w-full items-center justify-center gap-3 rounded-card border border-dashed border-line text-ink-2 hover:border-ink-3 hover:bg-surface hover:text-ink focus-visible:shadow-focus focus-visible:outline-none"
+            >
+              <span className="flex size-10 items-center justify-center rounded-tile bg-surface-2">
+                <Plus size={19} strokeWidth={2} aria-hidden />
+              </span>
+              <span className="font-semibold">{t('accounts.add')}</span>
+            </button>
+          )}
+        </li>
       </ul>
     </div>
   )
