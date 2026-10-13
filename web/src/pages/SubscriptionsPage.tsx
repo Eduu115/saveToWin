@@ -229,7 +229,7 @@ export function SubscriptionsPage() {
       )}
 
       {editing && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-4 sm:items-center">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 sm:items-center">
           <form
             onSubmit={onSubmit}
             className="w-full max-w-lg rounded-sheet bg-surface p-5 shadow-raised"

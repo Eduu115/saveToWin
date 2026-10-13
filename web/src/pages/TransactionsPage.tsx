@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatCents, parseAmountToCents } from '@savetowin/shared/money'
-import { useMemo, useState, type FormEvent } from 'react'
+import { Check, Pencil, Plus, Repeat, Trash2, X } from 'lucide-react'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import {
   createTransaction,
@@ -19,7 +20,11 @@ import type {
   Transaction,
 } from '../domain'
 import { t } from '../i18n/t'
-import { sortCategoriesByDisplayOrder } from '../ui/categoryMeta'
+import {
+  categoryBgClass,
+  categoryIcon,
+  sortCategoriesByDisplayOrder,
+} from '../ui/categoryMeta'
 
 type FlowDraft = 'expense' | 'income' | 'savings'
 
@@ -83,6 +88,38 @@ function amountSign(type: FlowDraft, categoryKey?: string): string {
   if (type === 'expense') return '−'
   if (type === 'income') return '+'
   return categoryKey === 'Savings withdrawal' ? '←' : '→'
+}
+
+/** Neto del día: ingresos − gastos; el ahorro no cuenta (es una transferencia). */
+function groupByDay(items: Transaction[]) {
+  const days: { date: string; net: number; items: Transaction[] }[] = []
+  for (const tx of items) {
+    let day = days[days.length - 1]
+    if (!day || day.date !== tx.date) {
+      day = { date: tx.date, net: 0, items: [] }
+      days.push(day)
+    }
+    day.items.push(tx)
+    if (tx.type === 'income') day.net += tx.amount
+    if (tx.type === 'expense') day.net -= tx.amount
+  }
+  return days
+}
+
+function draftAmountLabel(amount: string): string {
+  try {
+    return formatCents(parseAmountToCents(amount || '0'))
+  } catch {
+    return formatCents(0)
+  }
+}
+
+function dayLabel(iso: string): string {
+  return new Date(`${iso}T12:00:00`).toLocaleDateString('es-ES', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+  })
 }
 
 export function TransactionsPage() {
@@ -233,6 +270,15 @@ export function TransactionsPage() {
     return next
   }
 
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setOpen(false)
+    }
+    document.addEventListener('keydown', onKey)
+    return () => document.removeEventListener('keydown', onKey)
+  }, [open])
+
   function openNew() {
     setEditing(null)
     const d = emptyDraft()
@@ -267,20 +313,29 @@ export function TransactionsPage() {
 
   return (
     <div>
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-extrabold tracking-tight">{t('transactions.title')}</h1>
+      <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
+        <div>
+          <h1 className="text-[26px] font-extrabold tracking-tight">{t('transactions.title')}</h1>
+          {txs.data && txs.data.items.length > 0 && (
+            <p className="mt-1 text-[13px] text-ink-2">
+              {txs.data.total} {t('transactions.countSuffix')}
+            </p>
+          )}
+        </div>
         <div className="flex flex-wrap gap-2">
           <Link
             to={`/${locale}/subscriptions`}
-            className="inline-flex h-tap items-center rounded-pill bg-surface-2 px-4 font-semibold text-ink focus-visible:shadow-focus focus-visible:outline-none"
+            className="inline-flex h-tap items-center gap-2 rounded-pill border border-line bg-surface px-4 text-sm font-semibold text-ink focus-visible:shadow-focus focus-visible:outline-none"
           >
+            <Repeat size={15} strokeWidth={2.2} aria-hidden />
             {t('transactions.subscriptions')}
           </Link>
           <button
             type="button"
             onClick={openNew}
-            className="inline-flex h-tap items-center rounded-pill bg-accent px-4 font-semibold text-accent-fg focus-visible:shadow-focus focus-visible:outline-none"
+            className="inline-flex h-tap items-center gap-2 rounded-pill bg-accent px-4 text-sm font-bold text-accent-fg shadow-accent focus-visible:shadow-focus focus-visible:outline-none"
           >
+            <Plus size={16} strokeWidth={2.4} aria-hidden />
             {t('transactions.new')}
           </button>
         </div>
@@ -294,69 +349,115 @@ export function TransactionsPage() {
       )}
 
       {txs.data && txs.data.items.length > 0 && (
-        <div className="overflow-x-auto rounded-card bg-surface shadow-raised">
-          <table className="w-full min-w-[640px] text-left text-sm">
-            <thead className="border-b border-line text-ink-2">
-              <tr>
-                <th className="px-4 py-3 font-medium">{t('transactions.date')}</th>
-                <th className="px-4 py-3 font-medium">{t('transactions.type')}</th>
-                <th className="px-4 py-3 font-medium">{t('transactions.category')}</th>
-                <th className="px-4 py-3 font-medium">{t('transactions.account')}</th>
-                <th className="px-4 py-3 text-right font-medium">{t('transactions.amount')}</th>
-              </tr>
-            </thead>
-            <tbody>
-              {txs.data.items.map((tx) => (
-                <tr
-                  key={tx.id}
-                  className="border-b border-line last:border-0 hover:bg-surface-2"
-                >
-                  <td className="px-4 py-3">
-                    <button
-                      type="button"
-                      className="text-left font-medium focus-visible:shadow-focus focus-visible:outline-none"
-                      onClick={() => openEdit(tx)}
-                    >
-                      {tx.date}
-                    </button>
-                  </td>
-                  <td className="px-4 py-3 text-ink-2">{typeLabel(tx.type, catMap.get(tx.categoryId)?.key)}</td>
-                  <td className="px-4 py-3">{catMap.get(tx.categoryId)?.label ?? tx.categoryId}</td>
-                  <td className="px-4 py-3">
-                    {accMap.get(tx.accountId) ?? tx.accountId}
-                    {tx.cardId != null && cardMap.has(tx.cardId) && (
-                      <span className="mt-0.5 block text-[11px] text-ink-2">
-                        {cardMap.get(tx.cardId)}
-                      </span>
-                    )}
-                  </td>
-                  <td
-                    className={`px-4 py-3 text-right font-medium tabular-nums ${amountClass(tx.type)}`}
-                  >
-                    {amountSign(tx.type, catMap.get(tx.categoryId)?.key)}
-                    {formatCents(tx.amount)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="overflow-hidden rounded-card border border-line bg-surface shadow-raised">
+          {groupByDay(txs.data.items).map((day) => (
+            <section key={day.date}>
+              <h2 className="flex items-center gap-3 border-b border-line bg-surface-2 px-4 py-2 text-[11px] font-bold uppercase tracking-wide text-ink-2">
+                <span>{dayLabel(day.date)}</span>
+                <span className="h-px flex-1 bg-line" aria-hidden />
+                <span className="tabular-nums">
+                  {day.net >= 0 ? '+' : '−'} {formatCents(Math.abs(day.net))}
+                </span>
+              </h2>
+              <ul>
+                {day.items.map((tx) => {
+                  const cat = catMap.get(tx.categoryId)
+                  const Icon = categoryIcon(cat?.key ?? '')
+                  const card = tx.cardId != null ? cardMap.get(tx.cardId) : undefined
+                  return (
+                    <li key={tx.id} className="border-b border-line last:border-0">
+                      <button
+                        type="button"
+                        onClick={() => openEdit(tx)}
+                        className="group flex min-h-row w-full items-center gap-3 px-4 py-2.5 text-left hover:bg-surface-2 focus-visible:shadow-focus focus-visible:outline-none"
+                      >
+                        <span
+                          className={`flex size-8 flex-none items-center justify-center rounded-icon text-white ${cat ? categoryBgClass(cat.color) : 'bg-ink-3'}`}
+                        >
+                          <Icon size={16} strokeWidth={2.2} aria-hidden />
+                        </span>
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-sm font-semibold">
+                            {cat?.label ?? tx.categoryId}
+                          </span>
+                          <span className="block truncate text-[12px] text-ink-2">
+                            {tx.note || typeLabel(tx.type, cat?.key)}
+                          </span>
+                        </span>
+                        <span className="hidden w-44 min-w-0 text-[13px] text-ink-2 sm:block">
+                          <span className="block truncate">
+                            {accMap.get(tx.accountId) ?? tx.accountId}
+                          </span>
+                          {card && <span className="block truncate text-[11px]">{card}</span>}
+                        </span>
+                        <span
+                          className={`w-28 text-right text-sm font-bold tabular-nums ${amountClass(tx.type)}`}
+                        >
+                          {amountSign(tx.type, cat?.key)} {formatCents(tx.amount)}
+                        </span>
+                        <span
+                          className="flex size-8 flex-none items-center justify-center rounded-full text-ink-3 group-hover:bg-surface group-hover:text-ink"
+                          aria-hidden
+                        >
+                          <Pencil size={15} strokeWidth={2.2} />
+                        </span>
+                        <span className="sr-only">{t('transactions.edit')}</span>
+                      </button>
+                    </li>
+                  )
+                })}
+              </ul>
+            </section>
+          ))}
         </div>
       )}
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-4 sm:items-center">
+        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 sm:items-center">
           <form
             onSubmit={onSubmit}
-            className="max-h-full w-full max-w-lg overflow-y-auto rounded-sheet bg-surface p-5 shadow-raised"
+            className="max-h-full w-full max-w-lg overflow-y-auto rounded-sheet bg-surface shadow-raised"
           >
-            <h2 className="mb-4 text-lg font-bold">
-              {editing
-                ? t('transactions.edit')
-                : isSubscriptionForm
-                  ? t('transactions.newSubscription')
-                  : t('transactions.new')}
-            </h2>
-            <div className="grid gap-3">
+            <div className="bg-accent px-5 pb-5 pt-4 text-accent-fg">
+              <div className="flex items-center justify-between gap-2">
+                <h2 className="text-[15px] font-bold">
+                  {editing
+                    ? t('transactions.edit')
+                    : isSubscriptionForm
+                      ? t('transactions.newSubscription')
+                      : t('transactions.new')}
+                </h2>
+                <div className="flex gap-2">
+                  {editing && (
+                    <button
+                      type="button"
+                      aria-label={t('transactions.delete')}
+                      disabled={remove.isPending}
+                      onClick={() => {
+                        if (window.confirm(t('transactions.deleteConfirm'))) {
+                          remove.mutate(editing.id)
+                        }
+                      }}
+                      className="inline-flex size-tap items-center justify-center rounded-full bg-accent-fg/15 hover:bg-accent-fg/25 focus-visible:shadow-focus focus-visible:outline-none"
+                    >
+                      <Trash2 size={17} strokeWidth={2.2} aria-hidden />
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    aria-label={t('transactions.close')}
+                    onClick={() => setOpen(false)}
+                    className="inline-flex size-tap items-center justify-center rounded-full bg-accent-fg/15 hover:bg-accent-fg/25 focus-visible:shadow-focus focus-visible:outline-none"
+                  >
+                    <X size={18} strokeWidth={2.2} aria-hidden />
+                  </button>
+                </div>
+              </div>
+              <p className="mt-3 text-center text-[44px] font-extrabold leading-none tracking-tight tabular-nums">
+                {draftAmountLabel(draft.amount)}
+              </p>
+            </div>
+            <div className="grid gap-3 p-5">
               <label>
                 <span className="mb-1 block text-sm text-ink-2">
                   {isSubscriptionForm
@@ -538,34 +639,16 @@ export function TransactionsPage() {
                 </>
               )}
             </div>
-            {formError && <p className="mt-3 text-sm text-danger">{formError}</p>}
-            <div className="mt-5 flex flex-wrap gap-2">
+            <div className="px-5 pb-5">
+              {formError && <p className="mb-3 text-sm text-danger">{formError}</p>}
               <button
                 type="submit"
                 disabled={save.isPending}
-                className="inline-flex h-tap items-center rounded-pill bg-accent px-4 font-semibold text-accent-fg focus-visible:shadow-focus focus-visible:outline-none"
+                className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-pill bg-accent font-bold text-accent-fg shadow-accent focus-visible:shadow-focus focus-visible:outline-none disabled:opacity-50"
               >
+                <Check size={18} strokeWidth={2.4} aria-hidden />
                 {t('transactions.save')}
               </button>
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="inline-flex h-tap items-center rounded-pill bg-surface-2 px-4 text-ink-2 focus-visible:shadow-focus focus-visible:outline-none"
-              >
-                {t('transactions.cancel')}
-              </button>
-              {editing && (
-                <button
-                  type="button"
-                  disabled={remove.isPending}
-                  onClick={() => {
-                    if (window.confirm(t('transactions.deleteConfirm'))) remove.mutate(editing.id)
-                  }}
-                  className="inline-flex h-tap items-center rounded-pill bg-danger-weak px-4 text-danger focus-visible:shadow-focus focus-visible:outline-none"
-                >
-                  {t('transactions.delete')}
-                </button>
-              )}
             </div>
           </form>
         </div>
