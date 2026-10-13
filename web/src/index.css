@@ -14,3 +14,38 @@
     font-variant-numeric: var(--num);
   }
 }
+
+/* Directions 3c — hoja inferior: sube desde el FAB y cambia de altura en 240 ms */
+@layer components {
+  .sheet-in {
+    animation: sheet-in 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .sheet-height {
+    transition: height 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .fade-in {
+    animation: fade-in 240ms ease-out;
+  }
+}
+
+@keyframes sheet-in {
+  from {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sheet-in,
+  .fade-in {
+    animation: none;
+  }
+  .sheet-height {
+    transition: none;
+  }
+}

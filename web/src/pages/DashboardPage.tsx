@@ -8,8 +8,10 @@ import {
 } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { fetchStats } from '../api/stats'
+import { listAccounts, listCategories, listTransactions } from '../api/transactions'
 import { DEFAULT_LOCALE } from '../i18n/locales'
 import { t } from '../i18n/t'
+import { categoryBgClass, categoryIcon } from '../ui/categoryMeta'
 import { CategorySpendRanking } from '../ui/CategorySpendRanking'
 import { ChartPanel } from '../ui/ChartPanel'
 import { InsightsColumn } from '../ui/InsightCard'
@@ -94,7 +96,7 @@ export function DashboardPage() {
     <div className="flex min-w-0 flex-col gap-4">
       <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr]">
         {/* Hero «you kept» — Directions 1b */}
-        <section className="flex flex-col gap-4 rounded-card border border-line bg-surface p-6 shadow-raised">
+        <section className="flex flex-col gap-4 rounded-card border border-line bg-surface p-5 shadow-raised sm:p-6">
           <div className="flex items-baseline justify-between gap-3">
             <h1 className="text-sm font-semibold text-ink-2">
               {empty
@@ -118,7 +120,7 @@ export function DashboardPage() {
             <>
               <div className="flex flex-wrap items-end gap-4">
                 <div
-                  className={`text-[52px] font-extrabold leading-[0.95] tracking-tight tabular-nums ${
+                  className={`text-[40px] font-extrabold leading-[0.95] tracking-tight tabular-nums sm:text-[52px] ${
                     data.balanceCents >= 0 ? 'text-savings' : 'text-ink'
                   }`}
                 >
@@ -132,8 +134,8 @@ export function DashboardPage() {
                 )}
               </div>
 
-              <div className="flex flex-col gap-2.5 sm:flex-row">
-                <div className="flex flex-1 items-center gap-3 rounded-tile bg-surface-2 px-4 py-3">
+              <div className="grid grid-cols-2 gap-2.5">
+                <div className="flex min-w-0 items-center gap-2.5 rounded-tile bg-surface-2 px-3 py-3 sm:gap-3 sm:px-4">
                   <span className="flex h-8 w-8 flex-none items-center justify-center rounded-pill bg-income text-white">
                     <ArrowDownLeft size={16} strokeWidth={2.4} aria-hidden />
                   </span>
@@ -141,12 +143,12 @@ export function DashboardPage() {
                     <span className="text-[11.5px] font-medium text-ink-2">
                       {t('dashboard.moneyIn')}
                     </span>
-                    <span className="text-[17px] font-bold tabular-nums text-income">
+                    <span className="truncate text-[15px] font-bold tabular-nums text-income sm:text-[17px]">
                       {formatSigned(data.incomeCents)}
                     </span>
                   </div>
                 </div>
-                <div className="flex flex-1 items-center gap-3 rounded-tile bg-surface-2 px-4 py-3">
+                <div className="flex min-w-0 items-center gap-2.5 rounded-tile bg-surface-2 px-3 py-3 sm:gap-3 sm:px-4">
                   <span className="flex h-8 w-8 flex-none items-center justify-center rounded-pill bg-expense text-white">
                     <ArrowUpRight size={16} strokeWidth={2.4} aria-hidden />
                   </span>
@@ -154,7 +156,7 @@ export function DashboardPage() {
                     <span className="text-[11.5px] font-medium text-ink-2">
                       {t('dashboard.moneyOut')}
                     </span>
-                    <span className="text-[17px] font-bold tabular-nums">
+                    <span className="truncate text-[15px] font-bold tabular-nums sm:text-[17px]">
                       − {formatCents(data.expenseCents)}
                     </span>
                   </div>
@@ -165,7 +167,7 @@ export function DashboardPage() {
         </section>
 
         {/* Objetivo + anillo — Directions 1b */}
-        <section className="flex items-center gap-5 rounded-card border border-line bg-surface px-6 py-5 shadow-raised">
+        <section className="flex items-center gap-5 rounded-card border border-line bg-surface px-5 py-5 shadow-raised sm:px-6">
           <div className="relative h-[124px] w-[124px] flex-none">
             <ProgressRing
               percent={data.goalProgressPercent}
@@ -208,20 +210,20 @@ export function DashboardPage() {
       </div>
 
       {/* KPI row — Directions 1b / 9b */}
-      <div className="grid gap-4 md:grid-cols-3">
-        <article className="flex flex-col gap-2.5 rounded-field border border-line bg-surface px-5 py-[18px]">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
+        <article className="flex min-w-0 flex-col gap-2.5 rounded-field border border-line bg-surface px-4 py-4 sm:px-5 sm:py-[18px]">
           <div className="text-[12.5px] font-semibold text-ink-2">
             {t('dashboard.kpi.budgetLeft')}
           </div>
           {data.budgetLimitCents === 0 ? (
             <>
-              <span className="text-[30px] font-extrabold tracking-tight text-line">— €</span>
+              <span className="text-[24px] font-extrabold tracking-tight text-line sm:text-[30px]">— €</span>
               <span className="text-xs text-ink-3">{t('dashboard.kpi.noBudget')}</span>
             </>
           ) : (
             <>
               <div className="flex items-baseline gap-2">
-                <span className="text-[30px] font-extrabold tabular-nums tracking-tight">
+                <span className="text-[24px] font-extrabold tabular-nums tracking-tight sm:text-[30px]">
                   {formatCents(Math.max(0, data.budgetRemainingCents))}
                 </span>
                 <span className="text-[12.5px] font-semibold text-warn">
@@ -238,19 +240,19 @@ export function DashboardPage() {
           )}
         </article>
 
-        <article className="flex flex-col gap-2.5 rounded-field border border-line bg-surface px-5 py-[18px]">
+        <article className="flex min-w-0 flex-col gap-2.5 rounded-field border border-line bg-surface px-4 py-4 sm:px-5 sm:py-[18px]">
           <div className="text-[12.5px] font-semibold text-ink-2">
             {t('dashboard.kpi.dailyAvg')}
           </div>
           {empty ? (
             <>
-              <span className="text-[30px] font-extrabold tracking-tight text-line">— €</span>
+              <span className="text-[24px] font-extrabold tracking-tight text-line sm:text-[30px]">— €</span>
               <span className="text-xs text-ink-3">{t('dashboard.kpi.noData')}</span>
             </>
           ) : (
             <>
               <div className="flex items-baseline gap-2">
-                <span className="text-[30px] font-extrabold tabular-nums tracking-tight">
+                <span className="text-[24px] font-extrabold tabular-nums tracking-tight sm:text-[30px]">
                   {formatCents(data.dailyAverageCents)}
                 </span>
                 <span className="text-[12.5px] font-semibold text-ink-2">
@@ -271,12 +273,12 @@ export function DashboardPage() {
           )}
         </article>
 
-        <article className="flex flex-col gap-2.5 rounded-field border border-line bg-surface px-5 py-[18px]">
+        <article className="col-span-2 flex min-w-0 flex-col gap-2.5 rounded-field border border-line bg-surface px-4 py-4 sm:px-5 sm:py-[18px]">
           <div className="text-[12.5px] font-semibold text-ink-2">
             {t('dashboard.kpi.streak')}
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-[30px] font-extrabold tabular-nums tracking-tight">
+            <span className="text-[24px] font-extrabold tabular-nums tracking-tight sm:text-[30px]">
               {data.savingsStreakMonths}{' '}
               <span className="text-[18px] font-bold">
                 {data.savingsStreakMonths === 1
@@ -297,6 +299,14 @@ export function DashboardPage() {
           </div>
         </article>
       </div>
+
+      {/* Directions 2a — en móvil el aviso va bajo los KPIs, y luego los últimos movimientos */}
+      {data.insights.length > 0 && (
+        <div className="xl:hidden">
+          <InsightsColumn insights={data.insights} />
+        </div>
+      )}
+      <LatestMovements locale={locale} />
 
       {/* Gráficos — Directions 1b / 11a / 11b */}
       <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr]">
@@ -331,7 +341,73 @@ export function DashboardPage() {
     </div>
 
       {/* Avisos: columna propia con caja fija y scroll interno */}
-      {data.insights.length > 0 && <InsightsColumn insights={data.insights} />}
+      {data.insights.length > 0 && (
+        <div className="hidden xl:sticky xl:top-6 xl:block">
+          <InsightsColumn insights={data.insights} />
+        </div>
+      )}
     </div>
+  )
+}
+
+/** Directions 2a — «Últimos» (solo móvil): tres movimientos y enlace a todos. */
+function LatestMovements({ locale }: { locale: string }) {
+  const txs = useQuery({
+    queryKey: ['transactions', 'latest'],
+    queryFn: () => listTransactions({ limit: 3 }),
+  })
+  const cats = useQuery({ queryKey: ['categories'], queryFn: listCategories })
+  const accs = useQuery({ queryKey: ['accounts'], queryFn: listAccounts })
+  const items = txs.data?.items ?? []
+  if (items.length === 0) return null
+  const catById = new Map((cats.data?.items ?? []).map((c) => [c.id, c]))
+  const accById = new Map((accs.data?.items ?? []).map((a) => [a.id, a.name]))
+
+  return (
+    <section className="md:hidden" aria-labelledby="latest-title">
+      <div className="mb-2 flex items-center justify-between">
+        <h2 id="latest-title" className="text-[15px] font-bold">
+          {t('dashboard.latest')}
+        </h2>
+        <Link
+          to={`/${locale}/transactions`}
+          className="inline-flex min-h-tap items-center text-[13px] font-semibold text-accent focus-visible:shadow-focus focus-visible:outline-none"
+        >
+          {t('dashboard.latestAll')} {txs.data?.total ?? ''} →
+        </Link>
+      </div>
+      <ul className="flex flex-col gap-1">
+        {items.map((tx) => {
+          const cat = catById.get(tx.categoryId)
+          const Icon = categoryIcon(cat?.key ?? '')
+          const income = tx.type === 'income'
+          return (
+            <li
+              key={tx.id}
+              className={`flex min-h-row items-center gap-3 rounded-tile px-2 py-2 ${income ? 'bg-income-weak' : ''}`}
+            >
+              <span
+                className={`flex size-10 flex-none items-center justify-center rounded-icon text-white ${cat ? categoryBgClass(cat.color) : 'bg-ink-3'}`}
+              >
+                <Icon size={18} strokeWidth={2.2} aria-hidden />
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block truncate text-sm font-semibold">
+                  {tx.note || cat?.label}
+                </span>
+                <span className="block truncate text-[12px] text-ink-2">
+                  {cat?.label} · {accById.get(tx.accountId)}
+                </span>
+              </span>
+              <span
+                className={`whitespace-nowrap text-sm font-bold tabular-nums ${income ? 'text-income' : tx.type === 'savings' ? 'text-savings' : ''}`}
+              >
+                {income ? '+' : tx.type === 'savings' ? '→' : '−'} {formatCents(tx.amount)}
+              </span>
+            </li>
+          )
+        })}
+      </ul>
+    </section>
   )
 }

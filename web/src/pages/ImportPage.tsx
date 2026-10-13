@@ -733,14 +733,14 @@ function StepRail({ current }: { current: 1 | 2 | 3 }) {
     { n: 3, label: t('import.step.review') },
   ]
   return (
-    <div className="flex flex-wrap items-center gap-4">
+    <div className="flex items-center gap-2 sm:gap-4">
       {items.map((item, idx) => {
         const done = item.n < current
         const active = item.n === current
         return (
-          <div key={item.n} className="flex items-center gap-4">
+          <div key={item.n} className={`flex items-center gap-2 sm:gap-4 ${idx > 0 ? 'flex-1 sm:flex-none' : ''}`}>
             {idx > 0 && (
-              <div className={`h-0.5 w-[60px] ${current >= item.n ? 'bg-savings' : 'bg-line'}`} />
+              <div className={`h-0.5 flex-1 sm:w-[60px] sm:flex-none ${current >= item.n ? 'bg-savings' : 'bg-line'}`} />
             )}
             <div className="flex items-center gap-2.5">
               <span
@@ -758,6 +758,7 @@ function StepRail({ current }: { current: 1 | 2 | 3 }) {
               <span
                 className={[
                   'text-[13px]',
+                  active ? '' : 'hidden sm:inline',
                   active
                     ? 'font-bold'
                     : done

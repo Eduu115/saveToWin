@@ -64,7 +64,7 @@ export function AuthPage({ mode }: { mode: Mode }) {
     : 'flex h-[60px] items-center gap-3 rounded-field border-2 border-accent bg-surface px-4 focus-within:shadow-focus'
 
   const brandPanel = (
-    <div className="flex flex-col justify-between bg-accent px-6 pb-8 pt-8 text-accent-fg md:w-[min(100%,620px)] md:flex-none md:px-14 md:py-14">
+    <div className="flex flex-col justify-between bg-accent px-6 pb-14 pt-8 text-accent-fg md:w-[min(100%,620px)] md:flex-none md:px-14 md:py-14">
       <div className="flex items-center gap-3">
         <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-accent-fg text-accent md:h-[30px]">
           <BrandMark percent={70} size={22} tone="brand" />
@@ -111,7 +111,7 @@ export function AuthPage({ mode }: { mode: Mode }) {
   )
 
   const formPanel = (
-    <div className="flex flex-1 items-center justify-center bg-bg px-5 py-8 md:px-20">
+    <div className="relative -mt-7 flex flex-1 items-start justify-center rounded-t-sheet bg-bg px-5 py-8 md:mt-0 md:items-center md:rounded-none md:px-20">
       <form
         onSubmit={onSubmit}
         className="flex w-full max-w-[420px] flex-col gap-6 md:gap-[26px]"
