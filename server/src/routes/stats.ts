@@ -3,6 +3,7 @@ import { Hono } from 'hono'
 import {
   computePeriodStats,
   computeSavingsStreak,
+  effectiveBudgets,
   previousPeriod,
   type StatsTransaction,
 } from '@savetowin/shared/stats'
@@ -137,14 +138,11 @@ statsRoutes.get('/', async (c) => {
       ),
     )
 
-  const periodBudgets = await db
-    .select({ limit: budgets.limit, period: budgets.period })
-    .from(budgets)
-    .where(eq(budgets.userId, userId))
+  const budgetRows = await db.select().from(budgets).where(eq(budgets.userId, userId))
+  const sumLimits = (p: string) =>
+    effectiveBudgets(budgetRows, p).reduce((s, b) => s + b.limit, 0)
 
-  const budgetLimitCents = periodBudgets
-    .filter((b) => b.period === period)
-    .reduce((s, b) => s + b.limit, 0)
+  const budgetLimitCents = sumLimits(period)
   const savedCents = await savedFromSavingsAccount(userId)
 
   const stats = computePeriodStats({
@@ -180,16 +178,11 @@ statsRoutes.get('/', async (c) => {
   }
   const savingsStreakMonths = computeSavingsStreak(monthlyBalance, period)
 
-  const budgetByPeriod = new Map<string, number>()
-  for (const b of periodBudgets) {
-    budgetByPeriod.set(b.period, (budgetByPeriod.get(b.period) ?? 0) + b.limit)
-  }
-
   const months = lastNPeriods(period, 6)
   const monthly = months.map((p) => {
     const expenseCents = monthlyExpense.get(p) ?? 0
     const incomeCents = monthlyIncome.get(p) ?? 0
-    const limit = budgetByPeriod.get(p) ?? 0
+    const limit = sumLimits(p)
     return {
       period: p,
       label: shortLabel(p),
@@ -244,15 +237,7 @@ statsRoutes.get('/', async (c) => {
     .filter((x): x is NonNullable<typeof x> => x != null)
     .sort((a, b) => b.expenseCents - a.expenseCents)
 
-  const budgetRows = await db
-    .select({
-      categoryId: budgets.categoryId,
-      limit: budgets.limit,
-    })
-    .from(budgets)
-    .where(and(eq(budgets.userId, userId), eq(budgets.period, period)))
-
-  const insightCategories = budgetRows.map((b) => {
+  const insightCategories = effectiveBudgets(budgetRows, period).map((b) => {
     const cat = catById.get(b.categoryId)
     return {
       categoryKey: cat?.key ?? `id:${b.categoryId}`,

@@ -184,3 +184,26 @@ export function computePeriodStats(input: ComputePeriodStatsInput): PeriodStats 
     daysInPeriod: days,
   }
 }
+
+export interface BudgetRow {
+  id: number
+  categoryId: number
+  /** `YYYY-MM`: el límite rige desde este mes en adelante. */
+  period: string
+  /** Céntimos; 0 = sin límite desde este mes. */
+  limit: number
+}
+
+/**
+ * Límites mensuales vigentes en `period`: por categoría, la fila más reciente
+ * con `row.period <= period`. Las filas con límite 0 cortan la herencia.
+ */
+export function effectiveBudgets<T extends BudgetRow>(rows: T[], period: string): T[] {
+  const latest = new Map<number, T>()
+  for (const row of rows) {
+    if (row.period > period) continue
+    const cur = latest.get(row.categoryId)
+    if (!cur || row.period > cur.period) latest.set(row.categoryId, row)
+  }
+  return [...latest.values()].filter((r) => r.limit > 0)
+}

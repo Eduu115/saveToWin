@@ -115,10 +115,24 @@ export function InsightCard({ insight }: { insight: Insight }) {
 export function InsightsColumn({ insights }: { insights: Insight[] }) {
   if (insights.length === 0) return null
   return (
-    <div className="flex flex-col gap-4">
-      {insights.map((i) => (
-        <InsightCard key={i.id} insight={i} />
-      ))}
-    </div>
+    <aside
+      aria-labelledby="insights-title"
+      className="flex max-h-[480px] flex-col overflow-hidden rounded-card border border-line bg-surface shadow-raised xl:sticky xl:top-6 xl:max-h-[calc(100dvh-3rem)]"
+    >
+      <h2
+        id="insights-title"
+        className="flex items-center justify-between gap-2 border-b border-line px-5 py-4 text-[15px] font-bold"
+      >
+        {t('insight.panelTitle')}
+        <span className="rounded-pill bg-surface-2 px-2 py-0.5 text-[11.5px] font-bold tabular-nums text-ink-2">
+          {insights.length}
+        </span>
+      </h2>
+      <div className="flex flex-col gap-3 overflow-y-auto p-3">
+        {insights.map((i) => (
+          <InsightCard key={i.id} insight={i} />
+        ))}
+      </div>
+    </aside>
   )
 }

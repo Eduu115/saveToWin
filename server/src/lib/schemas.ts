@@ -93,13 +93,12 @@ export const transactionListQuerySchema = z.object({
   offset: z.coerce.number().int().min(0).optional().default(0),
 })
 
-export const budgetCreateSchema = z.object({
+/** Límite mensual desde `period` en adelante; `limit: 0` lo quita desde ese mes. */
+export const budgetSetSchema = z.object({
   categoryId: z.number().int().positive(),
   period: periodSchema,
-  limit: centsSchema,
+  limit: centsSchema.nonnegative(),
 })
-
-export const budgetPatchSchema = budgetCreateSchema.partial()
 
 export const registerSchema = z.object({
   email: z.string().email(),
