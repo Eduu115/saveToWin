@@ -1,5 +1,6 @@
 import type { ColorToken } from '@savetowin/shared/types'
 import {
+  Banknote,
   Bus,
   Gamepad2,
   GraduationCap,
@@ -9,6 +10,7 @@ import {
   MoreHorizontal,
   PiggyBank,
   Plane,
+  Receipt,
   Repeat,
   Shirt,
   ShoppingCart,
@@ -26,11 +28,13 @@ export const CATEGORY_ICONS: Record<string, LucideIcon> = {
   'Digital & games': Gamepad2,
   Clothing: Shirt,
   'Home & bills': House,
+  Bills: Receipt,
   Health: HeartPulse,
   Education: GraduationCap,
   Travel: Plane,
   Other: MoreHorizontal,
   'Savings transfer': PiggyBank,
+  'Savings withdrawal': Banknote,
   // archivadas (por si se muestran en histórico)
   Tech: Gamepad2,
   Shopping: Shirt,
@@ -49,6 +53,7 @@ const CATEGORY_DISPLAY_ORDER: Record<string, number> = {
   'Dining out': 20,
   Transport: 30,
   'Home & bills': 40,
+  Bills: 45,
   Health: 50,
   Clothing: 60,
   Leisure: 70,
@@ -57,6 +62,7 @@ const CATEGORY_DISPLAY_ORDER: Record<string, number> = {
   'Digital & games': 100,
   Education: 110,
   'Savings transfer': 200,
+  'Savings withdrawal': 210,
   Other: 999,
 }
 

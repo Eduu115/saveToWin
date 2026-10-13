@@ -67,10 +67,10 @@ function fromTx(tx: Transaction): Draft {
   }
 }
 
-function typeLabel(type: FlowDraft): string {
+function typeLabel(type: FlowDraft, categoryKey?: string): string {
   if (type === 'expense') return `↓ ${t('transactions.type.expense')}`
   if (type === 'income') return `↑ ${t('transactions.type.income')}`
-  return `→ ${t('transactions.type.savings')}`
+  return `${amountSign(type, categoryKey)} ${t('transactions.type.savings')}`
 }
 
 function amountClass(type: FlowDraft): string {
@@ -79,10 +79,10 @@ function amountClass(type: FlowDraft): string {
   return 'text-expense'
 }
 
-function amountSign(type: FlowDraft): string {
+function amountSign(type: FlowDraft, categoryKey?: string): string {
   if (type === 'expense') return '−'
   if (type === 'income') return '+'
-  return '→'
+  return categoryKey === 'Savings withdrawal' ? '←' : '→'
 }
 
 export function TransactionsPage() {
@@ -113,6 +113,9 @@ export function TransactionsPage() {
 
   const isSubscriptionForm =
     !editing && selectedCat?.key === 'Subscriptions' && draft.type === 'expense'
+  // Ahorro: solo fecha + cantidad + ingreso/retirada; cuenta siempre Savings, sin tarjeta.
+  const isSavingsForm = draft.type === 'savings'
+  const savingsAccountId = accs.data?.items.find((a) => a.key === 'Savings')?.id
 
   const activeAccounts = useMemo(() => {
     const items = accs.data?.items ?? []
@@ -161,13 +164,14 @@ export function TransactionsPage() {
           note: draft.note || null,
         })
       }
+      if (isSavingsForm && savingsAccountId == null) throw new Error(t('common.error'))
       const body = {
         date: draft.date,
         amount,
         type: draft.type,
         categoryId: Number(draft.categoryId),
-        accountId: Number(draft.accountId),
-        cardId: draft.cardId ? Number(draft.cardId) : null,
+        accountId: isSavingsForm ? Number(savingsAccountId) : Number(draft.accountId),
+        cardId: !isSavingsForm && draft.cardId ? Number(draft.cardId) : null,
         note: draft.note || null,
       }
       if (editing) return updateTransaction(editing.id, body)
@@ -198,7 +202,10 @@ export function TransactionsPage() {
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ['transactions'] })
       await qc.invalidateQueries({ queryKey: ['stats'] })
+      setOpen(false)
+      setEditing(null)
     },
+    onError: () => setFormError(t('common.error')),
   })
 
   function applyTypeDefaults(type: FlowDraft, base: Draft): Draft {
@@ -215,6 +222,12 @@ export function TransactionsPage() {
       const cur = activeCats.find((c) => String(c.id) === next.categoryId)
       if (first && (!next.categoryId || cur?.type === 'savings')) {
         next.categoryId = String(first.id)
+      }
+      if (savingsAccountId != null && next.accountId === String(savingsAccountId)) {
+        const firstAcc = (accs.data?.items ?? []).find(
+          (a) => !a.archived && a.id !== savingsAccountId,
+        )
+        if (firstAcc) next.accountId = String(firstAcc.id)
       }
     }
     return next
@@ -248,7 +261,7 @@ export function TransactionsPage() {
 
   const field =
     'h-field w-full rounded-field border border-line bg-surface px-3 text-ink focus-visible:shadow-focus focus-visible:outline-none'
-  const catMap = new Map(cats.data?.items.map((c) => [c.id, c.label]) ?? [])
+  const catMap = new Map(cats.data?.items.map((c) => [c.id, c]) ?? [])
   const accMap = new Map(accs.data?.items.map((a) => [a.id, a.name]) ?? [])
   const cardMap = new Map(cardsQ.data?.items.map((c) => [c.id, c.name]) ?? [])
 
@@ -307,8 +320,8 @@ export function TransactionsPage() {
                       {tx.date}
                     </button>
                   </td>
-                  <td className="px-4 py-3 text-ink-2">{typeLabel(tx.type)}</td>
-                  <td className="px-4 py-3">{catMap.get(tx.categoryId) ?? tx.categoryId}</td>
+                  <td className="px-4 py-3 text-ink-2">{typeLabel(tx.type, catMap.get(tx.categoryId)?.key)}</td>
+                  <td className="px-4 py-3">{catMap.get(tx.categoryId)?.label ?? tx.categoryId}</td>
                   <td className="px-4 py-3">
                     {accMap.get(tx.accountId) ?? tx.accountId}
                     {tx.cardId != null && cardMap.has(tx.cardId) && (
@@ -320,7 +333,7 @@ export function TransactionsPage() {
                   <td
                     className={`px-4 py-3 text-right font-medium tabular-nums ${amountClass(tx.type)}`}
                   >
-                    {amountSign(tx.type)}
+                    {amountSign(tx.type, catMap.get(tx.categoryId)?.key)}
                     {formatCents(tx.amount)}
                   </td>
                 </tr>
@@ -334,7 +347,7 @@ export function TransactionsPage() {
         <div className="fixed inset-0 z-50 flex items-end justify-center bg-ink/40 p-4 sm:items-center">
           <form
             onSubmit={onSubmit}
-            className="w-full max-w-lg rounded-sheet bg-surface p-5 shadow-raised"
+            className="max-h-full w-full max-w-lg overflow-y-auto rounded-sheet bg-surface p-5 shadow-raised"
           >
             <h2 className="mb-4 text-lg font-bold">
               {editing
@@ -473,53 +486,57 @@ export function TransactionsPage() {
                   )}
                 </>
               )}
-              <label>
-                <span className="mb-1 block text-sm text-ink-2">{t('transactions.account')}</span>
-                <select
-                  className={field}
-                  required
-                  value={draft.accountId}
-                  onChange={(e) =>
-                    setDraft({ ...draft, accountId: e.target.value, cardId: '' })
-                  }
-                >
-                  {activeAccounts.map((a) => (
-                    <option key={a.id} value={a.id}>
-                      {a.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                <span className="mb-1 block text-sm text-ink-2">{t('transactions.card')}</span>
-                <select
-                  className={field}
-                  value={draft.cardId}
-                  onChange={(e) => setDraft({ ...draft, cardId: e.target.value })}
-                >
-                  <option value="">{t('transactions.cardNone')}</option>
-                  {cardsForSelect.map((c) => (
-                    <option key={c.id} value={c.id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                <span className="mb-1 block text-sm text-ink-2">
-                  {isSubscriptionForm
-                    ? t('subscriptions.noteLabel')
-                    : t('transactions.note')}
-                </span>
-                <input
-                  className={field}
-                  value={draft.note}
-                  placeholder={
-                    isSubscriptionForm ? t('subscriptions.notePlaceholder') : undefined
-                  }
-                  onChange={(e) => setDraft({ ...draft, note: e.target.value })}
-                />
-              </label>
+              {!isSavingsForm && (
+                <>
+                  <label>
+                    <span className="mb-1 block text-sm text-ink-2">{t('transactions.account')}</span>
+                    <select
+                      className={field}
+                      required
+                      value={draft.accountId}
+                      onChange={(e) =>
+                        setDraft({ ...draft, accountId: e.target.value, cardId: '' })
+                      }
+                    >
+                      {activeAccounts.map((a) => (
+                        <option key={a.id} value={a.id}>
+                          {a.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span className="mb-1 block text-sm text-ink-2">{t('transactions.card')}</span>
+                    <select
+                      className={field}
+                      value={draft.cardId}
+                      onChange={(e) => setDraft({ ...draft, cardId: e.target.value })}
+                    >
+                      <option value="">{t('transactions.cardNone')}</option>
+                      {cardsForSelect.map((c) => (
+                        <option key={c.id} value={c.id}>
+                          {c.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span className="mb-1 block text-sm text-ink-2">
+                      {isSubscriptionForm
+                        ? t('subscriptions.noteLabel')
+                        : t('transactions.note')}
+                    </span>
+                    <input
+                      className={field}
+                      value={draft.note}
+                      placeholder={
+                        isSubscriptionForm ? t('subscriptions.notePlaceholder') : undefined
+                      }
+                      onChange={(e) => setDraft({ ...draft, note: e.target.value })}
+                    />
+                  </label>
+                </>
+              )}
             </div>
             {formError && <p className="mt-3 text-sm text-danger">{formError}</p>}
             <div className="mt-5 flex flex-wrap gap-2">
@@ -540,9 +557,9 @@ export function TransactionsPage() {
               {editing && (
                 <button
                   type="button"
+                  disabled={remove.isPending}
                   onClick={() => {
-                    remove.mutate(editing.id)
-                    setOpen(false)
+                    if (window.confirm(t('transactions.deleteConfirm'))) remove.mutate(editing.id)
                   }}
                   className="inline-flex h-tap items-center rounded-pill bg-danger-weak px-4 text-danger focus-visible:shadow-focus focus-visible:outline-none"
                 >
