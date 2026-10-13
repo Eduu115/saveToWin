@@ -71,7 +71,10 @@ function shortLabel(period: string): string {
   return MONTH_SHORT_ES[month - 1] ?? period
 }
 
-/** Ahorrado = saldo de la cuenta Savings (initial + ingresos + movimientos ahorro − gastos). */
+/**
+ * Ahorrado = saldo de la cuenta Savings
+ * (initial + ingresos + ingresos a ahorro − retiradas de ahorro − gastos).
+ */
 async function savedFromSavingsAccount(userId: number): Promise<number> {
   const [savings] = await db
     .select()
@@ -85,7 +88,7 @@ async function savedFromSavingsAccount(userId: number): Promise<number> {
       income: sql<number>`coalesce(sum(case when ${transactions.type} = 'income' then ${transactions.amount} else 0 end), 0)`.mapWith(
         Number,
       ),
-      savingsIn: sql<number>`coalesce(sum(case when ${transactions.type} = 'savings' then ${transactions.amount} else 0 end), 0)`.mapWith(
+      savingsIn: sql<number>`coalesce(sum(case when ${transactions.type} = 'savings' then (case when ${categories.key} = 'Savings withdrawal' then -${transactions.amount} else ${transactions.amount} end) else 0 end), 0)`.mapWith(
         Number,
       ),
       expense: sql<number>`coalesce(sum(case when ${transactions.type} = 'expense' then ${transactions.amount} else 0 end), 0)`.mapWith(
@@ -93,6 +96,7 @@ async function savedFromSavingsAccount(userId: number): Promise<number> {
       ),
     })
     .from(transactions)
+    .innerJoin(categories, eq(categories.id, transactions.categoryId))
     .where(
       and(eq(transactions.userId, userId), eq(transactions.accountId, savings.id)),
     )

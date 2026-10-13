@@ -73,9 +73,10 @@ export const es = {
   'transactions.save': 'Guardar',
   'transactions.cancel': 'Cancelar',
   'transactions.delete': 'Eliminar',
+  'transactions.deleteConfirm': '¿Eliminar este movimiento? No se puede deshacer.',
   'transactions.type.expense': 'Gasto',
   'transactions.type.income': 'Ingreso',
-  'transactions.type.savings': 'Movimiento a ahorro',
+  'transactions.type.savings': 'Cuenta ahorro',
   'subscriptions.title': 'Suscripciones',
   'subscriptions.hint':
     'Plantillas recurrentes: se generan solas al abrir movimientos. Date de baja sin borrar el histórico.',

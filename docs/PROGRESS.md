@@ -139,3 +139,4 @@ el Cursor y añade una línea al Log. `[ ]` pendiente · `[~]` en curso · `[x]`
 - 2026-08-20 · Post-plan: Cuentas propias (entidad opcional) + tarjetas por cuenta; pestaña `/accounts`; tarjeta opcional en movimientos; soft-archive.
 - 2026-08-20 · Post-plan: Suscripciones (tabla + form al elegir categoría Suscripciones + `/es/subscriptions` editar/darse de baja; materializa vencidas al listar, sin cron).
 - 2026-08-20 · Post-plan: Presupuestos → Límites (nav/ruta `/limits`, copy orientativo; API `budgets` intacta).
+- 2026-10-14 · Post-plan: borrar movimiento en escritorio (modal con scroll + confirmación); categoría Facturas (Hogar y facturas → Hogar); Ahorro → Ingreso/Retirada cuenta ahorro (solo fecha+importe, cuenta Ahorro fija; la retirada resta del ahorrado). Migración `0006` sin borrar datos.

@@ -12,7 +12,8 @@ const CATEGORY_SEED: {
   { key: 'Groceries', label: 'Alimentación', color: 'c1', type: 'expense' },
   { key: 'Dining out', label: 'Restaurantes', color: 'c2', type: 'expense' },
   { key: 'Transport', label: 'Transporte', color: 'c3', type: 'expense' },
-  { key: 'Home & bills', label: 'Hogar y facturas', color: 'c8', type: 'expense' },
+  { key: 'Home & bills', label: 'Hogar', color: 'c8', type: 'expense' },
+  { key: 'Bills', label: 'Facturas', color: 'c8', type: 'expense' },
   { key: 'Health', label: 'Salud', color: 'c9', type: 'expense' },
   { key: 'Clothing', label: 'Prendas', color: 'c7', type: 'expense' },
   { key: 'Leisure', label: 'Ocio', color: 'c4', type: 'expense' },
@@ -28,7 +29,13 @@ const CATEGORY_SEED: {
   { key: 'Other', label: 'Otros', color: 'c12', type: 'expense' },
   {
     key: 'Savings transfer',
-    label: 'Ahorro',
+    label: 'Ingreso en cuenta ahorro',
+    color: 'c11',
+    type: 'savings',
+  },
+  {
+    key: 'Savings withdrawal',
+    label: 'Retirada cuenta ahorro',
     color: 'c11',
     type: 'savings',
   },
@@ -82,7 +89,7 @@ export async function assertSeedIsolation(userA: number, userB: number) {
     .select()
     .from(categories)
     .where(and(eq(categories.userId, userA), eq(categories.archived, false)))
-  if (catsA.length !== 13) throw new Error(`userA categories=${catsA.length}, expected 13`)
+  if (catsA.length !== 15) throw new Error(`userA categories=${catsA.length}, expected 15`)
 
   const accsA = await db.select().from(accounts).where(eq(accounts.userId, userA))
   if (accsA.length !== 7) throw new Error(`userA accounts=${accsA.length}, expected 7`)
@@ -92,7 +99,7 @@ export async function assertSeedIsolation(userA: number, userB: number) {
     .select()
     .from(categories)
     .where(and(eq(categories.userId, userB), eq(categories.archived, false)))
-  if (catsB.length !== 13) throw new Error(`userB categories=${catsB.length}, expected 13`)
+  if (catsB.length !== 15) throw new Error(`userB categories=${catsB.length}, expected 15`)
 
   const other = catsA.find((c) => c.key === 'Other')
   const current = accsA.find((a) => a.key === 'Current')
