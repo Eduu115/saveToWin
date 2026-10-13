@@ -1,23 +1,28 @@
-import { and, eq } from 'drizzle-orm'
+import { and, eq, gt } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { db } from '../../db/client.js'
 import { budgets, categories } from '../../db/schema.js'
 import type { AuthVariables } from '../lib/auth.js'
 import { apiError } from '../lib/errors.js'
-import { budgetCreateSchema, budgetPatchSchema } from '../lib/schemas.js'
+import { budgetSetSchema } from '../lib/schemas.js'
 import { parseBody } from '../lib/validate.js'
 
 export const budgetsRoutes = new Hono<{ Variables: AuthVariables }>()
 
+/** Filas crudas; el vigente de cada mes lo resuelve `effectiveBudgets` (shared/stats). */
 budgetsRoutes.get('/', async (c) => {
   const userId = c.get('userId')
   const items = await db.select().from(budgets).where(eq(budgets.userId, userId))
   return c.json({ items })
 })
 
-budgetsRoutes.post('/', async (c) => {
+/**
+ * Fija el límite mensual de una categoría desde `period` en adelante:
+ * upsert de ese mes + borra los meses posteriores. Los anteriores no se tocan.
+ */
+budgetsRoutes.put('/', async (c) => {
   const userId = c.get('userId')
-  const body = await parseBody(c, budgetCreateSchema)
+  const body = await parseBody(c, budgetSetSchema)
   if (body instanceof Response) return body
 
   const [cat] = await db
@@ -27,64 +32,25 @@ budgetsRoutes.post('/', async (c) => {
     .limit(1)
   if (!cat) return c.json(apiError('VALIDATION_ERROR', 'categoryId no válido'), 400)
 
-  try {
-    const [row] = await db
+  const row = await db.transaction(async (tx) => {
+    await tx
+      .delete(budgets)
+      .where(
+        and(
+          eq(budgets.userId, userId),
+          eq(budgets.categoryId, body.categoryId),
+          gt(budgets.period, body.period),
+        ),
+      )
+    const [saved] = await tx
       .insert(budgets)
-      .values({
-        userId,
-        categoryId: body.categoryId,
-        period: body.period,
-        limit: body.limit,
+      .values({ userId, ...body })
+      .onConflictDoUpdate({
+        target: [budgets.userId, budgets.categoryId, budgets.period],
+        set: { limit: body.limit },
       })
       .returning()
-    return c.json(row, 201)
-  } catch {
-    // ponytail: tabla/API `budgets`; mensaje de usuario habla de límite
-    return c.json(apiError('CONFLICT', 'Ya existe un límite para esa categoría y periodo'), 409)
-  }
-})
-
-budgetsRoutes.patch('/:id', async (c) => {
-  const userId = c.get('userId')
-  const id = Number(c.req.param('id'))
-  if (!Number.isInteger(id)) {
-    return c.json(apiError('VALIDATION_ERROR', 'id inválido'), 400)
-  }
-  const body = await parseBody(c, budgetPatchSchema)
-  if (body instanceof Response) return body
-  if (Object.keys(body).length === 0) {
-    return c.json(apiError('VALIDATION_ERROR', 'Nada que actualizar'), 400)
-  }
-
-  if (body.categoryId !== undefined) {
-    const [cat] = await db
-      .select({ id: categories.id })
-      .from(categories)
-      .where(and(eq(categories.id, body.categoryId), eq(categories.userId, userId)))
-      .limit(1)
-    if (!cat) return c.json(apiError('VALIDATION_ERROR', 'categoryId no válido'), 400)
-  }
-
-  const [row] = await db
-    .update(budgets)
-    .set(body)
-    .where(and(eq(budgets.id, id), eq(budgets.userId, userId)))
-    .returning()
-  if (!row) return c.json(apiError('NOT_FOUND', 'Límite no encontrado'), 404)
+    return saved
+  })
   return c.json(row)
-})
-
-budgetsRoutes.delete('/:id', async (c) => {
-  const userId = c.get('userId')
-  const id = Number(c.req.param('id'))
-  if (!Number.isInteger(id)) {
-    return c.json(apiError('VALIDATION_ERROR', 'id inválido'), 400)
-  }
-
-  const [row] = await db
-    .delete(budgets)
-    .where(and(eq(budgets.id, id), eq(budgets.userId, userId)))
-    .returning()
-  if (!row) return c.json(apiError('NOT_FOUND', 'Límite no encontrado'), 404)
-  return c.json({ ok: true })
 })

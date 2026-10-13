@@ -1,5 +1,5 @@
 import { formatCents, parseAmountToCents } from '@savetowin/shared/money'
-import { previousPeriod } from '@savetowin/shared/stats'
+import { effectiveBudgets, previousPeriod } from '@savetowin/shared/stats'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import {
   ChevronLeft,
@@ -11,14 +11,9 @@ import {
   Wallet,
 } from 'lucide-react'
 import { useMemo, useState, type FormEvent } from 'react'
-import {
-  createBudget,
-  deleteBudget,
-  listBudgets,
-  updateBudget,
-} from '../api/budgets'
+import { listBudgets, setBudget } from '../api/budgets'
 import { ApiClientError } from '../api/client'
-import { listCategories, listTransactions } from '../api/transactions'
+import { listCategories } from '../api/transactions'
 import { fetchStats } from '../api/stats'
 import { t } from '../i18n/t'
 import { categoryBgClass, categoryCssVar, categoryIcon, sortCategoriesByDisplayOrder } from '../ui/categoryMeta'
@@ -54,12 +49,6 @@ function nextPeriod(period: string): string {
   const [y, m] = period.split('-').map(Number)
   if (m === 12) return `${y + 1}-01`
   return `${y}-${String(m + 1).padStart(2, '0')}`
-}
-
-function periodEnd(period: string): string {
-  const [y, m] = period.split('-').map(Number)
-  const last = new Date(Date.UTC(y, m, 0)).getUTCDate()
-  return `${period}-${String(last).padStart(2, '0')}`
 }
 
 function StatusPill({ status, usedPercent }: { status: EnvelopeStatus; usedPercent: number }) {
@@ -107,15 +96,6 @@ export function BudgetsPage() {
 
   const budgets = useQuery({ queryKey: ['budgets'], queryFn: listBudgets })
   const cats = useQuery({ queryKey: ['categories'], queryFn: listCategories })
-  const txs = useQuery({
-    queryKey: ['transactions', 'budget-period', period],
-    queryFn: () =>
-      listTransactions({
-        from: `${period}-01`,
-        to: periodEnd(period),
-        limit: 500,
-      }),
-  })
   const stats = useQuery({
     queryKey: ['stats', period],
     queryFn: () => fetchStats(period),
@@ -129,18 +109,16 @@ export function BudgetsPage() {
     [cats.data],
   )
 
+  // Gasto del mes por categoría: ya viene agregado en /api/stats (sin tope de filas).
   const spentByCat = useMemo(() => {
-    const map = new Map<number, number>()
-    for (const tx of txs.data?.items ?? []) {
-      if (tx.type !== 'expense') continue
-      if (!tx.date.startsWith(period)) continue
-      map.set(tx.categoryId, (map.get(tx.categoryId) ?? 0) + tx.amount)
-    }
-    return map
-  }, [txs.data, period])
+    const byKey = new Map(
+      (stats.data?.charts.byCategory ?? []).map((c) => [c.key, c.expenseCents]),
+    )
+    return new Map(expenseCats.map((c) => [c.id, byKey.get(c.key) ?? 0]))
+  }, [stats.data, expenseCats])
 
   const periodBudgets = useMemo(
-    () => (budgets.data?.items ?? []).filter((b) => b.period === period),
+    () => effectiveBudgets(budgets.data?.items ?? [], period),
     [budgets.data, period],
   )
 
@@ -174,11 +152,7 @@ export function BudgetsPage() {
   const createMut = useMutation({
     mutationFn: async () => {
       const limit = parseAmountToCents(newLimit)
-      return createBudget({
-        categoryId: Number(newCategoryId),
-        period,
-        limit,
-      })
+      return setBudget({ categoryId: Number(newCategoryId), period, limit })
     },
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ['budgets'] })
@@ -197,22 +171,15 @@ export function BudgetsPage() {
     },
   })
 
+  // Editar o quitar (limit 0) rige desde el mes visto; los anteriores no cambian.
   const patchMut = useMutation({
-    mutationFn: async ({ id, limit }: { id: number; limit: number }) =>
-      updateBudget(id, { limit }),
+    mutationFn: async ({ categoryId, limit }: { categoryId: number; limit: number }) =>
+      setBudget({ categoryId, period, limit }),
     onSuccess: async () => {
       await qc.invalidateQueries({ queryKey: ['budgets'] })
       await qc.invalidateQueries({ queryKey: ['stats'] })
       setEditingId(null)
       setDraftLimit('')
-    },
-  })
-
-  const delMut = useMutation({
-    mutationFn: deleteBudget,
-    onSuccess: async () => {
-      await qc.invalidateQueries({ queryKey: ['budgets'] })
-      await qc.invalidateQueries({ queryKey: ['stats'] })
     },
   })
 
@@ -229,16 +196,17 @@ export function BudgetsPage() {
     setDraftLimit(`${whole},${String(frac).padStart(2, '0')}`)
   }
 
-  function saveEdit(id: number) {
+  function saveEdit(categoryId: number) {
     try {
       const limit = parseAmountToCents(draftLimit)
-      patchMut.mutate({ id, limit })
+      patchMut.mutate({ categoryId, limit })
     } catch {
       setFormError(t('budgets.invalidAmount'))
     }
   }
 
-  const loading = budgets.isLoading || cats.isLoading || txs.isLoading
+  const loading = budgets.isLoading || cats.isLoading || stats.isLoading
+  const failed = budgets.isError || cats.isError || stats.isError
 
   return (
     <div className="flex flex-col gap-4">
@@ -261,11 +229,15 @@ export function BudgetsPage() {
               {t('budgets.limits')}
             </span>
             <span
-              className="inline-flex items-center gap-1.5 rounded-pill px-3.5 py-2.5 text-[12.5px] font-semibold text-ink-3"
+              className="relative inline-flex cursor-not-allowed items-center gap-1.5 rounded-pill px-3.5 py-2.5 text-[12.5px] font-semibold text-ink-3 opacity-70"
+              aria-disabled="true"
               title={t('budgets.envelopesSoon')}
             >
               <Wallet size={15} strokeWidth={2.2} aria-hidden />
               {t('budgets.envelopes')}
+              <span className="absolute -right-2 -top-2.5 whitespace-nowrap rounded-pill bg-accent px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-wide text-accent-fg shadow-raised">
+                {t('budgets.comingSoon')}
+              </span>
             </span>
           </div>
           <div className="flex items-center gap-0.5 rounded-pill border border-line bg-surface p-0.5">
@@ -354,7 +326,8 @@ export function BudgetsPage() {
           </div>
 
           {loading && <p className="py-8 text-ink-2">{t('common.loading')}</p>}
-          {!loading && rows.length === 0 && (
+          {failed && <p className="py-8 text-danger">{t('common.error')}</p>}
+          {!loading && !failed && rows.length === 0 && (
             <p className="py-10 text-center text-[13px] text-ink-3">{t('budgets.empty')}</p>
           )}
 
@@ -429,7 +402,7 @@ export function BudgetsPage() {
                       />
                       <button
                         type="button"
-                        onClick={() => saveEdit(budget.id)}
+                        onClick={() => saveEdit(budget.categoryId)}
                         className="inline-flex h-9 items-center rounded-pill bg-accent px-3 text-xs font-bold text-accent-fg focus-visible:shadow-focus focus-visible:outline-none"
                       >
                         {t('budgets.save')}
@@ -458,7 +431,7 @@ export function BudgetsPage() {
                       </span>
                       <button
                         type="button"
-                        onClick={() => delMut.mutate(budget.id)}
+                        onClick={() => patchMut.mutate({ categoryId: budget.categoryId, limit: 0 })}
                         className="text-[11px] font-semibold text-ink-3 hover:text-danger focus-visible:shadow-focus focus-visible:outline-none"
                       >
                         {t('budgets.delete')}
@@ -475,7 +448,7 @@ export function BudgetsPage() {
         {stats.data ? (
           <SavingsGoalCard
             stats={stats.data}
-            rollOverCents={rollsOver > 0 ? rollsOver : 0}
+            rollOverCents={0 /* ponytail: «mover sobrante» es de Sobres (próximamente) */}
           />
         ) : (
           <aside className="rounded-card border border-line bg-surface p-5 shadow-raised">
@@ -491,7 +464,9 @@ export function BudgetsPage() {
             className="w-full max-w-md rounded-sheet bg-surface p-5 shadow-raised"
           >
             <h2 className="text-lg font-extrabold">{t('budgets.add')}</h2>
-            <p className="mt-1 text-sm text-ink-2">{periodLabel(period)}</p>
+            <p className="mt-1 text-sm text-ink-2">
+              {periodLabel(period)} · {t('budgets.fromThisMonth')}
+            </p>
             {formError && <p className="mt-3 text-sm text-danger">{formError}</p>}
             <label className="mt-4 block text-sm font-semibold">
               {t('transactions.category')}

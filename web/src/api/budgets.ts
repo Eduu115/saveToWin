@@ -3,31 +3,15 @@ import { api } from './client'
 
 // ponytail: UI «Límites»; endpoint/tabla siguen `/api/budgets` para no migrar dominio.
 
+/** Filas crudas (cada una rige desde su mes); resolver con `effectiveBudgets`. */
 export function listBudgets() {
   return api<{ items: Budget[] }>('/api/budgets')
 }
 
-export function createBudget(body: {
-  categoryId: number
-  period: string
-  limit: number
-}) {
+/** Límite mensual desde `period` en adelante; `limit: 0` lo quita desde ese mes. */
+export function setBudget(body: { categoryId: number; period: string; limit: number }) {
   return api<Budget>('/api/budgets', {
-    method: 'POST',
+    method: 'PUT',
     body: JSON.stringify(body),
   })
-}
-
-export function updateBudget(
-  id: number,
-  body: Partial<{ categoryId: number; period: string; limit: number }>,
-) {
-  return api<Budget>(`/api/budgets/${id}`, {
-    method: 'PATCH',
-    body: JSON.stringify(body),
-  })
-}
-
-export function deleteBudget(id: number) {
-  return api<{ ok: true }>(`/api/budgets/${id}`, { method: 'DELETE' })
 }

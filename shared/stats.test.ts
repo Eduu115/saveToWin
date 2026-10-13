@@ -4,6 +4,7 @@ import {
   computeSavingsStreak,
   daysInPeriod,
   divRound,
+  effectiveBudgets,
   type StatsTransaction,
 } from './stats.ts'
 
@@ -134,5 +135,23 @@ describe('computePeriodStats — bordes', () => {
     expect(s.savingsRateTenths).toBe(0)
     expect(s.dailyAverageCents).toBe(0)
     expect(s.budgetRemainingCents).toBe(230_000)
+  })
+})
+
+describe('effectiveBudgets', () => {
+  const rows = [
+    { id: 1, categoryId: 10, period: '2026-08', limit: 20_000 },
+    { id: 2, categoryId: 10, period: '2026-10', limit: 30_000 },
+    { id: 3, categoryId: 11, period: '2026-09', limit: 5_000 },
+    { id: 4, categoryId: 11, period: '2026-11', limit: 0 },
+  ]
+  const at = (p: string) =>
+    Object.fromEntries(effectiveBudgets(rows, p).map((r) => [r.categoryId, r.limit]))
+
+  it('hereda el último límite anterior o igual al mes', () => {
+    expect(at('2026-07')).toEqual({})
+    expect(at('2026-09')).toEqual({ 10: 20_000, 11: 5_000 })
+    expect(at('2026-10')).toEqual({ 10: 30_000, 11: 5_000 })
+    expect(at('2027-03')).toEqual({ 10: 30_000 })
   })
 })

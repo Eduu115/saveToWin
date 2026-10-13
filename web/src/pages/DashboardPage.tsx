@@ -90,7 +90,8 @@ export function DashboardPage() {
       : ('ready' as const)
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
+    <div className="flex min-w-0 flex-col gap-4">
       <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr]">
         {/* Hero «you kept» — Directions 1b */}
         <section className="flex flex-col gap-4 rounded-card border border-line bg-surface p-6 shadow-raised">
@@ -327,12 +328,10 @@ export function DashboardPage() {
         </ChartPanel>
       </div>
 
-      {data.insights.length > 0 && (
-        <div className="lg:grid lg:grid-cols-[1.55fr_1fr] lg:gap-4">
-          <div className="hidden lg:block" aria-hidden />
-          <InsightsColumn insights={data.insights} />
-        </div>
-      )}
+    </div>
+
+      {/* Avisos: columna propia con caja fija y scroll interno */}
+      {data.insights.length > 0 && <InsightsColumn insights={data.insights} />}
     </div>
   )
 }

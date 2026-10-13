@@ -163,6 +163,7 @@ export const es = {
   'dashboard.chart.empty': 'Aparece tras tu primer mes',
   'dashboard.chart.singleMonth': 'Un solo mes — sin comparación aún',
   'dashboard.chart.allCategories': 'Todas las categorías →',
+  'insight.panelTitle': 'Avisos',
   'insight.headsUp': 'Atención',
   'insight.onTrack': 'A buen ritmo',
   'insight.over': 'Pasado',
@@ -181,6 +182,8 @@ export const es = {
   'budgets.envelopes': 'Sobres',
   'budgets.limits': 'Límites',
   'budgets.envelopesSoon': 'Sobres con memoria: próximamente',
+  'budgets.comingSoon': 'Próximamente',
+  'budgets.fromThisMonth': 'mensual, se aplica desde este mes en adelante',
   'budgets.add': 'Añadir límite',
   'budgets.empty':
     'Aún no hay límites este mes. Define un tope orientativo por categoría.',
