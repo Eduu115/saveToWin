@@ -8,5 +8,5 @@
     "rootDir": ".",
     "types": ["node"]
   },
-  "include": ["src", "db"]
+  "include": ["src", "db", "pro"]
 }

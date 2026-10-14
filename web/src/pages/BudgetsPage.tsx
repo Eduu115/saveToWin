@@ -5,6 +5,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CircleAlert,
+  Lock,
   Plus,
   Target,
   TriangleAlert,
@@ -206,7 +207,10 @@ export function BudgetsPage() {
   }
 
   const loading = budgets.isLoading || cats.isLoading || stats.isLoading
-  const failed = budgets.isError || cats.isError || stats.isError
+  // Mes fuera de la ventana de historial (si una extensión la fija): aviso, no error.
+  const historyLocked =
+    stats.error instanceof ApiClientError && stats.error.body?.error.code === 'HISTORY_LOCKED'
+  const failed = budgets.isError || cats.isError || (stats.isError && !historyLocked)
 
   return (
     <div className="flex flex-col gap-4">
@@ -327,11 +331,17 @@ export function BudgetsPage() {
 
           {loading && <p className="py-8 text-ink-2">{t('common.loading')}</p>}
           {failed && <p className="py-8 text-danger">{t('common.error')}</p>}
-          {!loading && !failed && rows.length === 0 && (
+          {historyLocked && (
+            <p className="flex items-center gap-2 py-8 text-[13px] text-ink-2">
+              <Lock size={15} strokeWidth={2.2} aria-hidden />
+              {t('history.lockedPeriod')}
+            </p>
+          )}
+          {!loading && !failed && !historyLocked && rows.length === 0 && (
             <p className="py-10 text-center text-[13px] text-ink-3">{t('budgets.empty')}</p>
           )}
 
-          {rows.map(({ budget, cat, spent, bar }) => {
+          {!historyLocked && rows.map(({ budget, cat, spent, bar }) => {
             const Icon = categoryIcon(cat.key)
             const editing = editingId === budget.id
             return (

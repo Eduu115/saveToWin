@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthGuard } from './auth/AuthGuard'
+import { extensionPages } from './extension'
 import { DEFAULT_LOCALE } from './i18n/locales'
 import { AppLayout } from './layout/AppLayout'
 import { AccountsPage } from './pages/AccountsPage'
@@ -42,6 +43,9 @@ export function App() {
                 <Route path="budgets" element={<Navigate to="../limits" replace />} />
                 <Route path="import" element={<ImportPage />} />
                 <Route path="settings" element={<SettingsPage />} />
+                {extensionPages.map(({ path, Page }) => (
+                  <Route key={path} path={path} element={<Page />} />
+                ))}
               </Route>
             </Route>
           </Route>

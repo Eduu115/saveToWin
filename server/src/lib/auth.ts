@@ -5,6 +5,11 @@ import { verifyAccessToken } from './jwt.js'
 
 export type AuthVariables = {
   userId: number
+  /**
+   * Opcional (`YYYY-MM-DD`): si una extensión lo fija, no se sirven estadísticas ni
+   * gráficos de periodos que terminan antes. Los datos se conservan. Sin fijar = sin límite.
+   */
+  historyFrom?: string
 }
 
 const PUBLIC_API = new Set([

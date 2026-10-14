@@ -18,6 +18,7 @@ import { NavLink, Outlet, useLocation, useNavigate, useParams } from 'react-rout
 import { logout } from '../api/auth'
 import { fetchStats } from '../api/stats'
 import { DEFAULT_LOCALE } from '../i18n/locales'
+import { extensionPages } from '../extension'
 import { t } from '../i18n/t'
 import { BrandMark } from '../ui/BrandMark'
 import { GubiaCredit } from '../ui/GubiaCredit'
@@ -49,12 +50,14 @@ function ThemeToggle() {
 }
 
 const nav = [
-  { to: 'dashboard', label: 'nav.dashboard' as const, Icon: LayoutDashboard },
-  { to: 'transactions', label: 'nav.transactions' as const, Icon: ArrowLeftRight },
-  { to: 'accounts', label: 'nav.accounts' as const, Icon: Landmark },
-  { to: 'limits', label: 'nav.limits' as const, Icon: Target },
-  { to: 'import', label: 'nav.import' as const, Icon: Upload },
-  { to: 'settings', label: 'nav.settings' as const, Icon: Settings },
+  { to: 'dashboard', label: t('nav.dashboard'), Icon: LayoutDashboard },
+  { to: 'transactions', label: t('nav.transactions'), Icon: ArrowLeftRight },
+  { to: 'accounts', label: t('nav.accounts'), Icon: Landmark },
+  { to: 'limits', label: t('nav.limits'), Icon: Target },
+  // Pantallas de la extensión opcional (vacío si no hay)
+  ...extensionPages.map(({ path, label, Icon }) => ({ to: path, label, Icon })),
+  { to: 'import', label: t('nav.import'), Icon: Upload },
+  { to: 'settings', label: t('nav.settings'), Icon: Settings },
 ]
 
 /** Directions 2a — barra inferior móvil: 2 + FAB + 2; el resto vive en «Más». */
@@ -119,7 +122,7 @@ export function AppLayout() {
               {nav.map(({ to, label, Icon }) => (
                 <NavLink key={to} to={`/${locale}/${to}`} className={linkClass}>
                   <Icon size={15} strokeWidth={2} aria-hidden />
-                  {t(label)}
+                  {label}
                 </NavLink>
               ))}
             </nav>
@@ -150,7 +153,7 @@ export function AppLayout() {
           {mobileMain.slice(0, 2).map(({ to, label, Icon }) => (
             <NavLink key={to} to={`/${locale}/${to}`} className={tabClass}>
               <Icon size={21} strokeWidth={2} aria-hidden />
-              {t(label)}
+              {label}
             </NavLink>
           ))}
           <div className="flex-1" aria-hidden />
@@ -165,7 +168,7 @@ export function AppLayout() {
           {mobileMain.slice(2).map(({ to, label, Icon }) => (
             <NavLink key={to} to={`/${locale}/${to}`} className={tabClass}>
               <Icon size={21} strokeWidth={2} aria-hidden />
-              {t(label)}
+              {label}
             </NavLink>
           ))}
           <button
@@ -213,7 +216,7 @@ export function AppLayout() {
                     }
                   >
                     <Icon size={19} strokeWidth={2} aria-hidden />
-                    {t(label)}
+                    {label}
                   </NavLink>
                 </li>
               ))}
