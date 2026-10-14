@@ -104,7 +104,10 @@ export function DashboardPage() {
       : ('ready' as const)
 
   return (
-    <div className="grid items-start gap-4 lg:gap-3 xl:grid-cols-[minmax(0,1fr)_300px]">
+    // Sin avisos no hay columna derecha: el dashboard ocupa todo el ancho, centrado.
+    <div
+      className={`grid items-start gap-4 lg:gap-3 ${data.insights.length > 0 ? 'xl:grid-cols-[minmax(0,1fr)_300px]' : ''}`}
+    >
     <div className="flex min-w-0 flex-col gap-4 lg:gap-3">
       <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr] lg:gap-3">
         {/* Hero «you kept» — Directions 1b */}
