@@ -152,6 +152,8 @@ export const es = {
   'dashboard.moneyOut': 'Sale',
   'dashboard.goal.title': 'Objetivo de ahorro',
   'dashboard.latest': 'Últimos',
+  'history.lockedChart': 'Los meses anteriores quedan fuera de tu historial disponible',
+  'history.lockedPeriod': 'Este mes queda fuera de tu historial disponible. Tus datos siguen guardados.',
   'firstRun.title': 'Aún no hay nada — y es el mejor punto de partida',
   'firstRun.subtitle': 'Tres pasos y el dashboard se llena solo. Puedes parar después del primero.',
   'firstRun.step1.title': 'Añade un gasto',
