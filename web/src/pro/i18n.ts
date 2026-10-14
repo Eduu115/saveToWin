@@ -8,6 +8,7 @@ const es = {
   'pro.plan.premium': 'Premium',
   'pro.plan.until': 'hasta el',
   'pro.plan.forever': 'sin fecha de fin',
+  'pro.plan.manage': 'Ver qué incluye',
   'pro.history.limited': 'Ves gráficos y estadísticas desde el',
   'pro.history.full': 'Ves todo tu historial, sin límite de fechas.',
   'pro.history.notEnforced': 'Ahora mismo ves todo tu historial.',
