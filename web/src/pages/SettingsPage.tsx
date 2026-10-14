@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { downloadBackup, restoreBackup, type BackupPayload } from '../api/backup'
 import { ApiClientError } from '../api/client'
 import { t } from '../i18n/t'
+import { GubiaCredit } from '../ui/GubiaCredit'
 
 export function SettingsPage() {
   const qc = useQueryClient()
@@ -112,6 +113,10 @@ export function SettingsPage() {
           </p>
         )}
       </section>
+
+      <footer className="border-t border-line pt-4">
+        <GubiaCredit variant="inline" />
+      </footer>
     </div>
   )
 }

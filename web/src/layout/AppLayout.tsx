@@ -20,6 +20,7 @@ import { fetchStats } from '../api/stats'
 import { DEFAULT_LOCALE } from '../i18n/locales'
 import { t } from '../i18n/t'
 import { BrandMark } from '../ui/BrandMark'
+import { GubiaCredit } from '../ui/GubiaCredit'
 import { setFaviconPercent } from '../ui/ProgressRing'
 
 type Theme = 'light' | 'dark'
@@ -227,6 +228,9 @@ export function AppLayout() {
                 </button>
               </li>
             </ul>
+            <div className="mt-3 border-t border-line px-3 pt-2">
+              <GubiaCredit variant="inline" />
+            </div>
           </div>
         </div>
       )}
