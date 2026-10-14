@@ -5,6 +5,7 @@ import { z } from 'zod'
 import { db } from '../../db/client.js'
 import { authCodes, users } from '../../db/schema.js'
 import type { AuthVariables } from '../lib/auth.js'
+import { clearAuthCookie } from '../lib/cookies.js'
 import { apiError } from '../lib/errors.js'
 import { mailConfigured, MailNotConfiguredError, maskEmail, sendMail } from '../lib/mail.js'
 import {
@@ -216,5 +217,29 @@ profileRoutes.post('/2fa/disable', async (c) => {
     .update(users)
     .set({ totpSecret: null, totpEnabledAt: null, totpRecovery: [] })
     .where(eq(users.id, user.id))
+  return c.json({ ok: true })
+})
+
+const deleteBody = z.object({
+  currentPassword: z.string().min(1),
+  code: z.string().trim().max(12).optional(),
+})
+
+/**
+ * Eliminar la cuenta (derecho de supresión): borra el usuario y, en cascada,
+ * todos sus datos. Pide la contraseña y, con 2FA activa, también un código.
+ */
+profileRoutes.delete('/', async (c) => {
+  const body = await parseBody(c, deleteBody)
+  if (body instanceof Response) return body
+  const user = await checkPassword(c.get('userId'), body.currentPassword)
+  if (!user) return c.json(wrongPassword(), 401)
+  if (user.totpEnabledAt && user.totpSecret) {
+    const code = body.code ?? ''
+    const ok = verifyTotp(user.totpSecret, code) || user.totpRecovery.includes(sha256(normalizeRecovery(code)))
+    if (!ok) return c.json(apiError('CODE_INVALID', 'El código de verificación no es correcto'), 400)
+  }
+  await db.delete(users).where(eq(users.id, user.id))
+  clearAuthCookie(c)
   return c.json({ ok: true })
 })

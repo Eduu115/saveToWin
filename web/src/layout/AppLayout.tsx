@@ -9,7 +9,6 @@ import {
   UserRound,
   MoreHorizontal,
   Plus,
-  Settings,
   Sun,
   Target,
   Upload,
@@ -62,7 +61,6 @@ const nav = [
     .filter((p) => p.nav !== false)
     .map(({ path, label, Icon }) => ({ to: path, label, Icon })),
   { to: 'import', label: t('nav.import'), Icon: Upload },
-  { to: 'settings', label: t('nav.settings'), Icon: Settings },
 ]
 
 /** Directions 2a — barra inferior móvil: 2 + FAB + 2; el resto vive en «Más». */

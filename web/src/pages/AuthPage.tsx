@@ -6,7 +6,9 @@ import { fetchRegistration, login, loginTwoFactor, register } from '../api/auth'
 import { ApiClientError } from '../api/client'
 import { DEFAULT_LOCALE } from '../i18n/locales'
 import { t } from '../i18n/t'
+import { extensionLegalLinks } from '../extension'
 import { GubiaCredit } from '../ui/GubiaCredit'
+import { LegalLinks } from '../ui/LegalLinks'
 import { BrandMark } from '../ui/BrandMark'
 import { setFaviconPercent } from '../ui/ProgressRing'
 
@@ -304,9 +306,18 @@ export function AuthPage({ mode }: { mode: Mode }) {
           )}
         </p>
 
-        <div className="flex items-center gap-2 pt-1 text-xs text-ink-3">
-          <Server size={14} strokeWidth={2.2} aria-hidden />
-          <span>{t('auth.selfHosted')}</span>
+        {mode === 'register' && extensionLegalLinks.length > 0 && (
+          <div className="text-[12px] leading-relaxed text-ink-3">
+            {t('auth.legalConsent')} <LegalLinks className="mt-1" />
+          </div>
+        )}
+
+        <div className="flex flex-col gap-2 pt-1">
+          <div className="flex items-center gap-2 text-xs text-ink-3">
+            <Server size={14} strokeWidth={2.2} aria-hidden />
+            <span>{t('auth.selfHosted')}</span>
+          </div>
+          {mode === 'login' && <LegalLinks />}
         </div>
       </form>
       )}
