@@ -122,3 +122,14 @@ Fuera de alcance: OAuth, 2FA, billing, sync realtime, categorización con IA.
 - **Postgres** (no SQLite): varios usuarios concurrentes.
 - **JWT en cookie httpOnly** (no `localStorage`): mitiga XSS.
 - **Céntimos**: correctitud del dinero por encima de comodidad.
+
+---
+
+## Licencia
+
+Copyright (C) 2026 Eduardo Serrano.
+
+El núcleo de saveToWin es software libre bajo la **GNU Affero General Public
+License v3.0** ([`LICENSE`](LICENSE)): puedes usarlo, modificarlo y
+hospedarlo; si lo ofreces como servicio en red, debes publicar tus cambios
+bajo la misma licencia.
