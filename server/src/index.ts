@@ -1,4 +1,5 @@
 import { existsSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { serve } from '@hono/node-server'
 import { serveStatic } from '@hono/node-server/serve-static'
 import { Hono } from 'hono'
@@ -34,6 +35,16 @@ const app = new Hono()
 app.use('/api/auth/login', rateLimitAuth)
 app.use('/api/auth/register', rateLimitAuth)
 app.use('/api/*', requireAuth)
+
+// Extensión opcional: si existe `server/pro/` (no forma parte de este repo), se
+// registra antes que las rutas del núcleo. Sin ella, la app funciona completa.
+const proEntry = ['../pro/index.js', '../pro/index.ts']
+  .map((rel) => new URL(rel, import.meta.url))
+  .find((url) => existsSync(fileURLToPath(url)))
+if (proEntry) {
+  const pro = (await import(proEntry.href)) as { register: (a: typeof app) => Promise<void> }
+  await pro.register(app)
+}
 
 app.get('/api/health', (c) => c.json({ ok: true }))
 app.route('/api/auth', authRoutes)

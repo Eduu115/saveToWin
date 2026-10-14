@@ -116,6 +116,16 @@ statsRoutes.get('/', async (c) => {
   if (!period) {
     return c.json(apiError('VALIDATION_ERROR', 'period debe ser YYYY-MM'), 400)
   }
+  const historyFrom = c.get('historyFrom')
+  const isLocked = (p: string) => historyFrom != null && periodBounds(p).to < historyFrom
+  if (isLocked(period)) {
+    return c.json(
+      apiError('HISTORY_LOCKED', 'Ese periodo queda fuera de tu historial disponible', {
+        historyFrom,
+      }),
+      403,
+    )
+  }
 
   const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1)
   if (!user) return c.json(apiError('UNAUTHORIZED', 'No autenticado'), 401)
@@ -180,8 +190,10 @@ statsRoutes.get('/', async (c) => {
 
   const months = lastNPeriods(period, 6)
   const monthly = months.map((p) => {
-    const expenseCents = monthlyExpense.get(p) ?? 0
-    const incomeCents = monthlyIncome.get(p) ?? 0
+    // Mes fuera de la ventana de historial: se marca y no se sirven sus cifras.
+    const locked = isLocked(p)
+    const expenseCents = locked ? 0 : (monthlyExpense.get(p) ?? 0)
+    const incomeCents = locked ? 0 : (monthlyIncome.get(p) ?? 0)
     const limit = sumLimits(p)
     return {
       period: p,
@@ -190,6 +202,7 @@ statsRoutes.get('/', async (c) => {
       incomeCents,
       overBudget: limit > 0 && expenseCents > limit,
       isCurrent: p === period,
+      locked,
     }
   })
 
@@ -265,6 +278,7 @@ statsRoutes.get('/', async (c) => {
 
   return c.json({
     ...stats,
+    historyFrom: historyFrom ?? null,
     savingsStreakMonths,
     charts: {
       monthly,

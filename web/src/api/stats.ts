@@ -10,6 +10,8 @@ export type MonthlyBar = {
   incomeCents: number
   overBudget: boolean
   isCurrent: boolean
+  /** Fuera de la ventana de historial disponible: sin cifras. */
+  locked: boolean
 }
 
 export type CategorySpend = {
@@ -20,6 +22,8 @@ export type CategorySpend = {
 }
 
 export type DashboardStats = PeriodStats & {
+  /** `YYYY-MM-DD` desde el que hay historial disponible; null = sin límite. */
+  historyFrom: string | null
   savingsStreakMonths: number
   charts: {
     monthly: MonthlyBar[]

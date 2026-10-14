@@ -1,5 +1,5 @@
 import { formatCents } from '@savetowin/shared/money'
-import { Info } from 'lucide-react'
+import { Info, Lock } from 'lucide-react'
 import { useSyncExternalStore } from 'react'
 import {
   Bar,
@@ -164,6 +164,12 @@ export function MonthlySpendChart({
         <div className="flex items-center gap-1.5 text-[11px] font-medium leading-snug text-warn">
           <Info size={13} strokeWidth={2.4} aria-hidden />
           {t('dashboard.chart.singleMonth')}
+        </div>
+      )}
+      {monthly.some((m) => m.locked) && (
+        <div className="flex items-center gap-1.5 text-[11px] font-medium leading-snug text-ink-2">
+          <Lock size={13} strokeWidth={2.4} aria-hidden />
+          {t('history.lockedChart')}
         </div>
       )}
     </div>
