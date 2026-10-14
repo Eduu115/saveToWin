@@ -92,8 +92,25 @@ HTTPS en `savetowin.app` (DNS apuntando al server, 80/443 abiertos):
 docker compose --profile https up -d --build
 ```
 
-Datos en volumen `pgdata`. Backup JSON desde **Ajustes** (`GET/POST /api/backup`).
+Datos en volumen `pgdata`. Cada usuario puede descargar o restaurar su copia en
+JSON desde su **Perfil** (`GET/POST /api/backup`).
 PWA instalable en build de producción (manifest + service worker).
+
+### Copias y despliegue automáticos (`ops/`)
+
+- `ops/backup.sh`: copia de la base de datos (`pg_dump` comprimido y verificado) en
+  `~/backups/savetowin`, con permisos solo para tu usuario. Borra las que superan
+  `BACKUP_KEEP_DAYS` (30).
+- `ops/deploy.sh`: si hay commits nuevos en `origin/main`, hace una copia, actualiza,
+  reconstruye la app y comprueba `/api/health`; si no responde, **vuelve sola** a la
+  versión anterior. Sin cambios no hace nada (`--force` reconstruye igualmente).
+
+Ejemplo de `crontab -e` (copia cada 2 días y despliegue diario a las 4:00):
+
+```cron
+45 3 */2 * * $HOME/apps/saveToWin/ops/backup.sh >> $HOME/logs/savetowin-backup.log 2>&1
+0 4 * * *    $HOME/apps/saveToWin/ops/deploy.sh >> $HOME/logs/savetowin-deploy.log 2>&1
+```
 
 ---
 
