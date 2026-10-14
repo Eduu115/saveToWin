@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthGuard } from './auth/AuthGuard'
-import { extensionPages } from './extension'
+import { extensionPages, extensionPublicPages } from './extension'
 import { DEFAULT_LOCALE } from './i18n/locales'
 import { AppLayout } from './layout/AppLayout'
 import { AccountsPage } from './pages/AccountsPage'
@@ -11,7 +11,6 @@ import { DashboardPage } from './pages/DashboardPage'
 import { ImportPage } from './pages/ImportPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { LocaleLayout } from './pages/LocaleLayout'
-import { SettingsPage } from './pages/SettingsPage'
 import { SubscriptionsPage } from './pages/SubscriptionsPage'
 import { TransactionsPage } from './pages/TransactionsPage'
 
@@ -33,6 +32,9 @@ export function App() {
           <Route path="/:locale" element={<LocaleLayout />}>
             <Route path="login" element={<AuthPage mode="login" />} />
             <Route path="register" element={<AuthPage mode="register" />} />
+            {extensionPublicPages.map(({ path, Page }) => (
+              <Route key={path} path={path} element={<Page />} />
+            ))}
             <Route element={<AuthGuard />}>
               <Route element={<AppLayout />}>
                 <Route index element={<Navigate to="dashboard" replace />} />
@@ -43,7 +45,7 @@ export function App() {
                 <Route path="limits" element={<BudgetsPage />} />
                 <Route path="budgets" element={<Navigate to="../limits" replace />} />
                 <Route path="import" element={<ImportPage />} />
-                <Route path="settings" element={<SettingsPage />} />
+                <Route path="settings" element={<Navigate to="../profile" replace />} />
                 <Route path="profile" element={<ProfilePage />} />
                 {extensionPages.map(({ path, Page }) => (
                   <Route key={path} path={path} element={<Page />} />

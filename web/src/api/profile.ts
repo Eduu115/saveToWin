@@ -34,3 +34,7 @@ export const enableTwoFactor = (code: string) =>
 
 export const disableTwoFactor = (currentPassword: string, code: string) =>
   post<{ ok: true }>('/2fa/disable', { currentPassword, code })
+
+/** Elimina la cuenta y todos sus datos. Con 2FA activa, exige `code`. */
+export const deleteAccount = (currentPassword: string, code?: string) =>
+  api<{ ok: true }>('/api/profile', { method: 'DELETE', body: JSON.stringify({ currentPassword, code }) })
