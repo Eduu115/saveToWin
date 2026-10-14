@@ -88,7 +88,7 @@ export function AuthPage({ mode }: { mode: Mode }) {
             {t('auth.slogan.line3')}
           </span>
         </h2>
-        <p className="hidden max-w-[420px] text-base leading-relaxed text-accent-fg/80 md:block">
+        <p className="hidden max-w-[420px] text-base leading-relaxed text-accent-fg opacity-80 md:block">
           {t('auth.slogan.body')}
         </p>
       </div>
@@ -98,16 +98,16 @@ export function AuthPage({ mode }: { mode: Mode }) {
           <span className="text-[26px] font-extrabold tabular-nums tracking-tight">
             {t('auth.brand.stat1.value')}
           </span>
-          <span className="text-xs font-medium text-accent-fg/65">
+          <span className="text-xs font-medium text-accent-fg opacity-65">
             {t('auth.brand.stat1.label')}
           </span>
         </div>
-        <div className="w-px bg-accent-fg/20" />
+        <div className="w-px bg-[color-mix(in_srgb,var(--on-accent)_20%,transparent)]" />
         <div className="flex flex-col gap-1">
           <span className="text-[26px] font-extrabold tabular-nums tracking-tight">
             {t('auth.brand.stat2.value')}
           </span>
-          <span className="text-xs font-medium text-accent-fg/65">
+          <span className="text-xs font-medium text-accent-fg opacity-65">
             {t('auth.brand.stat2.label')}
           </span>
         </div>
