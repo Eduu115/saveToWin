@@ -259,12 +259,19 @@ export function TransactionsPage() {
     setEditing(null)
     const d = emptyDraft()
     // Directions 3a: sugerencias = última categoría y última cuenta usadas en un gasto.
-    const last = txs.data?.items.find((tx) => tx.type === 'expense')
+    // Nunca sugerir Suscripciones: esa categoría convierte el alta en una suscripción
+    // (y los cargos que genera cada suscripción son justo los gastos más recientes).
+    const subsId = activeCats.find((c) => c.key === 'Subscriptions')?.id
+    const last = txs.data?.items.find(
+      (tx) => tx.type === 'expense' && tx.subscriptionId == null && tx.categoryId !== subsId,
+    )
     const lastCat = activeCats.find((c) => c.id === last?.categoryId)
     const lastAcc = (accs.data?.items ?? []).find((a) => a.id === last?.accountId && !a.archived)
     const expense =
       lastCat ??
-      sortCategoriesByDisplayOrder(activeCats.filter((c) => c.type === 'expense'))[0]
+      sortCategoriesByDisplayOrder(
+        activeCats.filter((c) => c.type === 'expense' && c.id !== subsId),
+      )[0]
     if (expense) d.categoryId = String(expense.id)
     const firstAcc = lastAcc ?? (accs.data?.items ?? []).find((a) => !a.archived)
     if (firstAcc) d.accountId = String(firstAcc.id)

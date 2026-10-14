@@ -26,10 +26,14 @@ export type MovementDraft = {
   customUnit: SubscriptionCustomUnit
 }
 
-/** Directions 3c — tres alturas fijas (px); la completa es la pantalla entera. */
+/**
+ * Directions 3c — tres alturas; la completa es la pantalla entera.
+ * ponytail: la compacta se ajusta al contenido (teclado + sugerencias que pueden
+ * ocupar 2 líneas) en vez de 352px fijos, para que nada se solape con Guardar.
+ */
 type SheetHeight = 'compact' | 'medium' | 'full'
 const HEIGHTS: Record<SheetHeight, string> = {
-  compact: 'min(560px, 100dvh)',
+  compact: 'auto',
   medium: 'min(712px, 100dvh)',
   full: '100dvh',
 }
@@ -106,6 +110,13 @@ export function MovementSheet(props: Props) {
   }, [isSubscriptionForm])
 
   const compact = !desktop && height === 'compact'
+  // 3c: al crecer desde compacta, la tarjeta terracota se estira hasta ser la cabecera.
+  const [grewFromCompact, setGrewFromCompact] = useState(false)
+  const prevHeight = useRef(height)
+  useEffect(() => {
+    setGrewFromCompact(prevHeight.current === 'compact' && height !== 'compact')
+    prevHeight.current = height
+  }, [height])
   const selectedCat = categories.find((c) => String(c.id) === draft.categoryId)
   const selectedAcc = accounts.find((a) => String(a.id) === draft.accountId)
   const cents = typedAmountCents(draft.amount)
@@ -248,7 +259,7 @@ export function MovementSheet(props: Props) {
         onSubmit={onSubmit}
         onClick={(e) => e.stopPropagation()}
         style={sheetStyle}
-        className="sheet-in sheet-height flex h-[var(--sheet-h)] w-full flex-col overflow-hidden rounded-t-sheet bg-surface shadow-raised sm:h-auto sm:max-h-[calc(100dvh-2rem)] sm:max-w-lg sm:rounded-sheet"
+        className="sheet-in sheet-height flex h-[var(--sheet-h)] max-h-dvh w-full flex-col overflow-hidden rounded-t-sheet bg-surface shadow-raised sm:h-auto sm:max-h-[calc(100dvh-2rem)] sm:max-w-lg sm:rounded-sheet"
       >
         {compact ? (
           /* 3a — compacta: el importe es una tarjeta dentro de la hoja */
@@ -286,26 +297,28 @@ export function MovementSheet(props: Props) {
                 {t('transactions.more')}
               </button>
             </div>
-            <div className="grid min-h-0 flex-1 grid-cols-3 gap-2">
+            <div className="grid grid-cols-3 gap-2">
               {KEYS.map((k) => (
                 <button
                   key={k}
                   type="button"
                   aria-label={k === 'del' ? t('transactions.keyDelete') : k}
                   onClick={() => press(k)}
-                  className="flex min-h-11 items-center justify-center rounded-tile bg-surface-2 text-2xl font-semibold tabular-nums active:bg-line focus-visible:shadow-focus focus-visible:outline-none"
+                  className="flex h-12 items-center justify-center rounded-tile bg-surface-2 text-2xl font-semibold tabular-nums active:bg-line focus-visible:shadow-focus focus-visible:outline-none"
                 >
                   {k === 'del' ? <Delete size={22} strokeWidth={2} aria-hidden /> : k}
                 </button>
               ))}
             </div>
             {props.formError && <p className="text-sm text-danger">{props.formError}</p>}
-            {saveButton}
+            <div className="mt-3 flex-none">{saveButton}</div>
           </div>
         ) : (
           <>
             {/* 3b / 4e — cabecera terracota de borde a borde */}
-            <div className="flex-none bg-accent px-4 pb-5 text-accent-fg sm:px-5 sm:pt-4">
+            <div
+              className={`flex-none bg-accent px-4 pb-5 text-accent-fg sm:px-5 sm:pt-4 ${grewFromCompact ? 'header-grow' : ''}`}
+            >
               {handle}
               <div className="flex items-center justify-between gap-2">
                 {typeTabs || <h2 className="text-[15px] font-bold">{title}</h2>}

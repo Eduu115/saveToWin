@@ -26,6 +26,19 @@
   .fade-in {
     animation: fade-in 240ms ease-out;
   }
+  .header-grow {
+    animation: header-grow 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+}
+
+/* La tarjeta del importe (inset, redondeada) crece hasta la cabecera de borde a borde */
+@keyframes header-grow {
+  from {
+    clip-path: inset(72px 16px 24px 16px round 20px);
+  }
+  to {
+    clip-path: inset(0 0 0 0 round 0);
+  }
 }
 
 @keyframes sheet-in {
@@ -42,7 +55,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   .sheet-in,
-  .fade-in {
+  .fade-in,
+  .header-grow {
     animation: none;
   }
   .sheet-height {

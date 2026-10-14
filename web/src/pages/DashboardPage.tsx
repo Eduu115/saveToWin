@@ -3,8 +3,13 @@ import { useQuery } from '@tanstack/react-query'
 import {
   ArrowDownLeft,
   ArrowUpRight,
+  BarChart3,
   Flag,
+  PieChart,
+  Plus,
+  Target,
   TrendingUp,
+  Upload,
 } from 'lucide-react'
 import { Link, useParams } from 'react-router-dom'
 import { fetchStats } from '../api/stats'
@@ -64,6 +69,13 @@ export function DashboardPage() {
     queryKey: ['stats', period],
     queryFn: () => fetchStats(period),
   })
+  // Mismo query que «Últimos»: su `total` dice si el usuario aún no tiene nada.
+  const latest = useQuery({
+    queryKey: ['transactions', 'latest'],
+    queryFn: () => listTransactions({ limit: 3 }),
+  })
+
+  if (latest.data?.total === 0) return <FirstRun locale={locale} />
 
   if (isLoading) {
     return (
@@ -92,11 +104,11 @@ export function DashboardPage() {
       : ('ready' as const)
 
   return (
-    <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_300px]">
-    <div className="flex min-w-0 flex-col gap-4">
-      <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr]">
+    <div className="grid items-start gap-4 lg:gap-3 xl:grid-cols-[minmax(0,1fr)_300px]">
+    <div className="flex min-w-0 flex-col gap-4 lg:gap-3">
+      <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr] lg:gap-3">
         {/* Hero «you kept» — Directions 1b */}
-        <section className="flex flex-col gap-4 rounded-card border border-line bg-surface p-5 shadow-raised sm:p-6">
+        <section className="flex flex-col gap-4 rounded-card border border-line bg-surface p-5 shadow-raised sm:p-6 lg:gap-3 lg:p-5">
           <div className="flex items-baseline justify-between gap-3">
             <h1 className="text-sm font-semibold text-ink-2">
               {empty
@@ -120,7 +132,7 @@ export function DashboardPage() {
             <>
               <div className="flex flex-wrap items-end gap-4">
                 <div
-                  className={`text-[40px] font-extrabold leading-[0.95] tracking-tight tabular-nums sm:text-[52px] ${
+                  className={`text-[40px] font-extrabold leading-[0.95] tracking-tight tabular-nums sm:text-[52px] lg:text-[46px] ${
                     data.balanceCents >= 0 ? 'text-savings' : 'text-ink'
                   }`}
                 >
@@ -135,7 +147,7 @@ export function DashboardPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-2.5">
-                <div className="flex min-w-0 items-center gap-2.5 rounded-tile bg-surface-2 px-3 py-3 sm:gap-3 sm:px-4">
+                <div className="flex min-w-0 items-center gap-2.5 rounded-tile bg-surface-2 px-3 py-3 sm:gap-3 sm:px-4 lg:py-2.5">
                   <span className="flex h-8 w-8 flex-none items-center justify-center rounded-pill bg-income text-white">
                     <ArrowDownLeft size={16} strokeWidth={2.4} aria-hidden />
                   </span>
@@ -148,7 +160,7 @@ export function DashboardPage() {
                     </span>
                   </div>
                 </div>
-                <div className="flex min-w-0 items-center gap-2.5 rounded-tile bg-surface-2 px-3 py-3 sm:gap-3 sm:px-4">
+                <div className="flex min-w-0 items-center gap-2.5 rounded-tile bg-surface-2 px-3 py-3 sm:gap-3 sm:px-4 lg:py-2.5">
                   <span className="flex h-8 w-8 flex-none items-center justify-center rounded-pill bg-expense text-white">
                     <ArrowUpRight size={16} strokeWidth={2.4} aria-hidden />
                   </span>
@@ -189,7 +201,7 @@ export function DashboardPage() {
             <div className="text-[13px] font-semibold text-ink-2">
               {t('dashboard.goal.title')}
             </div>
-            <div className="text-[26px] font-extrabold tabular-nums tracking-tight">
+            <div className="whitespace-nowrap text-[clamp(20px,1.8vw,26px)] font-extrabold tabular-nums tracking-tight">
               {formatCents(data.savedCents)}
             </div>
             <div className="text-[12.5px] font-medium leading-snug text-ink-2">
@@ -210,8 +222,8 @@ export function DashboardPage() {
       </div>
 
       {/* KPI row — Directions 1b / 9b */}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4">
-        <article className="flex min-w-0 flex-col gap-2.5 rounded-field border border-line bg-surface px-4 py-4 sm:px-5 sm:py-[18px]">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 md:gap-4 lg:gap-3">
+        <article className="flex min-w-0 flex-col gap-2.5 rounded-field border border-line bg-surface px-4 py-4 sm:px-5 sm:py-[18px] lg:gap-2 lg:py-3.5">
           <div className="text-[12.5px] font-semibold text-ink-2">
             {t('dashboard.kpi.budgetLeft')}
           </div>
@@ -223,7 +235,7 @@ export function DashboardPage() {
           ) : (
             <>
               <div className="flex items-baseline gap-2">
-                <span className="text-[24px] font-extrabold tabular-nums tracking-tight sm:text-[30px]">
+                <span className="text-[24px] font-extrabold tabular-nums tracking-tight sm:text-[30px] lg:text-[26px]">
                   {formatCents(Math.max(0, data.budgetRemainingCents))}
                 </span>
                 <span className="text-[12.5px] font-semibold text-warn">
@@ -240,7 +252,7 @@ export function DashboardPage() {
           )}
         </article>
 
-        <article className="flex min-w-0 flex-col gap-2.5 rounded-field border border-line bg-surface px-4 py-4 sm:px-5 sm:py-[18px]">
+        <article className="flex min-w-0 flex-col gap-2.5 rounded-field border border-line bg-surface px-4 py-4 sm:px-5 sm:py-[18px] lg:gap-2 lg:py-3.5">
           <div className="text-[12.5px] font-semibold text-ink-2">
             {t('dashboard.kpi.dailyAvg')}
           </div>
@@ -252,7 +264,7 @@ export function DashboardPage() {
           ) : (
             <>
               <div className="flex items-baseline gap-2">
-                <span className="text-[24px] font-extrabold tabular-nums tracking-tight sm:text-[30px]">
+                <span className="text-[24px] font-extrabold tabular-nums tracking-tight sm:text-[30px] lg:text-[26px]">
                   {formatCents(data.dailyAverageCents)}
                 </span>
                 <span className="text-[12.5px] font-semibold text-ink-2">
@@ -273,12 +285,12 @@ export function DashboardPage() {
           )}
         </article>
 
-        <article className="col-span-2 flex min-w-0 flex-col gap-2.5 rounded-field border border-line bg-surface px-4 py-4 sm:px-5 sm:py-[18px]">
+        <article className="col-span-2 flex min-w-0 flex-col gap-2.5 rounded-field border border-line bg-surface px-4 py-4 sm:px-5 sm:py-[18px] md:col-span-1 lg:gap-2 lg:py-3.5">
           <div className="text-[12.5px] font-semibold text-ink-2">
             {t('dashboard.kpi.streak')}
           </div>
           <div className="flex items-baseline gap-2">
-            <span className="text-[24px] font-extrabold tabular-nums tracking-tight sm:text-[30px]">
+            <span className="text-[24px] font-extrabold tabular-nums tracking-tight sm:text-[30px] lg:text-[26px]">
               {data.savingsStreakMonths}{' '}
               <span className="text-[18px] font-bold">
                 {data.savingsStreakMonths === 1
@@ -309,7 +321,7 @@ export function DashboardPage() {
       <LatestMovements locale={locale} />
 
       {/* Gráficos — Directions 1b / 11a / 11b */}
-      <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr]">
+      <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr] lg:gap-3">
         <ChartPanel
           title={t('dashboard.chart.spendTitle')}
           state={chartState}
@@ -409,5 +421,110 @@ function LatestMovements({ locale }: { locale: string }) {
         })}
       </ul>
     </section>
+  )
+}
+
+/** Directions 8c — primer arranque: tres pasos en vez de un dashboard vacío. */
+function FirstRun({ locale }: { locale: string }) {
+  const steps = [
+    {
+      n: 1,
+      title: t('firstRun.step1.title'),
+      body: t('firstRun.step1.body'),
+      cta: t('firstRun.step1.cta'),
+      to: `/${locale}/transactions?new=1`,
+      Icon: Plus,
+      primary: true,
+    },
+    {
+      n: 2,
+      title: t('firstRun.step2.title'),
+      body: t('firstRun.step2.body'),
+      cta: t('firstRun.step2.cta'),
+      to: `/${locale}/import`,
+      Icon: Upload,
+      primary: false,
+    },
+    {
+      n: 3,
+      title: t('firstRun.step3.title'),
+      body: t('firstRun.step3.body'),
+      cta: t('firstRun.step3.cta'),
+      to: `/${locale}/limits`,
+      Icon: Target,
+      primary: false,
+    },
+  ]
+  const ghosts = [
+    { label: t('firstRun.ghost.balance'), unit: '€' },
+    { label: t('firstRun.ghost.rate'), unit: '%' },
+    { label: t('firstRun.ghost.limit'), unit: '€' },
+    { label: t('firstRun.ghost.daily'), unit: '€' },
+  ]
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="text-center">
+        <h1 className="text-[26px] font-extrabold tracking-tight sm:text-[30px]">
+          {t('firstRun.title')}
+        </h1>
+        <p className="mt-1.5 text-[13.5px] text-ink-2">{t('firstRun.subtitle')}</p>
+      </div>
+
+      <ol className="grid gap-3 md:grid-cols-3">
+        {steps.map(({ n, title, body, cta, to, Icon, primary }) => (
+          <li
+            key={n}
+            className={`flex flex-col gap-3 rounded-card border bg-surface p-5 ${
+              primary ? 'border-2 border-accent shadow-raised' : 'border-line'
+            }`}
+          >
+            <div className="flex items-center gap-3">
+              <span
+                className={`flex size-8 flex-none items-center justify-center rounded-full text-sm font-bold ${
+                  primary ? 'bg-accent text-accent-fg' : 'bg-surface-2 text-ink-2'
+                }`}
+              >
+                {n}
+              </span>
+              <h2 className="text-[15.5px] font-bold">{title}</h2>
+            </div>
+            <p className="flex-1 text-[13px] leading-relaxed text-ink-2">{body}</p>
+            <Link
+              to={to}
+              className={`inline-flex h-tap items-center gap-2 self-start rounded-pill px-4 text-[13px] font-bold focus-visible:shadow-focus focus-visible:outline-none ${
+                primary ? 'bg-accent text-accent-fg shadow-accent' : 'bg-surface-2 text-ink'
+              }`}
+            >
+              <Icon size={16} strokeWidth={2.4} aria-hidden />
+              {cta}
+            </Link>
+          </li>
+        ))}
+      </ol>
+
+      {/* Huecos de lo que se llenará solo */}
+      <div className="hidden grid-cols-4 gap-3 sm:grid" aria-hidden>
+        {ghosts.map((g) => (
+          <div key={g.label} className="rounded-field border border-dashed border-line px-5 py-4">
+            <div className="text-[12.5px] font-semibold text-ink-3">{g.label}</div>
+            <div className="mt-1 text-[26px] font-extrabold text-line">— {g.unit}</div>
+          </div>
+        ))}
+      </div>
+      <div className="hidden gap-3 sm:grid sm:grid-cols-[1.55fr_1fr]" aria-hidden>
+        <div className="flex h-[200px] flex-col items-center justify-center gap-3 rounded-card border border-dashed border-line">
+          <span className="flex size-12 items-center justify-center rounded-full bg-surface-2 text-ink-3">
+            <BarChart3 size={20} strokeWidth={2} />
+          </span>
+          <span className="text-[13px] font-medium text-ink-3">{t('firstRun.ghost.chart')}</span>
+        </div>
+        <div className="flex h-[200px] flex-col items-center justify-center gap-3 rounded-card border border-dashed border-line">
+          <span className="flex size-12 items-center justify-center rounded-full bg-surface-2 text-ink-3">
+            <PieChart size={20} strokeWidth={2} />
+          </span>
+          <span className="text-[13px] font-medium text-ink-3">{t('firstRun.ghost.categories')}</span>
+        </div>
+      </div>
+    </div>
   )
 }
