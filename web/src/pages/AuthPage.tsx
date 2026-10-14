@@ -6,6 +6,7 @@ import { fetchRegistration, login, register } from '../api/auth'
 import { ApiClientError } from '../api/client'
 import { DEFAULT_LOCALE } from '../i18n/locales'
 import { t } from '../i18n/t'
+import { GubiaCredit } from '../ui/GubiaCredit'
 import { BrandMark } from '../ui/BrandMark'
 import { setFaviconPercent } from '../ui/ProgressRing'
 
@@ -65,11 +66,15 @@ export function AuthPage({ mode }: { mode: Mode }) {
 
   const brandPanel = (
     <div className="flex flex-col justify-between bg-accent px-6 pb-14 pt-8 text-accent-fg md:w-[min(100%,620px)] md:flex-none md:px-14 md:py-14">
-      <div className="flex items-center gap-3">
-        <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-accent-fg text-accent md:h-[30px]">
-          <BrandMark percent={70} size={22} tone="brand" />
-        </span>
-        <span className="text-[17px] font-bold tracking-tight md:text-[19px]">{t('app.name')}</span>
+      {/* «saveToWin by gubia digital» — opción B: misma fila que el nombre */}
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="flex h-[30px] w-[30px] items-center justify-center rounded-[10px] bg-accent-fg text-accent md:h-[30px]">
+            <BrandMark percent={70} size={22} tone="brand" />
+          </span>
+          <span className="text-[17px] font-bold tracking-tight md:text-[19px]">{t('app.name')}</span>
+        </div>
+        <GubiaCredit variant="lockup" />
       </div>
 
       <div className="mt-8 flex flex-col gap-4 md:mt-0 md:gap-[22px]">
