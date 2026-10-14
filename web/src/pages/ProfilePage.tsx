@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { Check, Copy, Download, KeyRound, LogOut, Mail, ShieldAlert, ShieldCheck, UserRound } from 'lucide-react'
+import { Check, Copy, Download, KeyRound, LogOut, Mail, ShieldAlert, ShieldCheck, Trash2, UserRound } from 'lucide-react'
 import { useEffect, useState, type FormEvent, type ReactNode } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { renderSVG } from 'uqr'
@@ -7,6 +7,7 @@ import { logout, updateMe } from '../api/auth'
 import { ApiClientError } from '../api/client'
 import {
   confirmCode,
+  deleteAccount,
   disableTwoFactor,
   enableTwoFactor,
   fetchProfile,
@@ -16,6 +17,9 @@ import {
 } from '../api/profile'
 import { extensionProfileSections } from '../extension'
 import { t } from '../i18n/t'
+import { BackupCard } from '../ui/BackupCard'
+import { GubiaCredit } from '../ui/GubiaCredit'
+import { LegalLinks } from '../ui/LegalLinks'
 
 const field =
   'h-field w-full rounded-field border border-line bg-surface px-3 text-ink focus-visible:shadow-focus focus-visible:outline-none'
@@ -489,6 +493,67 @@ function TwoFactorCard({ enabled, recoveryLeft }: { enabled: boolean; recoveryLe
   )
 }
 
+/** Eliminar la cuenta (derecho de supresión): contraseña y, con 2FA, un código. */
+function DeleteAccountCard({ twoFactor }: { twoFactor: boolean }) {
+  const { locale = 'es' } = useParams()
+  const navigate = useNavigate()
+  const qc = useQueryClient()
+  const [open, setOpen] = useState(false)
+  const [password, setPassword] = useState('')
+  const [code, setCode] = useState('')
+  const remove = useMutation({
+    mutationFn: () => deleteAccount(password, twoFactor ? code : undefined),
+    onSuccess: () => {
+      qc.clear()
+      navigate(`/${locale}/login`, { replace: true })
+    },
+  })
+  return (
+    <section className="rounded-card border border-line bg-surface p-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="text-[15px] font-bold">{t('profile.delete.title')}</h2>
+          <p className="mt-1 max-w-md text-[12.5px] text-ink-2">{t('profile.delete.hint')}</p>
+        </div>
+        {!open && (
+          <button type="button" onClick={() => setOpen(true)} className="inline-flex h-tap items-center gap-2 rounded-pill bg-danger-weak px-4 text-sm font-semibold text-danger focus-visible:shadow-focus focus-visible:outline-none">
+            <Trash2 size={16} strokeWidth={2.2} aria-hidden />
+            {t('profile.delete.cta')}
+          </button>
+        )}
+      </div>
+      {open && (
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            if (window.confirm(t('profile.delete.confirm'))) remove.mutate()
+          }}
+          className="mt-4 flex flex-col gap-3"
+        >
+          <Label text={t('profile.password.current')}>
+            <input className={field} type="password" required autoComplete="current-password" value={password} onChange={(e) => setPassword(e.target.value)} />
+          </Label>
+          {twoFactor && (
+            <Label text={t('profile.2fa.codeOrRecovery')}>
+              <input className={field} required autoComplete="one-time-code" maxLength={12} value={code} onChange={(e) => setCode(e.target.value)} />
+            </Label>
+          )}
+          {remove.isError && <p className="text-sm text-danger">{errorText(remove.error)}</p>}
+          <div className="flex flex-wrap gap-2">
+            <button type="submit" disabled={remove.isPending} className="inline-flex h-tap items-center gap-2 rounded-pill bg-danger px-4 text-sm font-bold text-white focus-visible:shadow-focus focus-visible:outline-none disabled:opacity-50">
+              <Trash2 size={16} strokeWidth={2.2} aria-hidden />
+              {t('profile.delete.final')}
+            </button>
+            <button type="button" onClick={() => setOpen(false)} className={secondary}>
+              {t('accounts.cancel')}
+            </button>
+          </div>
+        </form>
+      )}
+    </section>
+  )
+}
+
 /** Perfil: gestión mínima de la cuenta (sin parte social). */
 export function ProfilePage() {
   const { locale = 'es' } = useParams()
@@ -542,6 +607,8 @@ export function ProfilePage() {
           {extensionProfileSections.map((Section, i) => (
             <Section key={i} />
           ))}
+          <BackupCard />
+          <DeleteAccountCard twoFactor={p.twoFactorEnabled} />
           <button
             type="button"
             onClick={() => out.mutate()}
@@ -550,6 +617,10 @@ export function ProfilePage() {
             <LogOut size={16} strokeWidth={2.2} aria-hidden />
             {t('nav.logout')}
           </button>
+          <footer className="flex flex-col gap-2 border-t border-line pt-4">
+            <GubiaCredit variant="inline" />
+            <LegalLinks />
+          </footer>
         </>
       )}
     </div>

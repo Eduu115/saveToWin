@@ -39,6 +39,8 @@ app.use('/api/auth/login/2fa', rateLimitAuth)
 app.use('/api/profile/confirm', rateLimitAuth)
 app.use('/api/profile/password', rateLimitAuth)
 app.use('/api/profile/email', rateLimitAuth)
+// Borrar cuenta (DELETE /api/profile): mismo límite que el resto de operaciones con contraseña.
+app.on('DELETE', '/api/profile', rateLimitAuth)
 app.use('/api/profile/2fa/*', rateLimitAuth)
 app.use('/api/*', requireAuth)
 
