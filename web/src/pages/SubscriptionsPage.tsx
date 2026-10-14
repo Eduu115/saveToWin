@@ -229,10 +229,10 @@ export function SubscriptionsPage() {
       )}
 
       {editing && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 sm:items-center">
+        <div className="fade-in fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center sm:p-4">
           <form
             onSubmit={onSubmit}
-            className="w-full max-w-lg rounded-sheet bg-surface p-5 shadow-raised"
+            className="sheet-in w-full max-w-lg rounded-t-sheet bg-surface p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-raised sm:rounded-sheet"
           >
             <h2 className="mb-4 text-lg font-bold">{t('subscriptions.edit')}</h2>
             <div className="grid gap-3">

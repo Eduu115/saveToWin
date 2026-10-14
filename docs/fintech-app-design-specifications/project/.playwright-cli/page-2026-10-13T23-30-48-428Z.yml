@@ -1,0 +1,3190 @@
+- generic [ref=e3]:
+  - generic [ref=e4]:
+    - generic [ref=e5]:
+      - generic [ref=e6]: RONDA 14 · MARCA
+      - heading "El logo — tres caminos y una propuesta" [level=1] [ref=e9]
+      - paragraph [ref=e10]:
+        - text: "Un logo que se dibuja con las mismas formas que la app: círculo, arco y píldora. Nada de metáforas de banco."
+        - link "14a" [ref=e11] [cursor=pointer]:
+          - /url: "#14a"
+        - text: el anillo,
+        - link "14b" [ref=e12] [cursor=pointer]:
+          - /url: "#14b"
+        - text: el doble ascenso,
+        - link "14c" [ref=e13] [cursor=pointer]:
+          - /url: "#14c"
+        - text: solo tipografía.
+        - link "14d" [ref=e14] [cursor=pointer]:
+          - /url: "#14d"
+        - text: es mi propuesta con el sistema completo — mi recomendación es 14a.
+    - generic [ref=e15]:
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - generic [ref=e18]: 14a
+          - heading "El anillo" [level=3] [ref=e19]
+          - generic [ref=e20]: recomendado
+        - generic [ref=e21]:
+          - generic [ref=e22]: saveToWin
+          - generic [ref=e27]: 64 · 44 · 28 · 18 px
+          - generic [ref=e38]: "Es el gráfico del objetivo de ahorro convertido en marca: el arco es lo guardado, el hueco lo que falta. Puede llevar tu porcentaje real — al abrir la app el anillo del login dibuja tu 70 %. Al reducir, el trazo engorda y sigue leyéndose como una \"o\"."
+      - generic [ref=e39]:
+        - generic [ref=e40]:
+          - generic [ref=e41]: 14b
+          - heading "Doble ascenso" [level=3] [ref=e42]
+        - generic [ref=e43]:
+          - generic [ref=e44]: saveToWin
+          - generic [ref=e49]: 60 · 44 · 28 · 18 px
+          - generic [ref=e60]: "Dos galones subiendo: ganar dos veces, y de paso la flecha de crecimiento. Más enérgico y más genérico — hay muchas flechas hacia arriba en finanzas. A 18px los dos trazos empiezan a fundirse."
+      - generic [ref=e61]:
+        - generic [ref=e62]:
+          - generic [ref=e63]: 14c
+          - heading "Solo tipografía" [level=3] [ref=e64]
+        - generic [ref=e65]:
+          - generic [ref=e66]:
+            - generic [ref=e67]: saveToWin
+            - generic [ref=e68]: saveToWin
+          - generic [ref=e69]:
+            - generic [ref=e70]: sW
+            - generic [ref=e71]: sW
+            - generic [ref=e72]: sW
+            - generic [ref=e73]: monograma
+          - generic [ref=e74]: "Cero símbolo: el camelCase del nombre ya es la marca, y el terracota hace el trabajo. Honesto y barato de mantener, pero deja el icono de la app en manos de un monograma que no dice nada."
+      - generic [ref=e75]:
+        - generic [ref=e76]:
+          - generic [ref=e77]: 14d
+          - heading "La propuesta" [level=3] [ref=e78]
+          - generic [ref=e79]:
+            - text: sistema completo sobre
+            - link "14a" [ref=e80] [cursor=pointer]:
+              - /url: "#14a"
+        - generic [ref=e81]:
+          - generic [ref=e82]:
+            - generic [ref=e83]: Bloques
+            - generic [ref=e84]:
+              - generic [ref=e85]:
+                - generic [ref=e86]: saveToWin
+                - generic [ref=e91]: horizontal · por defecto
+              - generic [ref=e92]:
+                - generic [ref=e93]: saveToWin
+                - generic [ref=e98]: apilado · login, splash
+              - generic [ref=e99]: símbolo solo · <120px
+          - generic [ref=e104]:
+            - generic [ref=e105]:
+              - generic [ref=e106]: Variantes de color
+              - generic [ref=e107]:
+                - generic [ref=e108]: papel
+                - generic [ref=e114]: sobre acento
+                - generic [ref=e120]: oscuro
+                - generic [ref=e126]: 1 tinta
+            - generic [ref=e132]:
+              - generic [ref=e133]: Icono de app y favicon
+              - generic [ref=e134]:
+                - generic [ref=e135]: iOS 76
+                - generic [ref=e141]: Android
+                - generic [ref=e147]: "32"
+                - generic [ref=e153]: "16"
+              - generic [ref=e157]: El anillo va siempre en blanco sobre terracota lleno — nunca terracota sobre blanco en un icono, se pierde entre las apps claras.
+          - generic [ref=e159]:
+            - generic [ref=e160]:
+              - generic [ref=e161]: Aire y tamaño mínimo
+              - generic [ref=e162]:
+                - generic [ref=e163]: saveToWin
+                - generic [ref=e169]: "Margen libre = ½ del diámetro del anillo por los cuatro lados. Mínimos: bloque horizontal 120px, símbolo solo 18px, impreso 12mm."
+            - generic [ref=e170]:
+              - generic [ref=e171]: Qué no hacer
+              - generic [ref=e172]:
+                - generic [ref=e173]: "Cerrar el anillo del todo: el hueco es el mensaje."
+                - generic [ref=e179]: Cambiar el terracota por un color de categoría.
+                - generic [ref=e185]: Poner sombra, degradado o contorno al símbolo.
+                - generic [ref=e191]: "Escribir \"SaveToWin\" o \"savetowin\": siempre saveToWin."
+          - generic [ref=e197]: "Por qué 14a: es el único de los tres que la app ya dibuja sola. El mismo componente de anillo sirve de logo, de KPI de objetivo y de favicon — un solo SVG de dos círculos, sin archivo de marca que mantener aparte. Y como el arco puede ser tu porcentaje real, el logo del login es distinto para cada persona que instale la app."
+  - generic [ref=e202]:
+    - generic [ref=e203]:
+      - generic [ref=e204]: ENTREGA · TOKENS
+      - heading "Tokens para pegar en el proyecto" [level=1] [ref=e207]
+      - paragraph [ref=e208]:
+        - link "13a" [ref=e209] [cursor=pointer]:
+          - /url: "#13a"
+        - text: el bloque CSS completo — claro y oscuro, semánticos, las 12 categóricas, la secuencial y los fundamentos.
+        - link "13b" [ref=e210] [cursor=pointer]:
+          - /url: "#13b"
+        - text: el mapeo a Tailwind y las cuatro reglas que no se negocian.
+    - generic [ref=e211]:
+      - generic [ref=e212]:
+        - generic [ref=e213]:
+          - generic [ref=e214]: 13a
+          - heading "tokens.css" [level=3] [ref=e215]
+        - generic [ref=e216]: ":root { /* tipografía — Public Sans 400/500/600/700/800, auto-alojada */ --font-sans: 'Public Sans', system-ui, sans-serif; --num: tabular-nums; /* font-variant-numeric en TODO importe */ /* superficie y tinta */ --bg: #FAF6F0; --surface: #FFFDFA; --surface-2: #F4ECE1; --fg: #211B15; --fg-2: #6D5F52; --fg-3: #9A8B7D; --border: #E9DFD1; --grid: #F2E9DD; --track: #EEE5D8; /* semánticos */ --accent: #A8471C; --accent-weak: #FBEADE; --accent-hover: #8E3B16; --on-accent: #FFFFFF; --income: #0E6A6F; --income-weak: #E6F4F3; --expense: #6D5F52; /* = --fg-2, el gasto NO tiene color propio */ --savings: #2F6A43; --savings-weak: #E8F3EC; --savings-border:#C7E0D1; --warn: #92600B; --warn-weak: #FDF1DC; --warn-border: #F0DCB4; --danger: #B03024; --danger-weak: #F8E7E4; --danger-border: #EFCFCB; /* categóricas — misma L y C, solo cambia el tono */ --c1: oklch(0.60 0.155 151); /* Groceries */ --c2: oklch(0.60 0.155 46); /* Dining out */ --c3: oklch(0.60 0.155 256); /* Transport */ --c4: oklch(0.60 0.155 306); /* Tech */ --c5: oklch(0.60 0.155 206); /* Subscriptions */ --c6: oklch(0.60 0.155 336); /* Digital & games*/ --c7: oklch(0.60 0.155 26); /* Shopping */ --c8: oklch(0.60 0.155 96); /* Home & bills */ --c9: oklch(0.60 0.155 181); /* Health */ --c10: oklch(0.60 0.155 271); /* Education */ --c11: oklch(0.60 0.155 126); /* Travel */ --c12: oklch(0.60 0.02 70); /* Other */ /* secuencial — heatmap, tono 45 */ --s1: oklch(0.965 0.014 45); --s2: oklch(0.90 0.05 45); --s3: oklch(0.82 0.09 45); --s4: oklch(0.72 0.13 45); --s5: oklch(0.60 0.155 45); --s6: oklch(0.47 0.14 45); /* radios */ --r-icon: 11px; --r-tile: 14px; --r-field: 16px; --r-card: 20px; --r-sheet: 28px; --r-pill: 100px; /* sombras */ --sh-raised: 0 10px 30px -24px #211B1559; --sh-accent: 0 10px 24px -10px #A8471CB3; --sh-focus: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); /* alturas */ --h-row: 52px; --h-row-mobile: 64px; --h-field: 56px; --h-btn: 48px; --h-tap: 44px; } [data-theme=\"dark\"] { --bg: #191512; --surface: #211C18; --surface-2: #2A231E; --fg: #F3ECE4; --fg-2: #B6A698; --fg-3: #8B7D70; --border: #3A3029; --grid: #2A231E; --track: #332B25; --accent: #F0885A; --accent-weak: #3A241A; --accent-hover: #F79B72; --on-accent: #241009; --income: #4FC9C0; --income-weak: #14282A; --expense: #B6A698; --savings: #6CC78F; --savings-weak: #16291E; --savings-border:#2C4A37; --warn: #E8B45F; --warn-weak: #2E2416; --warn-border: #4A3A1F; --danger: #FF8F80; --danger-weak: #33201D; --danger-border: #56302B; /* mismo tono, solo sube la lightness */ --c1: oklch(0.74 0.14 151); --c2: oklch(0.74 0.14 46); --c3: oklch(0.74 0.14 256); --c4: oklch(0.74 0.14 306); --c5: oklch(0.74 0.14 206); --c6: oklch(0.74 0.14 336); --c7: oklch(0.74 0.14 26); --c8: oklch(0.74 0.14 96); --c9: oklch(0.74 0.14 181); --c10: oklch(0.74 0.14 271); --c11: oklch(0.74 0.14 126); --c12: oklch(0.74 0.02 70); --s1: oklch(0.24 0.02 45); --s2: oklch(0.36 0.055 45); --s3: oklch(0.48 0.085 45); --s4: oklch(0.60 0.11 45); --s5: oklch(0.72 0.13 45); --s6: oklch(0.85 0.145 45); --sh-raised: 0 10px 30px -24px #00000080; }"
+      - generic [ref=e218]:
+        - generic [ref=e219]:
+          - generic [ref=e220]: 13b
+          - heading "Tailwind y reglas" [level=3] [ref=e221]
+        - generic [ref=e222]:
+          - generic [ref=e223]: "// tailwind.config.js — los tokens mandan, Tailwind solo los expone export default { darkMode: ['class', '[data-theme=\"dark\"]'], theme: { extend: { colors: { bg: 'var(--bg)', surface: { DEFAULT: 'var(--surface)', 2: 'var(--surface-2)' }, ink: { DEFAULT: 'var(--fg)', 2: 'var(--fg-2)', 3: 'var(--fg-3)' }, line: { DEFAULT: 'var(--border)', grid: 'var(--grid)' }, track: 'var(--track)', accent: { DEFAULT: 'var(--accent)', weak: 'var(--accent-weak)', hover: 'var(--accent-hover)', fg: 'var(--on-accent)' }, income: { DEFAULT: 'var(--income)', weak: 'var(--income-weak)' }, expense: 'var(--expense)', savings: { DEFAULT: 'var(--savings)', weak: 'var(--savings-weak)' }, warn: { DEFAULT: 'var(--warn)', weak: 'var(--warn-weak)' }, danger: { DEFAULT: 'var(--danger)', weak: 'var(--danger-weak)' }, cat: Object.fromEntries( Array.from({ length: 12 }, (_, i) => [i + 1, `var(--c${i + 1})`]) ), seq: Object.fromEntries( Array.from({ length: 6 }, (_, i) => [i + 1, `var(--s${i + 1})`]) ), }, borderRadius: { icon: 'var(--r-icon)', tile: 'var(--r-tile)', field:'var(--r-field)', card: 'var(--r-card)', sheet:'var(--r-sheet)', pill: 'var(--r-pill)', }, boxShadow: { raised: 'var(--sh-raised)', accent: 'var(--sh-accent)', focus: 'var(--sh-focus)', }, fontFamily: { sans: 'var(--font-sans)' }, height: { row: 'var(--h-row)', field: 'var(--h-field)', tap: 'var(--h-tap)' }, }, }, } // uso: class=\"bg-surface text-ink-2 rounded-card shadow-raised\" // class=\"focus-visible:shadow-focus focus-visible:outline-none\" // class=\"bg-cat-4\" → Tech"
+          - generic [ref=e225]:
+            - generic [ref=e226]: Las cuatro reglas que no se negocian
+            - generic [ref=e227]:
+              - generic [ref=e228]:
+                - generic [ref=e229]: "1"
+                - generic [ref=e230]:
+                  - text: El gasto no lleva color.
+                  - code [ref=e231]: "--expense"
+                  - text: es la misma tinta que
+                  - code [ref=e232]: "--fg-2"
+                  - text: . El ingreso se distingue por signo + flecha + etiqueta + fondo teal, nunca solo por color.
+              - generic [ref=e233]:
+                - generic [ref=e234]: "2"
+                - generic [ref=e235]:
+                  - text: "Todo importe con tabular-nums. No hay fuente mono en la app: Public Sans con"
+                  - code [ref=e236]: "--num"
+                  - text: alinea columnas y ahorra una descarga.
+              - generic [ref=e237]:
+                - generic [ref=e238]: "3"
+                - generic [ref=e239]:
+                  - text: Un solo anillo de foco.
+                  - code [ref=e240]: "--sh-focus"
+                  - text: en
+                  - code [ref=e241]: :focus-visible
+                  - text: ", nunca el outline del navegador. Área táctil ≥44px aunque el pintado sea menor."
+              - generic [ref=e242]:
+                - generic [ref=e243]: "4"
+                - generic [ref=e244]: "Ningún estado se codifica solo con color. Over, Tight y Unused llevan siempre icono + texto. Contraste AA: 4.5:1 en texto, 3:1 en iconos y bordes."
+            - generic [ref=e246]: "Entrega: Public Sans (OFL) y Lucide (ISC) se sirven desde el propio servidor — en estos mockups van por CDN solo para poder verlos. Importar únicamente los ~40 iconos en uso, no el paquete entero."
+  - generic [ref=e253]:
+    - generic [ref=e254]:
+      - generic [ref=e255]: RONDA 12 · UNA PÁGINA, DOS VISTAS
+      - heading "Envelopes y Limits, en la misma pantalla" [level=1] [ref=e258]
+      - paragraph [ref=e259]:
+        - text: Los sobres de
+        - link "5a" [ref=e260] [cursor=pointer]:
+          - /url: "#5a"
+        - text: "ya no viven aparte: son la otra pestaña de la página de"
+        - link "6a" [ref=e261] [cursor=pointer]:
+          - /url: "#6a"
+        - text: . Misma cabecera, mismo selector de mes, mismo conmutador. Envelopes responde "¿cuánto queda en cada categoría?"; Limits, "¿qué reglas he puesto y cuáles he roto?".
+        - link "12a" [ref=e262] [cursor=pointer]:
+          - /url: "#12a"
+        - text: es la vista de sobres activa.
+    - generic [ref=e264]:
+      - generic [ref=e265]:
+        - generic [ref=e266]: 12a
+        - heading "Vista Envelopes" [level=3] [ref=e267]
+        - generic [ref=e268]:
+          - text: la pestaña hermana de
+          - link "6a" [ref=e269] [cursor=pointer]:
+            - /url: "#6a"
+      - generic [ref=e271]:
+        - generic [ref=e272]:
+          - generic [ref=e273]: saveToWin
+          - generic [ref=e276]:
+            - generic [ref=e277]: Dashboard
+            - generic [ref=e283]: Transactions
+            - generic [ref=e287]: Budgets
+            - generic [ref=e292]: Import
+          - generic [ref=e299]: New expense
+        - generic [ref=e301]:
+          - generic [ref=e302]:
+            - heading "Budgets" [level=2] [ref=e303]
+            - generic [ref=e304]: July 2026 closed · 386,55 € rolls over into August
+          - generic [ref=e305]:
+            - generic [ref=e306]:
+              - generic [ref=e307]: Envelopes
+              - generic [ref=e311]: Limits
+            - generic [ref=e316]: July 2026
+            - generic [ref=e324]: Copy to August
+        - generic [ref=e329]:
+          - generic [ref=e330]:
+            - generic [ref=e331]: Budgeted
+            - generic [ref=e332]: 2.300,00 €
+          - generic [ref=e334]:
+            - generic [ref=e335]: Spent
+            - generic [ref=e336]: 1.913,45 €
+          - generic [ref=e338]:
+            - generic [ref=e339]: Rolls over
+            - generic [ref=e340]: + 386,55 €
+          - generic [ref=e351]:
+            - generic [ref=e352]: 83 % of the envelope used
+            - generic [ref=e353]: unspent
+        - generic [ref=e355]:
+          - generic [ref=e356]:
+            - generic [ref=e357]:
+              - generic [ref=e358]: One envelope per category
+              - generic [ref=e359]:
+                - generic [ref=e360]: SPENT / LIMIT
+                - generic [ref=e361]: STATUS
+            - generic [ref=e362]:
+              - generic [ref=e367]:
+                - generic [ref=e368]: Home & bills
+                - generic [ref=e369]: 30,00 € left
+              - generic [ref=e372]: 620,00 / 650,00 €
+              - generic [ref=e373]: 95 %
+            - generic [ref=e375]:
+              - generic [ref=e381]:
+                - generic [ref=e382]: Groceries
+                - generic [ref=e383]: 8,80 € left
+              - generic [ref=e386]: 341,20 / 350,00 €
+              - generic [ref=e387]: Tight
+            - generic [ref=e391]:
+              - generic [ref=e396]:
+                - generic [ref=e397]: Dining out
+                - generic [ref=e398]: 38,90 € over
+              - generic [ref=e402]: 238,90 / 200,00 €
+              - generic [ref=e403]: Over
+            - generic [ref=e407]:
+              - generic [ref=e413]:
+                - generic [ref=e414]: Transport
+                - generic [ref=e415]: 73,60 € left
+              - generic [ref=e418]: 176,40 / 250,00 €
+              - generic [ref=e419]: 71 %
+            - generic [ref=e421]:
+              - generic [ref=e426]:
+                - generic [ref=e427]: Tech
+                - generic [ref=e428]: editing limit
+              - generic [ref=e432]:
+                - generic [ref=e433]: 149,99 /
+                - generic [ref=e434]:
+                  - generic [ref=e435]: "180"
+                  - generic [ref=e436]: €
+            - generic [ref=e448]:
+              - generic [ref=e455]:
+                - generic [ref=e456]: Subscriptions
+                - generic [ref=e457]: 7 recurring
+              - generic [ref=e460]: 118,45 / 120,00 €
+              - generic [ref=e461]: Tight
+            - generic [ref=e465]:
+              - generic [ref=e469]:
+                - generic [ref=e470]: Digital & games
+                - generic [ref=e471]: 16,50 € over
+              - generic [ref=e475]: 96,50 / 80,00 €
+              - generic [ref=e476]: Over
+            - generic [ref=e480]:
+              - generic [ref=e485]:
+                - generic [ref=e486]: Shopping
+                - generic [ref=e487]: 62,00 € left
+              - generic [ref=e490]: 88,00 / 150,00 €
+              - generic [ref=e491]: 59 %
+            - generic [ref=e493]:
+              - generic [ref=e498]:
+                - generic [ref=e499]: Health
+                - generic [ref=e500]: 15,00 € left
+              - generic [ref=e503]: 45,00 / 60,00 €
+              - generic [ref=e504]: 75 %
+            - generic [ref=e506]:
+              - generic [ref=e511]:
+                - generic [ref=e512]: Education
+                - generic [ref=e513]: nothing yet
+              - generic [ref=e515]: 0,00 / 50,00 €
+              - generic [ref=e516]: Unused
+            - generic [ref=e518]:
+              - generic [ref=e522]:
+                - generic [ref=e523]: Travel
+                - generic [ref=e524]: nothing yet
+              - generic [ref=e526]: 0,00 / 240,00 €
+              - generic [ref=e527]: Unused
+            - generic [ref=e529]:
+              - generic [ref=e535]:
+                - generic [ref=e536]: Other
+                - generic [ref=e537]: 10,99 € left
+              - generic [ref=e540]: 39,01 / 50,00 €
+              - generic [ref=e541]: 78 %
+          - generic [ref=e543]:
+            - generic [ref=e544]:
+              - generic [ref=e545]:
+                - generic [ref=e546]: Savings goal
+                - generic [ref=e547]: Edit
+              - generic [ref=e548]:
+                - generic [ref=e553]:
+                  - generic [ref=e554]: 70 %
+                  - generic [ref=e555]: of goal
+                - generic [ref=e556]:
+                  - generic [ref=e557]: 8.420,00 €
+                  - generic [ref=e558]: of 12.000 €3.580 € to go
+                  - generic [ref=e559]: Landing Feb 2027
+              - generic [ref=e562]: Move 386,55 € to savings
+            - generic [ref=e566]:
+              - generic [ref=e567]: REBALANCE
+              - generic [ref=e572]: Tech and Digital & games went 66,49 € over — while Travel and Education never opened.
+              - generic [ref=e573]: 290 € sat unused in envelopes you don't really use in summer.
+              - generic [ref=e574]: Suggest August limits
+            - generic [ref=e580]:
+              - generic [ref=e581]: Sobres, no reglas
+              - generic [ref=e582]: Aquí hay exactamente uno por categoría y lo que sobra pasa a agosto. Las reglas que cruzan varias categorías viven en Limits.
+      - generic [ref=e583]: "Las dos vistas comparten cabecera, resumen y selector de mes: al conmutar solo cambia la lista central y la columna derecha mantiene el objetivo de ahorro. Así el cambio se siente como girar la misma hoja, no como navegar a otro sitio. En móvil el conmutador va bajo el título, a ancho completo."
+  - generic [ref=e589]:
+    - generic [ref=e590]:
+      - generic [ref=e591]: RONDA 11 · GRÁFICOS
+      - heading "Gráficos — qué usar y cómo dibujarlo" [level=1] [ref=e594]
+      - paragraph [ref=e595]:
+        - text: Recharts, cinco tipos y ni uno más.
+        - link "11a" [ref=e596] [cursor=pointer]:
+          - /url: "#11a"
+        - text: el catálogo con la regla de cuándo usar cada uno;
+        - link "11b" [ref=e597] [cursor=pointer]:
+          - /url: "#11b"
+        - text: las specs comunes de ejes, rejilla, tooltip y leyenda, más los tres estados que todo gráfico necesita.
+    - generic [ref=e598]:
+      - generic [ref=e599]:
+        - generic [ref=e600]:
+          - generic [ref=e601]: 11a
+          - heading "Catálogo" [level=3] [ref=e602]
+        - generic [ref=e603]:
+          - generic [ref=e604]:
+            - generic [ref=e605]:
+              - generic [ref=e606]: Barras · gasto por mes
+              - generic [ref=e607]: BarChart
+            - generic [ref=e608]:
+              - generic [ref=e609]: Mar
+              - generic [ref=e612]: Apr
+              - generic [ref=e615]: May
+              - generic [ref=e618]: Jun
+              - generic [ref=e621]: Jul
+            - generic [ref=e624]: Para comparar periodos. El mes actual en terracota, los que superaron su límite en ámbar; el resto en tinta neutra. Radio 8 arriba, 3 abajo.
+          - generic [ref=e625]:
+            - generic [ref=e626]:
+              - generic [ref=e627]: Donut · reparto
+              - generic [ref=e628]: PieChart · innerRadius 62 %
+            - generic [ref=e629]:
+              - generic [ref=e637]:
+                - generic [ref=e638]: 1.913 €
+                - generic [ref=e639]: spent
+              - generic [ref=e640]:
+                - generic [ref=e641]:
+                  - generic [ref=e643]: Home
+                  - generic [ref=e644]: 32 %
+                - generic [ref=e645]:
+                  - generic [ref=e647]: Groceries
+                  - generic [ref=e648]: 18 %
+                - generic [ref=e649]:
+                  - generic [ref=e651]: Dining
+                  - generic [ref=e652]: 13 %
+                - generic [ref=e653]:
+                  - generic [ref=e655]: Other 8
+                  - generic [ref=e656]: 37 %
+            - generic [ref=e657]: "Máximo 5 sectores + \"Other\". El total va en el hueco central. Nunca etiquetas dentro de los sectores: leyenda a la derecha con su cifra."
+          - generic [ref=e658]:
+            - generic [ref=e659]:
+              - generic [ref=e660]: Barras horizontales · ranking
+              - generic [ref=e661]: BarChart layout=vertical
+            - generic [ref=e662]:
+              - generic [ref=e664]:
+                - generic [ref=e665]: Home & bills
+                - generic [ref=e666]: 620,00 €
+              - generic [ref=e670]:
+                - generic [ref=e671]: Groceries
+                - generic [ref=e672]: 341,20 €
+              - generic [ref=e676]:
+                - generic [ref=e677]: Dining out
+                - generic [ref=e678]: 238,90 €
+            - generic [ref=e681]: Mejor que el donut cuando hay más de 5 categorías o los nombres son largos. Ordenado de mayor a menor, siempre con la cifra al final.
+          - generic [ref=e682]:
+            - generic [ref=e683]:
+              - generic [ref=e684]: Área · ahorro acumulado
+              - generic [ref=e685]: AreaChart
+            - generic [ref=e686]: goal 12.000 €
+            - generic [ref=e692]: Solo para lo que se acumula. Relleno verde muy claro, línea 2.5, punto en el último valor y el objetivo como línea discontinua etiquetada.
+          - generic [ref=e693]:
+            - generic [ref=e694]:
+              - generic [ref=e695]: Heatmap · intensidad por día
+              - generic [ref=e696]: grid propio, no Recharts · escala --s1…--s6 sobre tono 45
+            - generic [ref=e729]:
+              - generic [ref=e730]: Un cuadro por día del mes. Seis pasos, no un degradado continuo — el ojo no distingue más. La escala se etiqueta siempre con sus extremos en euros.
+              - generic [ref=e731]: 0 €180 €
+      - generic [ref=e738]:
+        - generic [ref=e739]:
+          - generic [ref=e740]: 11b
+          - heading "Specs y estados" [level=3] [ref=e741]
+        - generic [ref=e742]:
+          - generic [ref=e743]:
+            - generic [ref=e744]:
+              - generic [ref=e745]: Ejes y rejilla
+              - generic [ref=e746]:
+                - generic [ref=e747]:
+                  - generic [ref=e748]: CartesianGrid
+                  - generic [ref=e749]:
+                    - text: solo horizontal,
+                    - code [ref=e750]: "#F2E9DD"
+                    - text: 1px. Nunca verticales.
+                - generic [ref=e751]:
+                  - generic [ref=e752]: XAxis
+                  - generic [ref=e753]:
+                    - text: sin línea ni ticks; etiquetas 11px/500 en
+                    - code [ref=e754]: "#6D5F52"
+                    - text: .
+                - generic [ref=e755]:
+                  - generic [ref=e756]: YAxis
+                  - generic [ref=e757]: 4 marcas máximo, sin símbolo de euro, miles con punto. 10.5px tnum.
+                - generic [ref=e758]:
+                  - generic [ref=e759]: Barras
+                  - generic [ref=e760]: "ancho máx. 52px, gap 26. Con menos de 4 series no se estiran: se centran."
+                - generic [ref=e761]:
+                  - generic [ref=e762]: Animación
+                  - generic [ref=e763]: 400 ms al montar, y ninguna al filtrar. Cero con reduced-motion.
+            - generic [ref=e764]:
+              - generic [ref=e765]: Tooltip
+              - generic [ref=e766]:
+                - generic [ref=e767]:
+                  - generic [ref=e768]: Jueves 16 julio
+                  - generic [ref=e769]:
+                    - generic [ref=e771]: Groceries
+                    - generic [ref=e772]: 64,32 €
+                  - generic [ref=e773]:
+                    - generic [ref=e775]: Dining out
+                    - generic [ref=e776]: 18,50 €
+                  - generic [ref=e778]:
+                    - generic [ref=e779]: Total
+                    - generic [ref=e780]: 82,82 €
+                - generic [ref=e781]:
+                  - text: "Siempre oscuro, en los dos temas: así nunca se confunde con una tarjeta. Radio 12, fecha completa arriba, total abajo separado por una línea. El cursor de Recharts,"
+                  - code [ref=e782]: "#211B15"
+                  - text: al 6 %.
+          - generic [ref=e784]:
+            - generic [ref=e785]: Los tres estados que todo gráfico necesita
+            - generic [ref=e786]:
+              - generic [ref=e787]:
+                - generic [ref=e788]: Aparece tras tu primer mes
+                - generic [ref=e793]: vacío · dice cuándo aparecerá
+              - generic [ref=e794]: cargando · misma silueta
+              - generic [ref=e802]:
+                - generic [ref=e803]: Un solo mes — sin comparación aún
+                - generic [ref=e809]: un punto · no se estira
+          - generic [ref=e810]: "Ningún gráfico es la única fuente de un dato: la cifra que cuenta siempre está también en texto, en un KPI o en la leyenda. Quien no distinga los colores, o navegue con lector de pantalla, no pierde nada."
+  - generic [ref=e816]:
+    - generic [ref=e817]:
+      - generic [ref=e818]: RONDA 10 · ICONOGRAFÍA
+      - heading "Las 12 categorías, las 7 cuentas y los estados" [level=1] [ref=e821]
+      - paragraph [ref=e822]:
+        - text: Todo Lucide, auto-alojable.
+        - link "10a" [ref=e823] [cursor=pointer]:
+          - /url: "#10a"
+        - text: "es la tabla maestra: nombre del icono, token de color y su hex en claro y oscuro — lo que se copia al código."
+        - link "10b" [ref=e824] [cursor=pointer]:
+          - /url: "#10b"
+        - text: las cuentas y los iconos de estado.
+        - link "10c" [ref=e825] [cursor=pointer]:
+          - /url: "#10c"
+        - text: "las reglas de dibujo: qué grosor, qué tamaño y qué no hacer."
+    - generic [ref=e826]:
+      - generic [ref=e827]:
+        - generic [ref=e828]:
+          - generic [ref=e829]: 10a
+          - heading "Las 12 categorías" [level=3] [ref=e830]
+          - generic [ref=e831]: icono · token · claro / oscuro
+        - generic [ref=e832]:
+          - generic [ref=e833]:
+            - generic [ref=e834]: CATEGORÍA
+            - generic [ref=e835]: ICONO LUCIDE
+            - generic [ref=e836]: TOKEN
+            - generic [ref=e837]: CLARO
+            - generic [ref=e838]: OSCURO
+          - generic [ref=e839]:
+            - generic [ref=e845]: Groceries
+            - generic [ref=e846]: shopping-cart
+            - generic [ref=e847]: "--c1"
+            - generic [ref=e848]: 0.60 .155 151
+            - generic [ref=e851]: 0.74 .14 151
+          - generic [ref=e854]:
+            - generic [ref=e859]: Dining out
+            - generic [ref=e860]: utensils
+            - generic [ref=e861]: "--c2"
+            - generic [ref=e862]: 0.60 .155 46
+            - generic [ref=e865]: 0.74 .14 46
+          - generic [ref=e868]:
+            - generic [ref=e874]: Transport
+            - generic [ref=e875]: bus
+            - generic [ref=e876]: "--c3"
+            - generic [ref=e877]: 0.60 .155 256
+            - generic [ref=e880]: 0.74 .14 256
+          - generic [ref=e883]:
+            - generic [ref=e888]: Tech
+            - generic [ref=e889]: cpu
+            - generic [ref=e890]: "--c4"
+            - generic [ref=e891]: 0.60 .155 306
+            - generic [ref=e894]: 0.74 .14 306
+          - generic [ref=e897]:
+            - generic [ref=e904]: Subscriptions
+            - generic [ref=e905]: repeat
+            - generic [ref=e906]: "--c5"
+            - generic [ref=e907]: 0.60 .155 206
+            - generic [ref=e910]: 0.74 .14 206
+          - generic [ref=e913]:
+            - generic [ref=e917]:
+              - generic [ref=e918]: Digital & games
+              - generic [ref=e919]: "etiquetas: entretenimiento · juegos · ocio digital"
+            - generic [ref=e920]: gamepad-2
+            - generic [ref=e921]: "--c6"
+            - generic [ref=e922]: 0.60 .155 336
+            - generic [ref=e925]: 0.74 .14 336
+          - generic [ref=e928]:
+            - generic [ref=e933]: Shopping
+            - generic [ref=e934]: shopping-bag
+            - generic [ref=e935]: "--c7"
+            - generic [ref=e936]: 0.60 .155 26
+            - generic [ref=e939]: 0.74 .14 26
+          - generic [ref=e942]:
+            - generic [ref=e947]: Home & bills
+            - generic [ref=e948]: house
+            - generic [ref=e949]: "--c8"
+            - generic [ref=e950]: 0.60 .155 96
+            - generic [ref=e953]: 0.74 .14 96
+          - generic [ref=e956]:
+            - generic [ref=e961]: Health
+            - generic [ref=e962]: heart-pulse
+            - generic [ref=e963]: "--c9"
+            - generic [ref=e964]: 0.60 .155 181
+            - generic [ref=e967]: 0.74 .14 181
+          - generic [ref=e970]:
+            - generic [ref=e975]: Education
+            - generic [ref=e976]: graduation-cap
+            - generic [ref=e977]: "--c10"
+            - generic [ref=e978]: 0.60 .155 271
+            - generic [ref=e981]: 0.74 .14 271
+          - generic [ref=e984]:
+            - generic [ref=e988]: Travel
+            - generic [ref=e989]: plane
+            - generic [ref=e990]: "--c11"
+            - generic [ref=e991]: 0.60 .155 126
+            - generic [ref=e994]: 0.74 .14 126
+          - generic [ref=e997]:
+            - generic [ref=e1003]: Other
+            - generic [ref=e1004]: ellipsis
+            - generic [ref=e1005]: "--c12"
+            - generic [ref=e1006]: 0.60 .02 70
+            - generic [ref=e1009]: 0.74 .02 70
+          - generic [ref=e1012]: "Los once tonos están repartidos en la rueda de forma que dos categorías vecinas en la lista nunca son vecinas en color. Todas comparten L y C, así que en el donut ninguna pesa más que otra — y en oscuro solo sube la L, no el tono: la misma categoría es reconocible en los dos temas."
+      - generic [ref=e1021]:
+        - generic [ref=e1022]:
+          - generic [ref=e1023]: 10b
+          - heading "Cuentas y estados" [level=3] [ref=e1024]
+        - generic [ref=e1025]:
+          - generic [ref=e1026]:
+            - generic [ref=e1027]:
+              - generic [ref=e1028]: Las 7 cuentas
+              - generic [ref=e1029]: sin color propio — son tinta neutra, el color lo lleva la categoría
+            - generic [ref=e1030]:
+              - generic [ref=e1035]:
+                - generic [ref=e1036]: Current account
+                - generic [ref=e1037]: landmark
+              - generic [ref=e1043]:
+                - generic [ref=e1044]: Savings account
+                - generic [ref=e1045]: piggy-bank
+              - generic [ref=e1051]:
+                - generic [ref=e1052]: Transfer
+                - generic [ref=e1053]: arrow-left-right
+              - generic [ref=e1058]:
+                - generic [ref=e1059]: Bizum
+                - generic [ref=e1060]: smartphone
+              - generic [ref=e1065]:
+                - generic [ref=e1066]: Bank card
+                - generic [ref=e1067]: credit-card
+              - generic [ref=e1074]:
+                - generic [ref=e1075]: Prepaid card
+                - generic [ref=e1076]: wallet-cards
+              - generic [ref=e1082]:
+                - generic [ref=e1083]: e-cash card
+                - generic [ref=e1084]: banknote
+              - generic [ref=e1085]: Añadir cuenta
+          - generic [ref=e1090]:
+            - generic [ref=e1091]:
+              - generic [ref=e1092]: Iconos de estado
+              - generic [ref=e1093]:
+                - generic [ref=e1099]:
+                  - generic [ref=e1100]: On track
+                  - generic [ref=e1101]: circle-check
+                - generic [ref=e1106]:
+                  - generic [ref=e1107]: Tight
+                  - generic [ref=e1108]: triangle-alert
+                - generic [ref=e1113]:
+                  - generic [ref=e1114]: Over
+                  - generic [ref=e1115]: circle-alert
+                - generic [ref=e1121]:
+                  - generic [ref=e1122]: Sin categorizar
+                  - generic [ref=e1123]: circle-help
+                - generic [ref=e1129]:
+                  - generic [ref=e1130]: Duplicado
+                  - generic [ref=e1131]: copy
+                - generic [ref=e1137]:
+                  - generic [ref=e1138]: Límite solapado
+                  - generic [ref=e1139]: link
+                - generic [ref=e1145]:
+                  - generic [ref=e1146]: Detectado por la app
+                  - generic [ref=e1147]: wand-sparkles
+                - generic [ref=e1156]:
+                  - generic [ref=e1157]: Servidor caído
+                  - generic [ref=e1158]: server-off
+            - generic [ref=e1159]:
+              - generic [ref=e1160]: Navegación y acciones
+              - generic [ref=e1161]:
+                - generic [ref=e1162]: layout-dashboard
+                - generic [ref=e1170]: arrow-left-right
+                - generic [ref=e1176]: target
+                - generic [ref=e1183]: upload
+                - generic [ref=e1189]: sliders-horizontal
+                - generic [ref=e1193]: search
+                - generic [ref=e1199]: calendar
+                - generic [ref=e1204]: pencil
+                - generic [ref=e1210]: trash-2
+                - generic [ref=e1216]: ellipsis-vertical
+                - generic [ref=e1223]: moon / sun
+                - generic [ref=e1228]: settings
+      - generic [ref=e1234]:
+        - generic [ref=e1235]:
+          - generic [ref=e1236]: 10c
+          - heading "Reglas de dibujo" [level=3] [ref=e1237]
+        - generic [ref=e1238]:
+          - generic [ref=e1239]:
+            - generic [ref=e1240]:
+              - generic [ref=e1241]: Tamaño de contenedor y de trazo
+              - generic [ref=e1242]:
+                - generic [ref=e1243]: 22 / 122.4
+                - generic [ref=e1249]: 26 / 142.2
+                - generic [ref=e1255]: 34 / 172.2
+                - generic [ref=e1261]: 40 / 182.2
+                - generic [ref=e1267]: 80 / 341.8 · vacíos
+              - generic [ref=e1274]: "El icono ocupa siempre ~45 % del contenedor. El trazo baja a medida que el icono crece: 2.4 en 12px, 2.2 de 14 a 18, 1.8 en los iconos grandes de estado vacío. Nunca por debajo de 1.8 — a partir de ahí se rompe en pantallas no retina."
+            - generic [ref=e1275]:
+              - generic [ref=e1276]: Fondo del contenedor
+              - generic [ref=e1277]:
+                - generic [ref=e1278]: Relleno — la categoría de una transacción. Icono blanco.
+                - generic [ref=e1285]: Suave — la misma categoría cuando está inactiva o sin usar.
+                - generic [ref=e1292]: Neutro — cuentas, ajustes, navegación. Sin color de categoría.
+                - generic [ref=e1297]: Teal — reservado al ingreso. Ninguna categoría usa este color.
+          - generic [ref=e1304]:
+            - generic [ref=e1305]:
+              - generic [ref=e1306]: Qué no hacer
+              - generic [ref=e1307]:
+                - generic [ref=e1308]: Mezclar sets. Solo Lucide — un icono de otra familia canta a un kilómetro.
+                - generic [ref=e1314]: Emoji como categoría. No se tiñen, no escalan y cambian según el sistema.
+                - generic [ref=e1320]: Icono suelto sin etiqueta en una fila de datos. En la barra inferior sí, porque va con texto debajo.
+                - generic [ref=e1326]: Reutilizar un icono de categoría para una acción. repeat es Subscriptions; para "recurrente" en un formulario, usa texto.
+            - generic [ref=e1332]:
+              - generic [ref=e1333]: Entrega
+              - generic [ref=e1334]:
+                - generic [ref=e1339]:
+                  - code [ref=e1340]: lucide-react
+                  - text: ", importando solo los 40 iconos usados. Nada de la fuente completa."
+                - generic [ref=e1345]:
+                  - text: Cada icono con
+                  - code [ref=e1346]: aria-hidden
+                  - text: ; el significado va en el texto de al lado.
+                - generic [ref=e1351]:
+                  - text: "Botón de solo icono:"
+                  - code [ref=e1352]: aria-label
+                  - text: obligatorio.
+                - generic [ref=e1353]: Licencia ISC — se puede alojar y modificar sin atribución en la UI.
+  - generic [ref=e1358]:
+    - generic [ref=e1359]:
+      - generic [ref=e1360]: RONDA 9 · COMPONENTES
+      - heading "Hoja de componentes — medidas y estados" [level=1] [ref=e1363]
+      - paragraph [ref=e1364]:
+        - text: Todo lo que se repite en las rondas 2–8, aislado y medido.
+        - link "9a" [ref=e1365] [cursor=pointer]:
+          - /url: "#9a"
+        - text: botones, campos y chips con sus cinco estados;
+        - link "9b" [ref=e1366] [cursor=pointer]:
+          - /url: "#9b"
+        - text: las piezas de datos (KPI, fila, barra, conclusión);
+        - link "9c" [ref=e1367] [cursor=pointer]:
+          - /url: "#9c"
+        - text: "los fundamentos — rejilla, radios, sombras, tipografía y foco. El foco visible es el mismo anillo en todos: 2px terracota + 2px de separación, nunca el outline del navegador."
+    - generic [ref=e1368]:
+      - generic [ref=e1369]:
+        - generic [ref=e1370]:
+          - generic [ref=e1371]: 9a
+          - heading "Controles" [level=3] [ref=e1372]
+          - generic [ref=e1373]: reposo · hover · foco · activo · deshabilitado
+        - generic [ref=e1374]:
+          - generic [ref=e1375]:
+            - generic [ref=e1376]:
+              - generic [ref=e1377]: Button · primary
+              - generic [ref=e1378]: h 56 / 48 / 40 · radius 100 · pad 0 22/18/14 · weight 700
+            - generic [ref=e1379]:
+              - generic [ref=e1380]:
+                - generic [ref=e1381]: New expense
+                - generic [ref=e1383]: "rest · #A8471C"
+              - generic [ref=e1384]:
+                - generic [ref=e1385]: New expense
+                - generic [ref=e1387]: "hover · #8E3B16"
+              - generic [ref=e1388]:
+                - generic [ref=e1389]: New expense
+                - generic [ref=e1391]: focus · ring 2+2
+              - generic [ref=e1392]:
+                - generic [ref=e1393]: New expense
+                - generic [ref=e1395]: active · scale .98
+              - generic [ref=e1396]:
+                - generic [ref=e1397]: New expense
+                - generic [ref=e1399]: disabled
+          - generic [ref=e1400]:
+            - generic [ref=e1401]:
+              - generic [ref=e1402]: Button · secondary y ghost
+              - generic [ref=e1403]: "borde 1px #E9DFD1 · weight 600"
+            - generic [ref=e1404]:
+              - generic [ref=e1405]:
+                - generic [ref=e1406]: Export
+                - generic [ref=e1410]: rest
+              - generic [ref=e1411]:
+                - generic [ref=e1412]: Export
+                - generic [ref=e1416]: hover
+              - generic [ref=e1417]:
+                - generic [ref=e1418]: Export
+                - generic [ref=e1422]: focus
+              - generic [ref=e1423]:
+                - generic [ref=e1424]: Export
+                - generic [ref=e1428]: active
+              - generic [ref=e1429]:
+                - generic [ref=e1430]: Export
+                - generic [ref=e1434]: disabled
+            - generic [ref=e1435]:
+              - generic [ref=e1436]:
+                - generic [ref=e1437]: View all 68 →
+                - generic [ref=e1438]: ghost · rest
+              - generic [ref=e1439]:
+                - generic [ref=e1440]: View all 68 →
+                - generic [ref=e1441]: ghost · hover
+              - generic [ref=e1442]:
+                - generic [ref=e1443]: Delete
+                - generic [ref=e1447]: danger
+              - generic [ref=e1448]:
+                - generic [ref=e1449]: To savings
+                - generic [ref=e1453]: savings
+              - generic [ref=e1454]: FAB · 62px
+          - generic [ref=e1459]:
+            - generic [ref=e1460]:
+              - generic [ref=e1461]: Text field
+              - generic [ref=e1462]: h 56 · radius 16 · borde 1px reposo / 2px foco · label 12px/600
+            - generic [ref=e1463]:
+              - generic [ref=e1464]:
+                - generic [ref=e1465]:
+                  - generic [ref=e1466]: Description
+                  - generic [ref=e1467]: Bar Manolo
+                - generic [ref=e1472]: rest · placeholder
+              - generic [ref=e1473]:
+                - generic [ref=e1474]:
+                  - generic [ref=e1475]: Description
+                  - generic [ref=e1476]: Bar Manolo
+                - generic [ref=e1481]: hover
+              - generic [ref=e1482]:
+                - generic [ref=e1483]:
+                  - generic [ref=e1484]: Description
+                  - generic [ref=e1485]: Bar Manolo
+                - generic [ref=e1491]: focus · cursor
+              - generic [ref=e1492]:
+                - generic [ref=e1493]:
+                  - generic [ref=e1494]: Amount
+                  - generic [ref=e1495]: 0,00
+                  - generic [ref=e1499]: Tiene que ser mayor que cero
+                - generic [ref=e1502]: error
+              - generic [ref=e1503]:
+                - generic [ref=e1504]:
+                  - generic [ref=e1505]: Description
+                  - generic [ref=e1506]: Imported row
+                - generic [ref=e1511]: disabled
+          - generic [ref=e1512]:
+            - generic [ref=e1513]:
+              - generic [ref=e1514]: Category chip & tile
+              - generic [ref=e1515]: chip h 44 · tile 64×62 · el color relleno significa seleccionado
+            - generic [ref=e1516]:
+              - generic [ref=e1517]:
+                - generic [ref=e1518]: Dining out
+                - generic [ref=e1522]: chip · off
+              - generic [ref=e1523]:
+                - generic [ref=e1524]: Dining out
+                - generic [ref=e1528]: chip · on
+              - generic [ref=e1529]:
+                - generic [ref=e1530]: Dining out
+                - generic [ref=e1536]: filtro activo
+              - generic [ref=e1537]:
+                - generic [ref=e1538]: Category
+                - generic [ref=e1540]: añadir filtro
+              - generic [ref=e1541]:
+                - generic [ref=e1542]: Dining
+                - generic [ref=e1547]: tile · off
+              - generic [ref=e1548]:
+                - generic [ref=e1549]: Dining
+                - generic [ref=e1554]: tile · on
+              - generic [ref=e1555]:
+                - generic [ref=e1556]: Dining
+                - generic [ref=e1564]: tile · multi
+              - generic [ref=e1565]:
+                - generic [ref=e1566]: Tech
+                - generic [ref=e1575]: tile · solapada
+          - generic [ref=e1576]:
+            - generic [ref=e1577]:
+              - generic [ref=e1578]: Segmented, toggle, checkbox y stepper
+              - generic [ref=e1579]: objetivo táctil real ≥44px incluso cuando el pinte sea menor
+            - generic [ref=e1580]:
+              - generic [ref=e1581]:
+                - generic [ref=e1582]:
+                  - generic [ref=e1583]: Month
+                  - generic [ref=e1584]: 6 months
+                  - generic [ref=e1585]: Year
+                - generic [ref=e1586]: segmented · h 44
+              - generic [ref=e1587]: toggle · on / off / disabled
+              - generic [ref=e1596]: check · on / off / mixed / disabled
+              - generic [ref=e1606]:
+                - generic [ref=e1607]:
+                  - generic [ref=e1608]: "180"
+                  - generic [ref=e1609]: €
+                - generic [ref=e1617]: stepper de importe
+      - generic [ref=e1618]:
+        - generic [ref=e1619]:
+          - generic [ref=e1620]: 9b
+          - heading "Piezas de datos" [level=3] [ref=e1621]
+          - generic [ref=e1622]: KPI · fila · barra · conclusión
+        - generic [ref=e1623]:
+          - generic [ref=e1624]:
+            - generic [ref=e1625]:
+              - generic [ref=e1626]: KPI card
+              - generic [ref=e1627]: radius 16 · pad 18/20 · label 12.5/600 · cifra 30/800 tnum
+            - generic [ref=e1628]:
+              - generic [ref=e1629]:
+                - generic [ref=e1630]: Budget left
+                - generic [ref=e1631]:
+                  - generic [ref=e1632]: 386,55 €
+                  - generic [ref=e1633]: 83 %
+              - generic [ref=e1636]:
+                - generic [ref=e1637]: Month balance
+                - generic [ref=e1638]: +726,55 €
+                - generic [ref=e1642]: 2.640,00 in · 1.913,45 out
+              - generic [ref=e1643]:
+                - generic [ref=e1644]: Savings rate
+                - generic [ref=e1645]: 27,5 %
+                - generic [ref=e1647]: +3,1 pts vs June
+              - generic [ref=e1651]:
+                - generic [ref=e1652]: Daily average
+                - generic [ref=e1653]: — €
+                - generic [ref=e1654]: sin datos aún
+          - generic [ref=e1655]:
+            - generic [ref=e1656]:
+              - generic [ref=e1657]: Transaction row
+              - generic [ref=e1658]: desktop 52 · móvil 64 · icono 34/40 radius 11/13 · importe 700 tnum a la derecha
+            - generic [ref=e1659]:
+              - generic [ref=e1660]:
+                - generic [ref=e1666]:
+                  - generic [ref=e1667]: Mercadona
+                  - generic [ref=e1668]: Groceries · 31 jul
+                - generic [ref=e1669]: Bank card
+                - generic [ref=e1670]: − 64,32 €
+              - generic [ref=e1671]:
+                - generic [ref=e1677]:
+                  - generic [ref=e1678]: Mercadona
+                  - generic [ref=e1679]: "hover · fondo #F7F1E8"
+                - generic [ref=e1680]: Bank card
+                - generic [ref=e1681]: − 64,32 €
+              - generic [ref=e1682]:
+                - generic [ref=e1687]:
+                  - generic [ref=e1688]: Salary
+                  - generic [ref=e1689]: ingreso · fondo teal + signo + flecha
+                - generic [ref=e1690]: Current
+                - generic [ref=e1691]: + 2.640,00 €
+              - generic [ref=e1692]:
+                - generic [ref=e1699]:
+                  - generic [ref=e1700]: Netflix
+                  - generic [ref=e1701]: duplicado · 50 % + tachado
+                - generic [ref=e1702]: Current
+                - generic [ref=e1703]: − 12,99 €
+              - generic [ref=e1704]:
+                - generic [ref=e1709]:
+                  - generic [ref=e1710]: PAYPAL *STEAMGAMES
+                  - generic [ref=e1711]: sin categorizar · exige decisión
+                - generic [ref=e1712]: Current
+                - generic [ref=e1713]: − 29,99 €
+          - generic [ref=e1714]:
+            - generic [ref=e1715]:
+              - generic [ref=e1716]: Progress bar
+              - generic [ref=e1717]: "h 7–12 · radius 100 · el exceso se pinta DENTRO en #B03024, nunca desbordando"
+            - generic [ref=e1718]:
+              - generic [ref=e1719]: normal · <90 %
+              - generic [ref=e1723]: tight · ≥90 %
+              - generic [ref=e1727]: over · exceso dentro
+              - generic [ref=e1732]: stacked · gap 2px
+          - generic [ref=e1740]:
+            - generic [ref=e1741]:
+              - generic [ref=e1742]: Insight card
+              - generic [ref=e1743]: radius 20 · fondo teñido + borde a juego · cintillo 12/700 con icono
+            - generic [ref=e1744]:
+              - generic [ref=e1745]:
+                - generic [ref=e1746]: HEADS UP
+                - generic [ref=e1749]: Dining out passes its limit on 24 Aug.
+                - generic [ref=e1750]: Review 9
+              - generic [ref=e1751]:
+                - generic [ref=e1752]: ON TRACK
+                - generic [ref=e1756]: You're 4 days ahead of your 12.000 € goal.
+              - generic [ref=e1757]:
+                - generic [ref=e1758]: OVER
+                - generic [ref=e1761]: Tech is 49,99 € over — one purchase did it.
+      - generic [ref=e1762]:
+        - generic [ref=e1763]:
+          - generic [ref=e1764]: 9c
+          - heading "Fundamentos" [level=3] [ref=e1765]
+          - generic [ref=e1766]: tipografía · espacio · radios · sombras · foco
+        - generic [ref=e1767]:
+          - generic [ref=e1768]:
+            - generic [ref=e1769]:
+              - generic [ref=e1770]: Escala tipográfica · Public Sans
+              - generic [ref=e1771]:
+                - generic [ref=e1772]:
+                  - generic [ref=e1773]: display 46/800
+                  - generic [ref=e1774]: 8.420 €
+                - generic [ref=e1775]:
+                  - generic [ref=e1776]: figure 30/800
+                  - generic [ref=e1777]: 386,55 €
+                - generic [ref=e1778]:
+                  - generic [ref=e1779]: title 26/800
+                  - generic [ref=e1780]: Transactions
+                - generic [ref=e1781]:
+                  - generic [ref=e1782]: section 15/700
+                  - generic [ref=e1783]: Latest movements
+                - generic [ref=e1784]:
+                  - generic [ref=e1785]: body 13.5/600
+                  - generic [ref=e1786]: Mercadona
+                - generic [ref=e1787]:
+                  - generic [ref=e1788]: meta 11.5/400
+                  - generic [ref=e1789]: Groceries · Bank card
+                - generic [ref=e1790]:
+                  - generic [ref=e1791]: label 11/600 .06em
+                  - generic [ref=e1792]: CATEGORY
+              - generic [ref=e1793]: "Todo importe lleva font-variant-numeric: tabular-nums. No hay fuente mono en la app: Public Sans con tnum alinea columnas igual de bien y ahorra una descarga."
+            - generic [ref=e1799]:
+              - generic [ref=e1800]:
+                - generic [ref=e1801]: Radios
+                - generic [ref=e1802]:
+                  - generic [ref=e1803]: 11 icono
+                  - generic [ref=e1806]: 14 tile
+                  - generic [ref=e1809]: 16 campo
+                  - generic [ref=e1812]: 20 tarjeta
+                  - generic [ref=e1815]: 28 hoja
+                  - generic [ref=e1818]: 100 píldora
+              - generic [ref=e1821]:
+                - generic [ref=e1822]: Sombras
+                - generic [ref=e1823]:
+                  - generic [ref=e1824]: flat — solo borde
+                  - generic [ref=e1827]: raised — tarjeta clave
+                  - generic [ref=e1830]: accent — FAB y CTA
+              - generic [ref=e1833]:
+                - generic [ref=e1834]: Espacio · base 4
+                - generic [ref=e1835]:
+                  - generic [ref=e1836]: "4"
+                  - generic [ref=e1839]: "8"
+                  - generic [ref=e1842]: "12"
+                  - generic [ref=e1845]: "16"
+                  - generic [ref=e1848]: "20"
+                  - generic [ref=e1851]: "26"
+                  - generic [ref=e1854]: "44"
+          - generic [ref=e1858]:
+            - generic [ref=e1859]:
+              - generic [ref=e1860]: Foco visible — el mismo anillo en todo
+              - generic [ref=e1861]:
+                - generic [ref=e1862]: Botón
+                - generic [ref=e1863]: Campo
+                - generic [ref=e1864]: Tile
+              - generic [ref=e1873]:
+                - code [ref=e1874]: "box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent)"
+                - text: — funciona sobre cualquier fondo, respeta el radio y no descoloca nada. Solo con
+                - code [ref=e1875]: :focus-visible
+                - text: ", para que el ratón no lo dispare."
+            - generic [ref=e1876]:
+              - generic [ref=e1877]: Objetivo táctil ≥ 44px
+              - generic [ref=e1878]: La línea discontinua es el área pulsable, no el pintado. Un check de 18px sigue teniendo 44×44 de zona activa.
+              - generic [ref=e1889]: Reglas duras
+              - generic [ref=e1890]:
+                - generic [ref=e1891]: El gasto no tiene color. Ingreso = signo + flecha + etiqueta + fondo teal.
+                - generic [ref=e1896]: Toda etiqueta de estado lleva icono + texto, nunca solo color.
+                - generic [ref=e1901]: "Contraste AA: 4.5:1 en texto, 3:1 en iconos y bordes de control."
+                - generic [ref=e1906]: Con prefers-reduced-motion las transiciones pasan a 0 ms; nada se pierde.
+  - generic [ref=e1911]:
+    - generic [ref=e1912]:
+      - generic [ref=e1913]: RONDA 8 · LOGIN Y ESTADOS
+      - heading "Entrar, empezar de cero, esperar y fallar" [level=1] [ref=e1916]
+      - paragraph [ref=e1917]:
+        - text: Las cuatro pantallas que nadie diseña y todo el mundo ve.
+        - link "8a" [ref=e1918] [cursor=pointer]:
+          - /url: "#8a"
+        - text: login desktop,
+        - link "8b" [ref=e1919] [cursor=pointer]:
+          - /url: "#8b"
+        - text: login móvil con contraseña incorrecta,
+        - link "8c" [ref=e1920] [cursor=pointer]:
+          - /url: "#8c"
+        - text: el primer arranque sin un solo dato,
+        - link "8d" [ref=e1921] [cursor=pointer]:
+          - /url: "#8d"
+        - text: cargando y
+        - link "8e" [ref=e1922] [cursor=pointer]:
+          - /url: "#8e"
+        - text: el servidor caído — que en una app self-hosted no es un caso raro, es el martes que reinicias el NAS.
+    - generic [ref=e1923]:
+      - generic [ref=e1924]:
+        - generic [ref=e1925]:
+          - generic [ref=e1926]: 8a
+          - heading "Login desktop" [level=3] [ref=e1927]
+          - generic [ref=e1928]: un usuario, sin correo
+        - generic [ref=e1930]:
+          - generic [ref=e1931]:
+            - generic [ref=e1932]: saveToWin
+            - generic [ref=e1935]:
+              - heading "Ahorrar es la única forma de ganar dos veces." [level=2] [ref=e1936]: Ahorrar esla única formade ganar dos veces.
+              - paragraph [ref=e1937]: Tus movimientos, tus categorías, tu servidor. Nada sale de esta máquina.
+            - generic [ref=e1938]:
+              - generic [ref=e1939]:
+                - generic [ref=e1940]: 8.420 €
+                - generic [ref=e1941]: saved so far
+              - generic [ref=e1943]:
+                - generic [ref=e1944]: "5"
+                - generic [ref=e1945]: months in a row
+          - generic [ref=e1947]:
+            - generic [ref=e1948]:
+              - heading "Welcome back" [level=1] [ref=e1949]
+              - generic [ref=e1950]: One user, one password. No email, no account, no recovery link.
+            - generic [ref=e1951]:
+              - generic [ref=e1952]: Password
+              - generic [ref=e1953]: ••••••••
+            - generic [ref=e1963]: Keep me signed in on this device
+            - generic [ref=e1968]: Unlock
+            - generic [ref=e1971]: or
+            - generic [ref=e1975]: Use a passkey
+            - generic [ref=e1985]: Self-hosted · v1.4.0 · last backup 2 h ago
+        - generic [ref=e1990]: Con un solo usuario no hace falta campo de correo — pedirlo sería teatro. El panel de marca es el único sitio de toda la app donde el terracota ocupa media pantalla, y la línea del pie (versión y último backup) es lo que un dueño de servidor quiere ver antes de entrar.
+      - generic [ref=e1991]:
+        - generic [ref=e1992]:
+          - generic [ref=e1993]: 8b
+          - heading "Login móvil · error" [level=3] [ref=e1994]
+        - generic [ref=e1995]:
+          - generic [ref=e1996]: 9:41
+          - generic [ref=e2006]:
+            - generic [ref=e2007]: saveToWin
+            - heading "Ahorrar es la única forma de ganar dos veces." [level=2] [ref=e2010]
+          - generic [ref=e2011]:
+            - generic [ref=e2012]:
+              - heading "Welcome back" [level=1] [ref=e2013]
+              - generic [ref=e2014]: One user, one password.
+            - generic [ref=e2015]:
+              - generic [ref=e2016]: Password
+              - generic [ref=e2017]: ••••••
+              - generic [ref=e2027]: Wrong password. 2 attempts left before a 5-minute lock.
+            - generic [ref=e2032]: Unlock
+            - generic [ref=e2035]: Use Face ID
+            - generic [ref=e2045]: "No hay \"he olvidado mi contraseña\": se restablece desde el servidor, por consola. Se dice aquí para que no la busques."
+            - generic [ref=e2052]: v1.4.0 · home.local
+        - generic [ref=e2056]: El error dice qué ha pasado y qué va a pasar (2 intentos, bloqueo de 5 min). Y avisa de que no existe recuperación por correo antes de que la busques — en self-hosted eso es honestidad, no una carencia.
+      - generic [ref=e2057]:
+        - generic [ref=e2058]:
+          - generic [ref=e2059]: 8c
+          - heading "Primer arranque" [level=3] [ref=e2060]
+          - generic [ref=e2061]: cero movimientos
+        - generic [ref=e2063]:
+          - generic [ref=e2064]:
+            - generic [ref=e2065]: saveToWin
+            - generic [ref=e2068]:
+              - generic [ref=e2069]: Dashboard
+              - generic [ref=e2075]: Transactions
+              - generic [ref=e2079]: Limits
+              - generic [ref=e2084]: Import
+            - generic [ref=e2091]: New expense
+          - generic [ref=e2093]:
+            - heading "Nothing here yet — and that's the right start" [level=2] [ref=e2094]
+            - generic [ref=e2095]: Three steps and the dashboard fills itself. You can stop after the first one.
+          - generic [ref=e2096]:
+            - generic [ref=e2097]:
+              - generic [ref=e2098]:
+                - generic [ref=e2099]: "1"
+                - generic [ref=e2100]: Add one expense
+              - generic [ref=e2101]: A coffee, the bus, whatever you spent last. Takes eight seconds and the dashboard stops being empty.
+              - generic [ref=e2102]: Add my first one
+            - generic [ref=e2104]:
+              - generic [ref=e2105]:
+                - generic [ref=e2106]: "2"
+                - generic [ref=e2107]: Import your bank
+              - generic [ref=e2108]: Drop the CSV your bank exports and get months of history at once, already categorized.
+              - generic [ref=e2109]: Import a CSV
+            - generic [ref=e2113]:
+              - generic [ref=e2114]:
+                - generic [ref=e2115]: "3"
+                - generic [ref=e2116]: Set one limit
+              - generic [ref=e2117]: Just one, on whatever you overspend. The rest can wait until you know your own numbers.
+              - generic [ref=e2118]: Create a limit
+          - generic [ref=e2123]:
+            - generic [ref=e2124]:
+              - generic [ref=e2125]: Month balance
+              - generic [ref=e2126]: — €
+            - generic [ref=e2127]:
+              - generic [ref=e2128]: Savings rate
+              - generic [ref=e2129]: — %
+            - generic [ref=e2130]:
+              - generic [ref=e2131]: Budget left
+              - generic [ref=e2132]: — €
+            - generic [ref=e2133]:
+              - generic [ref=e2134]: Daily average
+              - generic [ref=e2135]: — €
+          - generic [ref=e2136]:
+            - generic [ref=e2137]: Income vs expenses appears after your first month
+            - generic [ref=e2142]: Categories need three movements to be worth drawing
+        - generic [ref=e2148]: "El vacío enseña la forma de la app en vez de esconderla: los KPIs y los gráficos siguen ahí, en línea discontinua y con un guion en vez de la cifra, así que cuando lleguen los datos no cambia nada de sitio. Solo el paso 1 lleva botón sólido — los otros dos pueden esperar, y decirlo en voz alta (\"puedes parar después del primero\") quita la presión de configurar."
+      - generic [ref=e2149]:
+        - generic [ref=e2150]:
+          - generic [ref=e2151]: 8d
+          - heading "Cargando" [level=3] [ref=e2152]
+        - generic [ref=e2153]:
+          - generic [ref=e2154]: 9:41
+          - generic [ref=e2218]:
+            - generic [ref=e2219]: Home
+            - generic [ref=e2226]: Moves
+            - generic [ref=e2231]: Limits
+            - generic [ref=e2237]: More
+        - generic [ref=e2244]:
+          - text: El esqueleto tiene la silueta exacta de
+          - link "2a" [ref=e2245] [cursor=pointer]:
+            - /url: "#2a"
+          - text: ", no bloques genéricos: cuando llegan los datos nada salta. Barrido diagonal de 1,4 s (con"
+          - code [ref=e2246]: prefers-reduced-motion
+          - text: "se queda quieto) y la lista se desvanece hacia abajo para no prometer un número de filas. La barra y el FAB nunca son esqueleto: se puede añadir un gasto mientras carga."
+      - generic [ref=e2247]:
+        - generic [ref=e2248]:
+          - generic [ref=e2249]: 8e
+          - heading "Servidor caído" [level=3] [ref=e2250]
+        - generic [ref=e2251]:
+          - generic [ref=e2252]: 9:41
+          - generic [ref=e2266]:
+            - generic [ref=e2272]: Offline — showing data from 08:12
+            - generic [ref=e2273]: Retry
+          - generic [ref=e2274]:
+            - generic [ref=e2282]:
+              - generic [ref=e2283]: Your server isn't answering
+              - generic [ref=e2284]: home.local didn't reply in 10 s. Usually it's the NAS rebooting or this phone being off your home network.
+            - generic [ref=e2285]:
+              - generic [ref=e2286]: DETAILS
+              - generic [ref=e2289]: GET http://home.local:8080/api/v1/summaryERR_CONNECTION_TIMED_OUT · 09:41:03
+            - generic [ref=e2290]:
+              - generic [ref=e2291]: Try again
+              - generic [ref=e2295]: Check my connection
+          - generic [ref=e2305]:
+            - generic [ref=e2306]: You can keep adding expenses.
+            - generic [ref=e2307]: They're saved on this phone and sync by themselves the moment the server is back. 2 waiting.
+        - generic [ref=e2310]: "Un error self-hosted tiene que decir qué host ha fallado y por qué suele fallar — el dueño del servidor es quien lo va a arreglar, así que el detalle técnico se muestra, no se esconde. Y lo más importante: el FAB sigue vivo. Los gastos se guardan en el móvil y suben solos."
+  - generic [ref=e2311]:
+    - generic [ref=e2312]:
+      - generic [ref=e2313]: RONDA 7 · IMPORT CSV
+      - heading "Importar el CSV del banco en tres pasos" [level=1] [ref=e2316]
+      - paragraph [ref=e2317]:
+        - text: "Pensado para exportaciones de bancos españoles: punto y coma, coma decimal, fechas dd/mm/aaaa, tildes en ISO-8859-1 y filas de cabecera basura. La app detecta todo eso sola y te enseña lo que ha decidido para que puedas corregirlo."
+        - link "7a" [ref=e2318] [cursor=pointer]:
+          - /url: "#7a"
+        - text: subir,
+        - link "7b" [ref=e2319] [cursor=pointer]:
+          - /url: "#7b"
+        - text: mapear columnas,
+        - link "7c" [ref=e2320] [cursor=pointer]:
+          - /url: "#7c"
+        - text: previsualizar y confirmar,
+        - link "7d" [ref=e2321] [cursor=pointer]:
+          - /url: "#7d"
+        - text: en el móvil.
+    - generic [ref=e2322]:
+      - generic [ref=e2323]:
+        - generic [ref=e2324]:
+          - generic [ref=e2325]: 7a
+          - heading "Paso 1 — subir" [level=3] [ref=e2326]
+        - generic [ref=e2328]:
+          - generic [ref=e2329]:
+            - generic [ref=e2330]: saveToWin
+            - generic [ref=e2333]:
+              - generic [ref=e2334]: Dashboard
+              - generic [ref=e2340]: Transactions
+              - generic [ref=e2344]: Limits
+              - generic [ref=e2349]: Import
+          - generic [ref=e2356]:
+            - heading "Import from your bank" [level=2] [ref=e2357]
+            - generic [ref=e2358]: CSV, XLS or XLSX · nothing leaves your server
+          - generic [ref=e2359]:
+            - generic [ref=e2360]:
+              - generic [ref=e2361]: "1"
+              - generic [ref=e2362]: Upload
+            - generic [ref=e2364]:
+              - generic [ref=e2365]: "2"
+              - generic [ref=e2366]: Map columns
+            - generic [ref=e2368]:
+              - generic [ref=e2369]: "3"
+              - generic [ref=e2370]: Review
+          - generic [ref=e2371]:
+            - generic [ref=e2372]:
+              - generic [ref=e2378]:
+                - generic [ref=e2379]: Drop your bank export here
+                - generic [ref=e2380]: Separator, encoding and date format are detected automatically — you'll see and confirm every guess in the next step.
+              - generic [ref=e2381]: Choose a file
+              - generic [ref=e2384]:
+                - generic [ref=e2385]: .csv
+                - generic [ref=e2386]: .xls
+                - generic [ref=e2387]: .xlsx
+                - generic [ref=e2388]: up to 10 MB
+            - generic [ref=e2389]:
+              - generic [ref=e2390]:
+                - generic [ref=e2391]: Saved mappings
+                - generic [ref=e2396]:
+                  - generic [ref=e2397]: Bank A — current account
+                  - generic [ref=e2398]: 6 columns · used 4 times
+                - generic [ref=e2406]:
+                  - generic [ref=e2407]: Bank B — card
+                  - generic [ref=e2408]: 5 columns · used 2 times
+                - generic [ref=e2412]: A mapping remembers which column is what, so the same bank imports in one click next month.
+              - generic [ref=e2413]:
+                - generic [ref=e2414]: Recent imports
+                - generic [ref=e2419]:
+                  - generic [ref=e2420]: movimientos-junio.csv
+                  - generic [ref=e2421]: 2 jul · 71 added, 3 duplicates
+                - generic [ref=e2426]:
+                  - generic [ref=e2427]: movimientos-mayo.csv
+                  - generic [ref=e2428]: 1 jun · 64 added
+                - generic [ref=e2429]: Undo an import →
+        - generic [ref=e2430]: "Los mapeos guardados son lo que hace esto usable a largo plazo: la segunda vez que subes el CSV del mismo banco, los pasos 2 y 3 ya vienen resueltos. Y \"deshacer una importación\" existe desde el primer día — importar sin poder revertir da miedo."
+      - generic [ref=e2431]:
+        - generic [ref=e2432]:
+          - generic [ref=e2433]: 7b
+          - heading "Paso 2 — mapear columnas" [level=3] [ref=e2434]
+        - generic [ref=e2436]:
+          - generic [ref=e2437]:
+            - generic [ref=e2438]: saveToWin
+            - generic [ref=e2441]: Cancel import
+          - generic [ref=e2445]:
+            - generic [ref=e2446]: Upload
+            - generic [ref=e2452]:
+              - generic [ref=e2453]: "2"
+              - generic [ref=e2454]: Map columns
+            - generic [ref=e2456]:
+              - generic [ref=e2457]: "3"
+              - generic [ref=e2458]: Review
+          - generic [ref=e2460]:
+            - generic [ref=e2465]:
+              - generic [ref=e2466]: movimientos-julio.csv
+              - generic [ref=e2467]: 143 rows · 84 KB
+            - generic [ref=e2469]:
+              - generic [ref=e2470]:
+                - text: Separator
+                - generic [ref=e2474]: ;
+              - generic [ref=e2475]: Encoding ISO-8859-1
+              - generic [ref=e2479]: Dates dd/mm/aaaa
+              - generic [ref=e2483]: Decimal comma
+              - generic [ref=e2487]: Skipped 4 header rows
+            - generic [ref=e2491]: Change detection
+          - generic [ref=e2492]:
+            - generic [ref=e2493]:
+              - generic [ref=e2494]:
+                - generic [ref=e2495]: COLUMN IN YOUR FILE
+                - generic [ref=e2496]: MEANS
+                - generic [ref=e2497]: FIRST VALUES
+              - generic [ref=e2498]:
+                - generic [ref=e2499]: Fecha operación
+                - generic [ref=e2503]: Date
+                - generic [ref=e2509]: 31/07/2026 · 30/07/2026
+              - generic [ref=e2510]:
+                - generic [ref=e2511]: Fecha valor
+                - generic [ref=e2515]: Ignore this column
+                - generic [ref=e2519]: 31/07/2026 · 31/07/2026
+              - generic [ref=e2520]:
+                - generic [ref=e2521]: Concepto
+                - generic [ref=e2525]: Description
+                - generic [ref=e2531]: COMPRA MERCADONA · NETFLIX
+              - generic [ref=e2532]:
+                - generic [ref=e2533]: Importe
+                - generic [ref=e2537]: Amount (signed)
+                - generic [ref=e2543]: "-64,32 · -12,99 · 2.640,00"
+              - generic [ref=e2544]:
+                - generic [ref=e2545]: Saldo
+                - generic [ref=e2549]: Ignore this column
+                - generic [ref=e2553]: 1.284,10 · 1.348,42
+              - generic [ref=e2554]:
+                - generic [ref=e2555]: Más datos
+                - generic [ref=e2559]: Note
+                - generic [ref=e2566]: TARJ. *4021 · RECIBO
+            - generic [ref=e2567]:
+              - generic [ref=e2568]:
+                - generic [ref=e2569]: Everything lands in
+                - generic [ref=e2570]: Current account
+                - generic [ref=e2577]: You can still change the account per row in the next step.
+              - generic [ref=e2578]:
+                - generic [ref=e2579]: Remember this mapping
+                - generic [ref=e2583]: Bank A — current account
+                - generic [ref=e2585]: Next month this file skips straight to the review step.
+              - generic [ref=e2586]:
+                - generic [ref=e2587]: Back
+                - generic [ref=e2588]: Preview 143 rows
+        - generic [ref=e2591]: "Las suposiciones de la máquina van en píldoras con varita, no escondidas en ajustes: separador, codificación, formato de fecha, decimal y cuántas filas de cabecera ha saltado. Las columnas ignoradas se quedan visibles al 55 % — verlas y descartarlas es parte de confiar en el resultado."
+      - generic [ref=e2592]:
+        - generic [ref=e2593]:
+          - generic [ref=e2594]: 7c
+          - heading "Paso 3 — revisar y confirmar" [level=3] [ref=e2595]
+        - generic [ref=e2597]:
+          - generic [ref=e2598]:
+            - generic [ref=e2599]: saveToWin
+            - generic [ref=e2602]: Cancel import
+          - generic [ref=e2606]:
+            - generic [ref=e2607]: Upload
+            - generic [ref=e2613]: Map columns
+            - generic [ref=e2619]:
+              - generic [ref=e2620]: "3"
+              - generic [ref=e2621]: Review
+          - generic [ref=e2622]:
+            - generic [ref=e2627]:
+              - generic [ref=e2628]: "138"
+              - generic [ref=e2629]: new movements
+            - generic [ref=e2635]:
+              - generic [ref=e2636]: "4"
+              - generic [ref=e2637]: duplicates, skipped
+            - generic [ref=e2642]:
+              - generic [ref=e2643]: "1"
+              - generic [ref=e2644]: needs your eyes
+            - generic [ref=e2650]:
+              - generic [ref=e2651]: 126 of 138
+              - generic [ref=e2652]: auto-categorized from your history
+          - generic [ref=e2654]:
+            - generic [ref=e2655]:
+              - generic [ref=e2656]: Preview
+              - generic [ref=e2657]: All 143
+              - generic [ref=e2658]: Needs review 1
+              - generic [ref=e2661]: Duplicates 4
+              - generic [ref=e2665]: Uncategorized 12
+            - generic [ref=e2669]:
+              - generic [ref=e2670]: DATE
+              - generic [ref=e2671]: DESCRIPTION
+              - generic [ref=e2672]: CATEGORY
+              - generic [ref=e2673]: ACCOUNT
+              - generic [ref=e2674]: AMOUNT
+            - generic [ref=e2675]:
+              - generic [ref=e2680]: 31 jul
+              - generic [ref=e2681]:
+                - generic [ref=e2682]: Mercadona
+                - generic [ref=e2683]: COMPRA MERCADONA 4021
+              - generic [ref=e2684]: Groceries
+              - generic [ref=e2693]: Current account
+              - generic [ref=e2694]: − 64,32 €
+            - generic [ref=e2700]:
+              - generic [ref=e2705]: 30 jul
+              - generic [ref=e2706]:
+                - generic [ref=e2707]: PAYPAL *STEAMGAMES
+                - generic [ref=e2708]: Never seen this one before
+              - generic [ref=e2711]: Pick a category
+              - generic [ref=e2715]: Current account
+              - generic [ref=e2716]: − 29,99 €
+            - generic [ref=e2722]:
+              - generic [ref=e2725]: 30 jul
+              - generic [ref=e2726]:
+                - generic [ref=e2727]: Netflix
+                - generic [ref=e2728]: Already in saveToWin — same date, amount and text
+              - generic [ref=e2732]: Subscriptions
+              - generic [ref=e2740]: Current account
+              - generic [ref=e2741]: − 12,99 €
+            - generic [ref=e2747]:
+              - generic [ref=e2752]: 29 jul
+              - generic [ref=e2753]:
+                - generic [ref=e2754]: Salary
+                - generic [ref=e2755]: TRANSFERENCIA NOMINA
+              - generic [ref=e2756]: Income
+              - generic [ref=e2764]: Current account
+              - generic [ref=e2765]: + 2.640,00 €
+            - generic [ref=e2771]:
+              - generic [ref=e2776]: 29 jul
+              - generic [ref=e2777]:
+                - generic [ref=e2778]: Iberdrola
+                - generic [ref=e2779]: RECIBO IBERDROLA CLIENTES
+              - generic [ref=e2780]: Home & bills
+              - generic [ref=e2788]: Current account
+              - generic [ref=e2789]: − 78,40 €
+          - generic [ref=e2795]:
+            - generic [ref=e2796]:
+              - generic [ref=e2799]: Learn from my corrections
+              - generic [ref=e2800]: — next import will know PAYPAL *STEAMGAMES
+            - generic [ref=e2801]: Back
+            - generic [ref=e2802]: Import 138 movements
+        - generic [ref=e2805]: "Tres estados de fila con significado propio: normal, ámbar cuando la app no sabe categorizar (y te obliga a decidir antes de importar), y tachada al 50 % cuando es un duplicado ya existente. El texto crudo del banco se conserva en mono bajo el nombre limpio — así compruebas que el renombrado no te ha engañado."
+      - generic [ref=e2806]:
+        - generic [ref=e2807]:
+          - generic [ref=e2808]: 7d
+          - heading "Import en móvil" [level=3] [ref=e2809]
+        - generic [ref=e2810]:
+          - generic [ref=e2811]: 9:41
+          - generic [ref=e2821]:
+            - generic [ref=e2822]: Import
+            - generic [ref=e2827]: "3"
+            - generic [ref=e2837]:
+              - generic [ref=e2843]:
+                - generic [ref=e2844]: movimientos-julio.csv
+                - generic [ref=e2845]: 143 rows · Bank A mapping
+              - generic [ref=e2846]:
+                - generic [ref=e2847]:
+                  - generic [ref=e2848]: "138"
+                  - generic [ref=e2849]: new
+                - generic [ref=e2850]:
+                  - generic [ref=e2851]: "4"
+                  - generic [ref=e2852]: dupes
+                - generic [ref=e2853]:
+                  - generic [ref=e2854]: "1"
+                  - generic [ref=e2855]: to fix
+            - generic [ref=e2856]:
+              - generic [ref=e2857]: 1 NEEDS A CATEGORY
+              - generic [ref=e2860]:
+                - generic [ref=e2861]:
+                  - generic [ref=e2862]: PAYPAL *STEAMGAMES
+                  - generic [ref=e2863]: 30 jul · Current account
+                - generic [ref=e2864]: − 29,99 €
+              - generic [ref=e2865]:
+                - generic [ref=e2866]: Digital
+                - generic [ref=e2869]: Shopping
+                - generic [ref=e2873]: More
+            - generic [ref=e2878]:
+              - generic [ref=e2879]: FIRST ROWS
+              - generic [ref=e2880]:
+                - generic [ref=e2886]:
+                  - generic [ref=e2887]: Mercadona
+                  - generic [ref=e2888]: Groceries · 31 jul
+                - generic [ref=e2889]: − 64,32 €
+              - generic [ref=e2890]:
+                - generic [ref=e2897]:
+                  - generic [ref=e2898]: Netflix
+                  - generic [ref=e2899]: duplicate · skipped
+                - generic [ref=e2900]: − 12,99 €
+              - generic [ref=e2901]:
+                - generic [ref=e2906]:
+                  - generic [ref=e2907]: Salary
+                  - generic [ref=e2908]: Income · 29 jul
+                - generic [ref=e2909]: + 2.640,00 €
+          - generic [ref=e2910]: Import 138 movements
+        - generic [ref=e2915]: "En móvil no se mapean columnas: se asume el mapeo guardado y se salta directo a revisar. Solo pide lo que de verdad necesita tu criterio — la fila sin categoría, con dos sugerencias y More. Si no hay mapeo guardado, la pantalla te dice que ese archivo se importa mejor desde el ordenador."
+  - generic [ref=e2916]:
+    - generic [ref=e2917]:
+      - generic [ref=e2918]: RONDA 6 · LÍMITES A TU MEDIDA
+      - heading "Los límites los defines tú, no las categorías" [level=1] [ref=e2921]
+      - paragraph [ref=e2922]:
+        - text: Corrijo
+        - link "5a" [ref=e2923] [cursor=pointer]:
+          - /url: "#5a"
+        - text: ": un límite ya no es \"un sobre por categoría\". Es una regla que tú creas y a la que asignas las categorías que quieras — una (Tech 100 €), varias (Ocio 400 €) o todas (Tope global 2.300 €). Y pueden solaparse: un gasto en Dining out cuenta a la vez para Ocio y para el tope global."
+        - link "6a" [ref=e2924] [cursor=pointer]:
+          - /url: "#6a"
+        - text: desktop,
+        - link "6b" [ref=e2925] [cursor=pointer]:
+          - /url: "#6b"
+        - text: móvil,
+        - link "6c" [ref=e2926] [cursor=pointer]:
+          - /url: "#6c"
+        - text: cómo se crea uno.
+    - generic [ref=e2927]:
+      - generic [ref=e2928]:
+        - generic [ref=e2929]:
+          - generic [ref=e2930]: 6a
+          - heading "Límites desktop" [level=3] [ref=e2931]
+          - generic [ref=e2932]: reglas solapables · cobertura visible
+        - generic [ref=e2934]:
+          - generic [ref=e2935]:
+            - generic [ref=e2936]: saveToWin
+            - generic [ref=e2939]:
+              - generic [ref=e2940]: Dashboard
+              - generic [ref=e2946]: Transactions
+              - generic [ref=e2950]: Limits
+              - generic [ref=e2955]: Import
+            - generic [ref=e2962]: New limit
+          - generic [ref=e2964]:
+            - generic [ref=e2965]:
+              - heading "Limits" [level=2] [ref=e2966]
+              - generic [ref=e2967]: 5 rules · July 2026 · a movement can count toward more than one
+            - generic [ref=e2968]:
+              - generic [ref=e2969]:
+                - generic [ref=e2970]: Envelopes
+                - generic [ref=e2974]: Limits
+              - generic [ref=e2979]: July 2026
+          - generic [ref=e2987]:
+            - generic [ref=e2988]:
+              - generic [ref=e2989]:
+                - generic [ref=e2995]:
+                  - generic [ref=e2996]: Everything
+                  - generic [ref=e2997]: all 12 categories · monthly
+                - generic [ref=e3005]:
+                  - generic [ref=e3006]: 386,55 € left
+                  - generic [ref=e3007]: 4 days to month end
+                - generic [ref=e3008]: 1.913,45 / 2.300,00 €
+              - generic [ref=e3015]:
+                - generic [ref=e3019]:
+                  - generic [ref=e3020]: Essentials
+                  - generic [ref=e3021]: 4 categories
+                - generic [ref=e3041]: 117,40 € left
+                - generic [ref=e3045]: 1.182,60 / 1.300,00 €
+              - generic [ref=e3052]:
+                - generic [ref=e3060]:
+                  - generic [ref=e3061]:
+                    - text: Fun money
+                    - generic [ref=e3062]: Over
+                  - generic [ref=e3065]: 3 categories
+                - generic [ref=e3078]: 23,40 € over — 5,85 € per remaining day to stop the bleed
+                - generic [ref=e3083]: 423,40 / 400,00 €
+              - generic [ref=e3089]:
+                - generic [ref=e3094]:
+                  - generic [ref=e3095]:
+                    - text: Tech
+                    - generic [ref=e3096]: Over
+                  - generic [ref=e3099]: 1 category · monthly
+                - generic [ref=e3103]: 49,99 € over · one purchase did it
+                - generic [ref=e3108]: 149,99 / 100,00 €
+              - generic [ref=e3114]:
+                - generic [ref=e3121]:
+                  - generic [ref=e3122]:
+                    - text: Subscriptions
+                    - generic [ref=e3123]: Tight
+                  - generic [ref=e3126]: 1 category · monthly
+                - generic [ref=e3130]: 1,55 € left
+                - generic [ref=e3134]: 118,45 / 120,00 €
+              - generic [ref=e3143]:
+                - generic [ref=e3144]: New limit
+                - generic [ref=e3145]: Pick an amount, then choose which categories it covers — one, several, or all.
+            - generic [ref=e3146]:
+              - generic [ref=e3147]:
+                - generic [ref=e3148]:
+                  - generic [ref=e3149]: Coverage
+                  - generic [ref=e3150]: Which limits watch each category
+                - generic [ref=e3151]:
+                  - generic [ref=e3152]:
+                    - generic [ref=e3157]: Home & bills
+                    - generic [ref=e3158]:
+                      - generic [ref=e3159]: Essentials
+                      - generic [ref=e3160]: All
+                  - generic [ref=e3161]:
+                    - generic [ref=e3167]: Groceries
+                    - generic [ref=e3168]:
+                      - generic [ref=e3169]: Essentials
+                      - generic [ref=e3170]: All
+                  - generic [ref=e3171]:
+                    - generic [ref=e3176]: Dining out
+                    - generic [ref=e3177]:
+                      - generic [ref=e3178]: Fun
+                      - generic [ref=e3179]: All
+                  - generic [ref=e3180]:
+                    - generic [ref=e3185]: Tech
+                    - generic [ref=e3186]:
+                      - generic [ref=e3187]: Tech
+                      - generic [ref=e3188]: All
+                  - generic [ref=e3189]:
+                    - generic [ref=e3194]: Education
+                    - generic [ref=e3195]: All
+                  - generic [ref=e3197]:
+                    - generic [ref=e3201]: Travel
+                    - generic [ref=e3202]: All
+                - generic [ref=e3204]: See all 12 →
+              - generic [ref=e3205]:
+                - generic [ref=e3206]: OVERLAP
+                - generic [ref=e3211]: The 149,99 € Apple Store purchase counted toward Tech and Everything at once.
+                - generic [ref=e3212]: "That's on purpose: the narrow limit catches the habit, the global one protects the month. Nothing is double-counted in your totals."
+              - generic [ref=e3213]:
+                - generic [ref=e3214]: Not watched by any limit
+                - generic [ref=e3215]:
+                  - generic [ref=e3216]: Education
+                  - generic [ref=e3218]: Travel
+                  - generic [ref=e3220]: Other
+                - generic [ref=e3222]: Only the global limit covers these. Perfectly fine — not every category needs a rule.
+        - generic [ref=e3223]: "El límite global va en tarjeta negra arriba: es el techo, no un sobre más. Los demás son reglas normales, y su alcance se lee de un vistazo por la pila de iconos de categoría. El panel Coverage resuelve la pregunta difícil de este modelo — \"¿qué límites vigilan esta categoría?\" — y las etiquetas de solape se explican en lugar de esconderse. Las categorías sin regla propia no son un error: se dicen en voz alta y se dejan estar."
+      - generic [ref=e3229]:
+        - generic [ref=e3230]:
+          - generic [ref=e3231]: 6b
+          - heading "Límites en móvil" [level=3] [ref=e3232]
+        - generic [ref=e3233]:
+          - generic [ref=e3234]: 9:41
+          - generic [ref=e3244]:
+            - generic [ref=e3245]:
+              - generic [ref=e3246]: Limits
+              - generic [ref=e3247]: July 2026
+            - generic [ref=e3250]:
+              - generic [ref=e3251]:
+                - generic [ref=e3257]:
+                  - generic [ref=e3258]: Everything
+                  - generic [ref=e3259]: all 12 categories
+                - generic [ref=e3260]: 386,55 €
+              - generic [ref=e3263]:
+                - generic [ref=e3264]: 1.913,45 of 2.300,00 €
+                - generic [ref=e3265]: left this month
+          - generic [ref=e3266]:
+            - generic [ref=e3267]:
+              - generic [ref=e3268]:
+                - generic [ref=e3276]:
+                  - generic [ref=e3277]: Fun money
+                  - generic [ref=e3278]: 3 categories
+                - generic [ref=e3283]:
+                  - generic [ref=e3284]: 423,40 €
+                  - generic [ref=e3285]: of 400,00 €
+              - generic [ref=e3289]: 23,40 € over
+            - generic [ref=e3290]:
+              - generic [ref=e3291]:
+                - generic [ref=e3296]:
+                  - generic [ref=e3297]: Tech
+                  - generic [ref=e3298]: 1 category
+                - generic [ref=e3299]:
+                  - generic [ref=e3300]: 149,99 €
+                  - generic [ref=e3301]: of 100,00 €
+              - generic [ref=e3305]: 49,99 € over
+            - generic [ref=e3306]:
+              - generic [ref=e3307]:
+                - generic [ref=e3311]:
+                  - generic [ref=e3312]: Essentials
+                  - generic [ref=e3313]: 4 categories
+                - generic [ref=e3319]:
+                  - generic [ref=e3320]: 1.182,60 €
+                  - generic [ref=e3321]: of 1.300,00 €
+              - generic [ref=e3324]: 117,40 € left
+            - generic [ref=e3325]:
+              - generic [ref=e3326]:
+                - generic [ref=e3333]:
+                  - generic [ref=e3334]: Subscriptions
+                  - generic [ref=e3335]: 1 category
+                - generic [ref=e3336]:
+                  - generic [ref=e3337]: 118,45 €
+                  - generic [ref=e3338]: of 120,00 €
+              - generic [ref=e3341]: 1,55 € left
+            - generic [ref=e3342]: New limit
+          - generic [ref=e3346]:
+            - generic [ref=e3347]: Home
+            - generic [ref=e3354]: Moves
+            - generic [ref=e3359]: Limits
+            - generic [ref=e3365]: More
+        - generic [ref=e3372]: El techo global siempre arriba y en negro; debajo tus reglas, ordenadas por urgencia. La pila de cuadraditos de color dice qué categorías cubre cada una sin gastar una línea de texto.
+      - generic [ref=e3373]:
+        - generic [ref=e3374]:
+          - generic [ref=e3375]: 6c
+          - heading "Crear un límite" [level=3] [ref=e3376]
+          - generic [ref=e3377]: importe → alcance
+        - generic [ref=e3378]:
+          - generic [ref=e3379]: Limits
+          - generic [ref=e3383]:
+            - generic [ref=e3384]:
+              - generic [ref=e3386]: New limit
+              - generic [ref=e3392]:
+                - generic [ref=e3393]: "400"
+                - generic [ref=e3394]: €
+              - generic [ref=e3395]:
+                - generic [ref=e3396]: Monthly
+                - generic [ref=e3397]: Weekly
+                - generic [ref=e3398]: One-off
+            - generic [ref=e3399]:
+              - generic [ref=e3400]:
+                - generic [ref=e3408]: Fun money
+                - generic [ref=e3409]: name
+              - generic [ref=e3410]:
+                - generic [ref=e3411]: COVERS
+                - generic [ref=e3412]:
+                  - generic [ref=e3413]: Select all
+                  - generic [ref=e3414]: Clear
+              - generic [ref=e3415]:
+                - generic [ref=e3416]: Dining
+                - generic [ref=e3424]: Digital
+                - generic [ref=e3431]: Shopping
+                - generic [ref=e3439]: Grocery
+                - generic [ref=e3445]: Transp.
+                - generic [ref=e3451]: Home
+                - generic [ref=e3456]: Tech
+                - generic [ref=e3465]: Subs
+                - generic [ref=e3476]: Health
+                - generic [ref=e3481]: Educ.
+                - generic [ref=e3486]: Travel
+                - generic [ref=e3490]: Other
+              - generic [ref=e3496]: Tech and Subscriptions already have their own limit. You can add them here too — spending would count toward both.
+              - generic [ref=e3502]: Warn me at 80 %
+              - generic [ref=e3511]: Create limit · 3 categories
+        - generic [ref=e3515]: "Primero el importe, luego el alcance: Select all crea el tope global de un toque. Las categorías que ya están en otra regla llevan un eslabón, y el aviso explica el solape antes de que lo descubras solo. El botón cuenta lo elegido."
+  - generic [ref=e3516]:
+    - generic [ref=e3517]:
+      - generic [ref=e3518]: RONDA 5 · PRESUPUESTOS
+      - heading "Presupuestos — sobres con memoria" [level=1] [ref=e3521]
+      - paragraph [ref=e3522]:
+        - text: "Cada categoría es un sobre con su límite. Lo que no gastas no desaparece: pasa al mes siguiente, y lo que te pasas se descuenta. Eso convierte la pantalla en una decisión (\"rebalancea\") en vez de un reproche."
+        - link "5a" [ref=e3523] [cursor=pointer]:
+          - /url: "#5a"
+        - text: desktop,
+        - link "5b" [ref=e3524] [cursor=pointer]:
+          - /url: "#5b"
+        - text: móvil,
+        - link "5c" [ref=e3525] [cursor=pointer]:
+          - /url: "#5c"
+        - text: el objetivo de ahorro con su historial.
+    - generic [ref=e3526]:
+      - generic [ref=e3527]:
+        - generic [ref=e3528]:
+          - generic [ref=e3529]: 5a
+          - heading "Presupuestos desktop" [level=3] [ref=e3530]
+          - generic [ref=e3531]: 12 sobres · arrastre al mes siguiente · edición de límite en línea
+        - generic [ref=e3533]:
+          - generic [ref=e3534]:
+            - generic [ref=e3535]: saveToWin
+            - generic [ref=e3538]:
+              - generic [ref=e3539]: Dashboard
+              - generic [ref=e3545]: Transactions
+              - generic [ref=e3549]: Budgets
+              - generic [ref=e3554]: Import
+            - generic [ref=e3561]: New expense
+          - generic [ref=e3563]:
+            - generic [ref=e3564]:
+              - heading "Budgets" [level=2] [ref=e3565]
+              - generic [ref=e3566]: July 2026 closed · 386,55 € rolls over into August
+            - generic [ref=e3567]:
+              - generic [ref=e3568]: July 2026
+              - generic [ref=e3576]: Copy to August
+          - generic [ref=e3581]:
+            - generic [ref=e3582]:
+              - generic [ref=e3583]: Budgeted
+              - generic [ref=e3584]: 2.300,00 €
+            - generic [ref=e3586]:
+              - generic [ref=e3587]: Spent
+              - generic [ref=e3588]: 1.913,45 €
+            - generic [ref=e3590]:
+              - generic [ref=e3591]: Rolls over
+              - generic [ref=e3592]: + 386,55 €
+            - generic [ref=e3603]:
+              - generic [ref=e3604]: 83 % of the envelope used
+              - generic [ref=e3605]: unspent
+          - generic [ref=e3607]:
+            - generic [ref=e3608]:
+              - generic [ref=e3609]:
+                - generic [ref=e3610]: Envelopes
+                - generic [ref=e3611]:
+                  - generic [ref=e3612]: SPENT / LIMIT
+                  - generic [ref=e3613]: STATUS
+              - generic [ref=e3614]:
+                - generic [ref=e3619]:
+                  - generic [ref=e3620]: Home & bills
+                  - generic [ref=e3621]: rent, power, phone
+                - generic [ref=e3624]: 620,00 / 650,00 €
+                - generic [ref=e3625]: 95 %
+              - generic [ref=e3627]:
+                - generic [ref=e3633]:
+                  - generic [ref=e3634]: Groceries
+                  - generic [ref=e3635]: 18 movements
+                - generic [ref=e3638]: 341,20 / 350,00 €
+                - generic [ref=e3639]: Tight
+              - generic [ref=e3643]:
+                - generic [ref=e3648]:
+                  - generic [ref=e3649]: Dining out
+                  - generic [ref=e3650]: 38,90 € over
+                - generic [ref=e3654]: 238,90 / 200,00 €
+                - generic [ref=e3655]: Over
+              - generic [ref=e3659]:
+                - generic [ref=e3664]:
+                  - generic [ref=e3665]: Tech
+                  - generic [ref=e3666]: editing limit
+                - generic [ref=e3670]:
+                  - generic [ref=e3671]: 149,99 /
+                  - generic [ref=e3672]:
+                    - generic [ref=e3673]: "180"
+                    - generic [ref=e3674]: €
+              - generic [ref=e3686]:
+                - generic [ref=e3692]:
+                  - generic [ref=e3693]: Transport
+                  - generic [ref=e3694]: 73,60 € unspent
+                - generic [ref=e3697]: 176,40 / 250,00 €
+                - generic [ref=e3698]: 71 %
+              - generic [ref=e3700]:
+                - generic [ref=e3707]:
+                  - generic [ref=e3708]: Subscriptions
+                  - generic [ref=e3709]: 7 recurring
+                - generic [ref=e3712]: 118,45 / 120,00 €
+                - generic [ref=e3713]: Tight
+              - generic [ref=e3717]:
+                - generic [ref=e3721]:
+                  - generic [ref=e3722]: Digital & games
+                  - generic [ref=e3723]: 16,50 € over
+                - generic [ref=e3727]: 96,50 / 80,00 €
+                - generic [ref=e3728]: Over
+              - generic [ref=e3732]:
+                - generic [ref=e3737]:
+                  - generic [ref=e3738]: Shopping
+                  - generic [ref=e3739]: 62,00 € unspent
+                - generic [ref=e3742]: 88,00 / 150,00 €
+                - generic [ref=e3743]: 59 %
+              - generic [ref=e3745]:
+                - generic [ref=e3750]:
+                  - generic [ref=e3751]: Health
+                  - generic [ref=e3752]: 3 movements
+                - generic [ref=e3755]: 45,00 / 60,00 €
+                - generic [ref=e3756]: 75 %
+              - generic [ref=e3758]:
+                - generic [ref=e3763]:
+                  - generic [ref=e3764]: Education
+                  - generic [ref=e3765]: nothing yet
+                - generic [ref=e3767]: 0,00 / 50,00 €
+                - generic [ref=e3768]: Unused
+              - generic [ref=e3770]:
+                - generic [ref=e3774]:
+                  - generic [ref=e3775]: Travel
+                  - generic [ref=e3776]: nothing yet
+                - generic [ref=e3778]: 0,00 / 240,00 €
+                - generic [ref=e3779]: Unused
+              - generic [ref=e3781]:
+                - generic [ref=e3787]:
+                  - generic [ref=e3788]: Other
+                  - generic [ref=e3789]: 2 movements
+                - generic [ref=e3792]: 39,01 / 50,00 €
+                - generic [ref=e3793]: 78 %
+            - generic [ref=e3795]:
+              - generic [ref=e3796]:
+                - generic [ref=e3797]:
+                  - generic [ref=e3798]: Savings goal
+                  - generic [ref=e3799]: Edit
+                - generic [ref=e3800]:
+                  - generic [ref=e3805]:
+                    - generic [ref=e3806]: 70 %
+                    - generic [ref=e3807]: of goal
+                  - generic [ref=e3808]:
+                    - generic [ref=e3809]: 8.420,00 €
+                    - generic [ref=e3810]: of 12.000 €3.580 € to go
+                    - generic [ref=e3811]: Landing 12 Feb 2027
+                - generic [ref=e3814]:
+                  - generic [ref=e3815]:
+                    - generic [ref=e3816]: May
+                    - generic [ref=e3817]: + 685,00 €
+                  - generic [ref=e3818]:
+                    - generic [ref=e3819]: June
+                    - generic [ref=e3820]: + 536,00 €
+                  - generic [ref=e3821]:
+                    - generic [ref=e3822]: July
+                    - generic [ref=e3823]: + 726,55 €
+                - generic [ref=e3824]: Move 386,55 € to savings
+              - generic [ref=e3828]:
+                - generic [ref=e3829]: REBALANCE
+                - generic [ref=e3834]: Tech and Digital & games went 66,49 € over — while Travel and Education never opened.
+                - generic [ref=e3835]: 290 € sat unused in envelopes you don't really use in summer. Move it where it actually goes.
+                - generic [ref=e3836]: Suggest August limits
+              - generic [ref=e3840]:
+                - generic [ref=e3841]: Add an envelope
+                - generic [ref=e3842]: Every category has one. Groups and sub-limits come next.
+        - generic [ref=e3843]: "El exceso se pinta dentro de la misma barra en rojo, no como una barra que se sale: así comparas de un vistazo doce sobres de anchura idéntica. Los sobres sin usar bajan a 62 % de opacidad — siguen ahí, pero no compiten. La etiqueta de estado (Over / Tight / % / Unused) lleva icono y texto, nunca solo color."
+      - generic [ref=e3849]:
+        - generic [ref=e3850]:
+          - generic [ref=e3851]: 5b
+          - heading "Sobres en móvil" [level=3] [ref=e3852]
+        - generic [ref=e3853]:
+          - generic [ref=e3854]: 9:41
+          - generic [ref=e3864]:
+            - generic [ref=e3865]:
+              - generic [ref=e3866]: Budgets
+              - generic [ref=e3867]: July 2026
+            - generic [ref=e3870]:
+              - generic [ref=e3871]:
+                - generic [ref=e3872]:
+                  - generic [ref=e3873]: Rolls over to August
+                  - generic [ref=e3874]: + 386,55 €
+                - generic [ref=e3875]: 83 %
+              - generic [ref=e3885]: 1.913,45 € spent of 2.300,00 €
+            - generic [ref=e3886]:
+              - generic [ref=e3887]: All 12
+              - generic [ref=e3888]: Over 2
+              - generic [ref=e3891]: Tight 2
+          - generic [ref=e3894]:
+            - generic [ref=e3896]:
+              - generic [ref=e3901]:
+                - generic [ref=e3902]: Dining out
+                - generic [ref=e3903]: 38,90 € over
+              - generic [ref=e3904]: 238,90 €
+            - generic [ref=e3909]:
+              - generic [ref=e3914]:
+                - generic [ref=e3915]: Tech
+                - generic [ref=e3916]: 49,99 € over
+              - generic [ref=e3917]: 149,99 €
+            - generic [ref=e3922]:
+              - generic [ref=e3928]:
+                - generic [ref=e3929]: Groceries
+                - generic [ref=e3930]: 8,80 € left
+              - generic [ref=e3931]: 341,20 €
+            - generic [ref=e3935]:
+              - generic [ref=e3940]:
+                - generic [ref=e3941]: Home & bills
+                - generic [ref=e3942]: 30,00 € left
+              - generic [ref=e3943]: 620,00 €
+            - generic [ref=e3947]:
+              - generic [ref=e3953]:
+                - generic [ref=e3954]: Transport
+                - generic [ref=e3955]: 73,60 € left
+              - generic [ref=e3956]: 176,40 €
+          - generic [ref=e3959]:
+            - generic [ref=e3960]: Home
+            - generic [ref=e3967]: Moves
+            - generic [ref=e3972]: Budgets
+            - generic [ref=e3978]: More
+        - generic [ref=e3985]:
+          - text: "Los sobres se ordenan por urgencia, no alfabéticamente: primero lo que se ha pasado. Los chips de arriba filtran por estado. Tocar un sobre abre la hoja de"
+          - link "3c" [ref=e3986] [cursor=pointer]:
+            - /url: "#3c"
+          - text: con el límite y su historial de 6 meses.
+      - generic [ref=e3987]:
+        - generic [ref=e3988]:
+          - generic [ref=e3989]: 5c
+          - heading "Objetivo de ahorro" [level=3] [ref=e3990]
+        - generic [ref=e3991]:
+          - generic [ref=e3992]: 9:41
+          - generic [ref=e4002]:
+            - generic [ref=e4003]: Savings goal
+            - generic [ref=e4012]:
+              - generic [ref=e4013]: 70 %
+              - generic [ref=e4018]:
+                - generic [ref=e4019]: 8.420 €
+                - generic [ref=e4020]: of 12.000 €3.580 € to go
+          - generic [ref=e4021]:
+            - generic [ref=e4022]:
+              - generic [ref=e4023]:
+                - generic [ref=e4024]: Monthly pace
+                - generic [ref=e4025]: 649 €
+              - generic [ref=e4026]:
+                - generic [ref=e4027]: Arrives
+                - generic [ref=e4028]: Feb 2027
+              - generic [ref=e4029]:
+                - generic [ref=e4030]: Ahead by
+                - generic [ref=e4031]: 4 days
+            - generic [ref=e4032]:
+              - generic [ref=e4033]: LAST 6 MONTHS
+              - generic [ref=e4034]:
+                - generic [ref=e4035]: Feb
+                - generic [ref=e4038]: Mar
+                - generic [ref=e4041]: Apr
+                - generic [ref=e4044]: May
+                - generic [ref=e4047]: Jun
+                - generic [ref=e4050]: Jul
+            - generic [ref=e4053]:
+              - generic [ref=e4054]: CONTRIBUTIONS
+              - generic [ref=e4055]:
+                - generic [ref=e4060]:
+                  - generic [ref=e4061]: July leftover
+                  - generic [ref=e4062]: 31 jul · automatic
+                - generic [ref=e4063]: + 726,55 €
+              - generic [ref=e4064]:
+                - generic [ref=e4069]:
+                  - generic [ref=e4070]: Manual transfer
+                  - generic [ref=e4071]: 18 jul · Savings account
+                - generic [ref=e4072]: + 200,00 €
+            - generic [ref=e4074]: Add to savings
+        - generic [ref=e4076]: "Única pantalla con cabecera verde: es la recompensa, y merece un color propio. El objetivo lo pones tú (importe y fecha opcional); si no hay fecha, la app calcula la llegada al ritmo actual en vez de regañarte."
+  - generic [ref=e4077]:
+    - generic [ref=e4078]:
+      - generic [ref=e4079]: RONDA 4 · TRANSACCIONES
+      - heading "Transacciones — desktop para analizar, móvil para revisar" [level=1] [ref=e4082]
+      - paragraph [ref=e4083]:
+        - link "4a" [ref=e4084] [cursor=pointer]:
+          - /url: "#4a"
+        - text: es la tabla de escritorio con filtros, selección múltiple y edición en línea;
+        - link "4b" [ref=e4085] [cursor=pointer]:
+          - /url: "#4b"
+        - text: la lista del móvil agrupada por día;
+        - link "4c" [ref=e4086] [cursor=pointer]:
+          - /url: "#4c"
+        - text: el panel de filtros (la misma hoja de tres alturas de
+        - link "3c" [ref=e4087] [cursor=pointer]:
+          - /url: "#3c"
+        - text: ) y
+        - link "4d" [ref=e4088] [cursor=pointer]:
+          - /url: "#4d"
+        - text: "el estado sin resultados. La edición reutiliza la hoja aprobada: tocar una fila la abre en altura media con los datos ya dentro."
+    - generic [ref=e4089]:
+      - generic [ref=e4090]:
+        - generic [ref=e4091]:
+          - generic [ref=e4092]: 4a
+          - heading "Tabla desktop" [level=3] [ref=e4093]
+          - generic [ref=e4094]: filtros · selección múltiple · edición en línea
+        - generic [ref=e4096]:
+          - generic [ref=e4097]:
+            - generic [ref=e4098]: saveToWin
+            - generic [ref=e4101]:
+              - generic [ref=e4102]: Dashboard
+              - generic [ref=e4108]: Transactions
+              - generic [ref=e4112]: Budgets
+              - generic [ref=e4117]: Import
+            - generic [ref=e4124]: New expense
+          - generic [ref=e4126]:
+            - generic [ref=e4127]:
+              - heading "Transactions" [level=2] [ref=e4128]
+              - generic [ref=e4129]: 68 movements in July 2026 · 1.913,45 € out · 2.640,00 € in
+            - generic [ref=e4130]:
+              - generic [ref=e4131]: Export CSV
+              - generic [ref=e4135]: Columns
+          - generic [ref=e4138]:
+            - generic [ref=e4139]: Search description or note
+            - generic [ref=e4145]: July 2026
+            - generic [ref=e4150]: Dining out
+            - generic [ref=e4156]: Groceries
+            - generic [ref=e4162]: Category
+            - generic [ref=e4164]: Account
+            - generic [ref=e4167]: Amount
+            - generic [ref=e4169]: Clear filters
+          - generic [ref=e4171]:
+            - generic [ref=e4175]: 2 selected · 87,77 €
+            - generic [ref=e4177]: Recategorize
+            - generic [ref=e4181]: Change account
+            - generic [ref=e4184]: Delete
+            - generic [ref=e4188]: Deselect all
+          - generic [ref=e4190]:
+            - generic [ref=e4191]:
+              - generic [ref=e4194]: DATE
+              - generic [ref=e4197]: DESCRIPTION
+              - generic [ref=e4198]: CATEGORY
+              - generic [ref=e4199]: ACCOUNT
+              - generic [ref=e4200]: NOTE
+              - generic [ref=e4201]: AMOUNT
+            - generic [ref=e4202]:
+              - generic [ref=e4203]: FRIDAY 31 JULY
+              - generic [ref=e4205]: − 76,12 €
+            - generic [ref=e4206]:
+              - generic [ref=e4211]: 31 jul
+              - generic [ref=e4212]: Mercadona
+              - generic [ref=e4213]: Groceries
+              - generic [ref=e4219]: Bank card
+              - generic [ref=e4220]: Weekly shop
+              - generic [ref=e4221]: − 64,32 €
+            - generic [ref=e4227]:
+              - generic [ref=e4230]: 31 jul
+              - generic [ref=e4231]: Renfe Cercanías
+              - generic [ref=e4232]: Transport
+              - generic [ref=e4238]: Bank card
+              - generic [ref=e4239]: —
+              - generic [ref=e4240]: − 11,80 €
+            - generic [ref=e4246]:
+              - generic [ref=e4247]: THURSDAY 30 JULY
+              - generic [ref=e4249]: − 36,44 €
+            - generic [ref=e4250]:
+              - generic [ref=e4255]: 30 jul
+              - generic [ref=e4256]: Consum
+              - generic [ref=e4257]: Groceries
+              - generic [ref=e4263]: Bank card
+              - generic [ref=e4264]: —
+              - generic [ref=e4265]: − 23,45 €
+            - generic [ref=e4271]:
+              - generic [ref=e4274]: 30 jul
+              - generic [ref=e4275]: Netflix
+              - generic [ref=e4276]: Subscriptions
+              - generic [ref=e4283]: Current account
+              - generic [ref=e4284]: Monthly
+              - generic [ref=e4290]: − 12,99 €
+            - generic [ref=e4296]:
+              - generic [ref=e4297]: WEDNESDAY 29 JULY
+              - generic [ref=e4299]: + 2.561,60 €
+            - generic [ref=e4300]:
+              - generic [ref=e4303]: 29 jul
+              - generic [ref=e4304]: Salary
+              - generic [ref=e4305]: Income
+              - generic [ref=e4310]: Current account
+              - generic [ref=e4311]: —
+              - generic [ref=e4312]: + 2.640,00 €
+            - generic [ref=e4318]:
+              - generic [ref=e4321]: 29 jul
+              - generic [ref=e4322]: Iberdrola
+              - generic [ref=e4323]: Home & bills
+              - generic [ref=e4328]: Current account
+              - generic [ref=e4329]: Electricity
+              - generic [ref=e4330]: − 78,40 €
+            - generic [ref=e4336]:
+              - generic [ref=e4337]: TUESDAY 28 JULY
+              - generic [ref=e4339]: − 48,49 €
+            - generic [ref=e4340]:
+              - generic [ref=e4343]: 28 jul
+              - generic [ref=e4344]: Bar Manolo
+              - generic [ref=e4346]: Dining out
+              - generic [ref=e4355]: Bizum
+              - generic [ref=e4360]: Cañas con Ana
+              - generic [ref=e4362]: − 18,50 €
+            - generic [ref=e4368]:
+              - generic [ref=e4371]: 28 jul
+              - generic [ref=e4372]: Steam
+              - generic [ref=e4373]: Digital & games
+              - generic [ref=e4377]: Prepaid card
+              - generic [ref=e4378]: games
+              - generic [ref=e4380]: − 29,99 €
+            - generic [ref=e4386]:
+              - generic [ref=e4389]: 27 jul
+              - generic [ref=e4390]: Apple Store
+              - generic [ref=e4391]: Tech
+              - generic [ref=e4396]: Prepaid card
+              - generic [ref=e4397]: Magic Keyboard
+              - generic [ref=e4398]: − 149,99 €
+          - generic [ref=e4404]:
+            - generic [ref=e4405]: Showing 9 of 68 · filtered by 2 categories
+            - generic [ref=e4406]:
+              - generic [ref=e4410]: "1"
+              - generic [ref=e4411]: "2"
+              - generic [ref=e4412]: "3"
+        - generic [ref=e4416]: "Cabeceras de día con su subtotal: es lo que convierte una lista en algo que puedes auditar. La fila en edición crece a 68px y todos sus campos son editables a la vez — no hay modal, así ves el contexto de las filas vecinas mientras corriges. El ingreso vuelve a distinguirse por fondo teal + signo + flecha, nunca solo por color."
+      - generic [ref=e4422]:
+        - generic [ref=e4423]:
+          - generic [ref=e4424]: 4b
+          - heading "Lista móvil" [level=3] [ref=e4425]
+        - generic [ref=e4426]:
+          - generic [ref=e4427]: 9:41
+          - generic [ref=e4437]:
+            - generic [ref=e4438]: Movements
+            - generic [ref=e4444]:
+              - generic [ref=e4445]: July 2026
+              - generic [ref=e4448]:
+                - text: Filters
+                - generic [ref=e4450]: "2"
+              - generic [ref=e4451]: Date
+          - generic [ref=e4455]:
+            - generic [ref=e4456]:
+              - generic [ref=e4457]: FRI 31 JULY
+              - generic [ref=e4459]: − 76,12 €
+            - generic [ref=e4460]:
+              - generic [ref=e4466]:
+                - generic [ref=e4467]: Mercadona
+                - generic [ref=e4468]: Groceries · Bank card
+              - generic [ref=e4469]: − 64,32 €
+            - generic [ref=e4470]:
+              - generic [ref=e4476]:
+                - generic [ref=e4477]: Renfe Cercanías
+                - generic [ref=e4478]: Transport · Bank card
+              - generic [ref=e4479]: − 11,80 €
+            - generic [ref=e4480]:
+              - generic [ref=e4481]: THU 30 JULY
+              - generic [ref=e4483]: − 36,44 €
+            - generic [ref=e4484]:
+              - generic [ref=e4485]:
+                - generic [ref=e4491]:
+                  - generic [ref=e4492]: Consum
+                  - generic [ref=e4493]: Groceries · Bank card
+                - generic [ref=e4494]: − 23,45 €
+              - generic [ref=e4495]: Delete
+            - generic [ref=e4501]:
+              - generic [ref=e4508]:
+                - generic [ref=e4509]: Netflix
+                - generic [ref=e4510]: Subscriptions · Current
+              - generic [ref=e4511]: − 12,99 €
+            - generic [ref=e4512]:
+              - generic [ref=e4513]: WED 29 JULY
+              - generic [ref=e4515]: + 2.561,60 €
+            - generic [ref=e4516]:
+              - generic [ref=e4521]:
+                - generic [ref=e4522]: Salary
+                - generic [ref=e4523]: Income · Current account
+              - generic [ref=e4524]: + 2.640,00 €
+            - generic [ref=e4525]:
+              - generic [ref=e4530]:
+                - generic [ref=e4531]: Iberdrola
+                - generic [ref=e4532]: Home & bills · Current
+              - generic [ref=e4533]: − 78,40 €
+            - generic [ref=e4534]:
+              - generic [ref=e4535]: TUE 28 JULY
+              - generic [ref=e4537]: − 48,49 €
+            - generic [ref=e4538]:
+              - generic [ref=e4543]:
+                - generic [ref=e4544]: Bar Manolo
+                - generic [ref=e4545]: Dining out · Bizum
+              - generic [ref=e4546]: − 18,50 €
+          - generic [ref=e4547]:
+            - generic [ref=e4548]: Home
+            - generic [ref=e4555]: Moves
+            - generic [ref=e4560]: Budgets
+            - generic [ref=e4566]: More
+        - generic [ref=e4573]:
+          - text: Mismas cabeceras de día con subtotal que en
+          - link "4a" [ref=e4574] [cursor=pointer]:
+            - /url: "#4a"
+          - text: . Deslizar a la izquierda revela borrar; tocar abre la hoja de
+          - link "3c" [ref=e4575] [cursor=pointer]:
+            - /url: "#3c"
+          - text: "en altura media, ya rellena. Filas de 64px: el objetivo táctil sobra."
+      - generic [ref=e4576]:
+        - generic [ref=e4577]:
+          - generic [ref=e4578]: 4c
+          - heading "Filtros" [level=3] [ref=e4579]
+        - generic [ref=e4580]:
+          - generic [ref=e4581]: Movements
+          - generic [ref=e4585]:
+            - generic [ref=e4587]:
+              - generic [ref=e4588]: Filters
+              - generic [ref=e4589]: Reset
+            - generic [ref=e4590]:
+              - generic [ref=e4591]: CATEGORY
+              - generic [ref=e4592]:
+                - generic [ref=e4593]: Dining
+                - generic [ref=e4598]: Grocery
+                - generic [ref=e4604]: Transp.
+                - generic [ref=e4610]: Home
+                - generic [ref=e4615]: Tech
+                - generic [ref=e4620]: Subs
+                - generic [ref=e4627]: Digital
+                - generic [ref=e4631]: More
+            - generic [ref=e4637]:
+              - generic [ref=e4638]: ACCOUNT
+              - generic [ref=e4639]:
+                - generic [ref=e4640]: Current
+                - generic [ref=e4641]: Savings
+                - generic [ref=e4642]: Bizum
+                - generic [ref=e4643]: Bank card
+                - generic [ref=e4644]: Prepaid
+                - generic [ref=e4645]: e-cash
+            - generic [ref=e4647]:
+              - generic [ref=e4648]: AMOUNT
+              - generic [ref=e4649]: 10 € — 200 €
+            - generic [ref=e4655]:
+              - generic [ref=e4656]: TYPE
+              - generic [ref=e4657]:
+                - generic [ref=e4658]: All
+                - generic [ref=e4659]: Expenses
+                - generic [ref=e4660]: Income
+            - generic [ref=e4662]: Show 14 movements
+        - generic [ref=e4664]: "El botón dice cuántos resultados vas a obtener antes de aplicar: se filtra en vivo detrás de la hoja. Misma rejilla de categorías que el alta, así que ya te la sabes."
+      - generic [ref=e4665]:
+        - generic [ref=e4666]:
+          - generic [ref=e4667]: 4d
+          - heading "Sin resultados" [level=3] [ref=e4668]
+        - generic [ref=e4669]:
+          - generic [ref=e4670]: 9:41
+          - generic [ref=e4680]:
+            - generic [ref=e4681]: Movements
+            - generic [ref=e4687]: decathlon
+            - generic [ref=e4697]:
+              - generic [ref=e4698]: July 2026
+              - generic [ref=e4701]: Dining out
+          - generic [ref=e4706]:
+            - generic [ref=e4713]:
+              - generic [ref=e4714]: No movements match
+              - generic [ref=e4715]: Nothing called “decathlon” in Dining out during July 2026. It might be filed under Shopping.
+            - generic [ref=e4716]:
+              - generic [ref=e4717]: Search all categories
+              - generic [ref=e4721]: Search the whole year
+          - generic [ref=e4724]:
+            - generic [ref=e4725]: Home
+            - generic [ref=e4732]: Moves
+            - generic [ref=e4737]: Budgets
+            - generic [ref=e4743]: More
+        - generic [ref=e4750]: "Un vacío que trabaja: te dice exactamente qué combinación falló, aventura dónde puede estar, y ofrece las dos salidas — ampliar categoría o ampliar fecha. Nunca un \"no hay resultados\" a secas."
+      - generic [ref=e4751]:
+        - generic [ref=e4752]:
+          - generic [ref=e4753]: 4e
+          - heading "Tap → editar" [level=3] [ref=e4754]
+          - generic [ref=e4755]: misma hoja, ya rellena
+        - generic [ref=e4756]:
+          - generic [ref=e4757]: Movements
+          - generic [ref=e4766]:
+            - generic [ref=e4767]:
+              - generic [ref=e4769]: Edit movement
+              - generic [ref=e4780]:
+                - generic [ref=e4781]: 18,50
+                - generic [ref=e4782]: €
+              - generic [ref=e4783]: Added 28 jul · imported from CSV
+            - generic [ref=e4787]:
+              - generic [ref=e4788]: Bar Manolo
+              - generic [ref=e4794]: CATEGORY
+              - generic [ref=e4795]:
+                - generic [ref=e4796]: Dining
+                - generic [ref=e4801]: Grocery
+                - generic [ref=e4807]: Transp.
+                - generic [ref=e4813]: Home
+                - generic [ref=e4818]: Tech
+                - generic [ref=e4823]: Subs
+                - generic [ref=e4830]: Digital
+                - generic [ref=e4834]: More
+              - generic [ref=e4840]:
+                - generic [ref=e4841]: Bizum
+                - generic [ref=e4842]: Bank card
+                - generic [ref=e4843]: Current
+              - generic [ref=e4844]:
+                - generic [ref=e4845]: 28 jul
+                - generic [ref=e4850]: Cañas con Ana
+                - generic [ref=e4856]: "123"
+              - generic [ref=e4858]: Save changes
+        - generic [ref=e4862]:
+          - text: Exactamente la hoja de
+          - link "3b" [ref=e4863] [cursor=pointer]:
+            - /url: "#3b"
+          - text: ", abierta en altura media con los datos dentro: no hay una pantalla de edición aparte que mantener. Cambia el título, aparece la papelera en la cabecera y una línea de procedencia (a mano o importado del CSV). Tocar el importe lo pone en modo teclado sin cerrar nada."
+  - generic [ref=e4864]:
+    - generic [ref=e4865]:
+      - generic [ref=e4866]: RONDA 3 · LA MEZCLA
+      - heading [level=1] [ref=e4869]:
+        - text: Una hoja que crece hasta ser
+        - link "2c" [ref=e4870] [cursor=pointer]:
+          - /url: "#2c"
+      - paragraph [ref=e4871]:
+        - text: Lo rápido de
+        - link "2b" [ref=e4872] [cursor=pointer]:
+          - /url: "#2b"
+        - text: con el carácter de
+        - link "2c" [ref=e4873] [cursor=pointer]:
+          - /url: "#2c"
+        - text: ": una sola pantalla en tres alturas. Abre en compacto para el gasto de todos los días; si arrastras hacia arriba (o tocas More), la cabecera del importe se tiñe de terracota y aparece la rejilla completa de categorías. Es el mismo componente creciendo, no tres pantallas distintas — el importe nunca se mueve de sitio y nunca pierdes lo tecleado."
+    - generic [ref=e4874]:
+      - generic [ref=e4875]:
+        - generic [ref=e4876]:
+          - generic [ref=e4877]: 3a
+          - heading "Altura 1 — compacta" [level=3] [ref=e4878]
+          - generic [ref=e4879]: el 90 % de las veces
+        - generic [ref=e4880]:
+          - generic [ref=e4881]: Hey — good month
+          - generic [ref=e4887]:
+            - generic [ref=e4889]: New expense
+            - generic [ref=e4895]:
+              - generic [ref=e4896]: 18,50
+              - generic [ref=e4897]: €
+            - generic [ref=e4898]:
+              - generic [ref=e4899]: Dining out
+              - generic [ref=e4903]: Bizum
+              - generic [ref=e4906]: More
+            - generic [ref=e4909]:
+              - generic [ref=e4910]: "1"
+              - generic [ref=e4911]: "2"
+              - generic [ref=e4912]: "3"
+              - generic [ref=e4913]: "4"
+              - generic [ref=e4914]: "5"
+              - generic [ref=e4915]: "6"
+              - generic [ref=e4916]: "7"
+              - generic [ref=e4917]: "8"
+              - generic [ref=e4918]: "9"
+              - generic [ref=e4919]: ","
+              - generic [ref=e4920]: "0"
+            - generic [ref=e4926]: Save expense
+        - generic [ref=e4930]:
+          - text: La cabecera terracota de
+          - link "2c" [ref=e4931] [cursor=pointer]:
+            - /url: "#2c"
+          - text: aquí es solo una tarjeta dentro de la hoja. Dos sugerencias (última categoría, última cuenta) y More. Si aciertan, esto son dos toques.
+      - generic [ref=e4932]:
+        - generic [ref=e4933]:
+          - generic [ref=e4934]: 3b
+          - heading "Altura 2 — media" [level=3] [ref=e4935]
+          - generic [ref=e4936]: arrastras o tocas More
+        - generic [ref=e4937]:
+          - generic [ref=e4938]: Hey — good month
+          - generic [ref=e4942]:
+            - generic [ref=e4943]:
+              - generic [ref=e4946]:
+                - generic [ref=e4947]: Expense
+                - generic [ref=e4948]: Income
+              - generic [ref=e4953]:
+                - generic [ref=e4954]: 18,50
+                - generic [ref=e4955]: €
+            - generic [ref=e4956]:
+              - generic [ref=e4957]: CATEGORY
+              - generic [ref=e4958]:
+                - generic [ref=e4959]: Dining
+                - generic [ref=e4964]: Grocery
+                - generic [ref=e4970]: Transp.
+                - generic [ref=e4976]: Home
+                - generic [ref=e4981]: Tech
+                - generic [ref=e4986]: Subs
+                - generic [ref=e4993]: Digital
+                - generic [ref=e4997]: More
+              - generic [ref=e5003]:
+                - generic [ref=e5004]: Bizum
+                - generic [ref=e5005]: Bank card
+                - generic [ref=e5006]: Current
+              - generic [ref=e5007]:
+                - generic [ref=e5008]: Today
+                - generic [ref=e5013]: Add a note
+                - generic [ref=e5019]: "123"
+              - generic [ref=e5021]: Save 18,50 €
+        - generic [ref=e5025]:
+          - text: La tarjeta del importe se ha estirado hasta ser la cabecera de
+          - link "2c" [ref=e5026] [cursor=pointer]:
+            - /url: "#2c"
+          - text: — mismo color, mismo sitio, solo más grande. El teclado se pliega en la tecla 123, que lo devuelve sin cerrar nada. Aquí caben las 12 categorías, la cuenta, la fecha y la nota.
+      - generic [ref=e5027]:
+        - generic [ref=e5028]:
+          - generic [ref=e5029]: 3c
+          - heading "Los tres pasos" [level=3] [ref=e5030]
+          - generic [ref=e5031]: cómo se lee la transición
+        - generic [ref=e5032]:
+          - generic [ref=e5037]:
+            - generic [ref=e5038]: 1 · Compacta
+            - generic [ref=e5039]: Sube desde el FAB. El importe es una tarjeta terracota; debajo, teclado y dos sugerencias.
+          - generic [ref=e5049]:
+            - generic [ref=e5050]: 2 · Media
+            - generic [ref=e5051]: La tarjeta se estira a cabecera de borde a borde y el teclado deja sitio a la rejilla de categorías.
+          - generic [ref=e5064]:
+            - generic [ref=e5065]: 3 · Completa
+            - generic [ref=e5066]:
+              - text: Llega arriba del todo y ya es
+              - link "2c" [ref=e5067] [cursor=pointer]:
+                - /url: "#2c"
+              - text: ": el terracota ocupa la barra de estado. Único estado con recurrencia y nota larga."
+          - generic [ref=e5069]:
+            - generic [ref=e5070]: MOVIMIENTO
+            - generic [ref=e5071]:
+              - text: Alturas fijas en 352 / 712 / 844 px, con imán al soltar. Transición de 240 ms con
+              - code [ref=e5072]: cubic-bezier(.22,1,.36,1)
+              - text: ". El importe y el botón de guardar no se remontan entre alturas: se mueven. Con"
+              - code [ref=e5073]: prefers-reduced-motion
+              - text: el cambio es instantáneo.
+        - generic [ref=e5074]: "Un solo componente con tres alturas: no hay navegación, no hay pérdida de estado, y el gesto de arrastrar enseña la pantalla completa sin obligarte a usarla."
+  - generic [ref=e5075]:
+    - generic [ref=e5076]:
+      - generic [ref=e5077]: RONDA 2 · MÓVIL SOBRE 1B
+      - heading "Alta rápida en el móvil — tres formas" [level=1] [ref=e5080]
+      - paragraph [ref=e5081]:
+        - text: Dirección 1b bloqueada.
+        - link "2a" [ref=e5082] [cursor=pointer]:
+          - /url: "#2a"
+        - text: es el dashboard móvil;
+        - link "2b" [ref=e5083] [cursor=pointer]:
+          - /url: "#2b"
+        - text: ","
+        - link "2c" [ref=e5084] [cursor=pointer]:
+          - /url: "#2c"
+        - text: "y"
+        - link "2d" [ref=e5085] [cursor=pointer]:
+          - /url: "#2d"
+        - text: son tres maneras distintas de meter un gasto. Todas cumplen ≥44px de objetivo táctil y llevan el importe como primer campo, porque es lo único que siempre sabes. Dime cuál y sigo con Transacciones, Presupuestos, Import CSV y Login.
+    - generic [ref=e5086]:
+      - generic [ref=e5087]:
+        - generic [ref=e5088]:
+          - generic [ref=e5089]: 2a
+          - heading "Dashboard móvil" [level=3] [ref=e5090]
+        - generic [ref=e5091]:
+          - generic [ref=e5092]: 9:41
+          - generic [ref=e5102]:
+            - generic [ref=e5104]:
+              - generic [ref=e5105]: July 2026
+              - generic [ref=e5106]: Hey — good month
+            - generic [ref=e5110]:
+              - generic [ref=e5111]: You kept this month
+              - generic [ref=e5112]:
+                - generic [ref=e5113]: +726,55 €
+                - generic [ref=e5114]: 27,5 %
+              - generic [ref=e5118]:
+                - generic [ref=e5124]:
+                  - generic [ref=e5125]: In
+                  - generic [ref=e5126]: 2.640,00
+                - generic [ref=e5132]:
+                  - generic [ref=e5133]: Out
+                  - generic [ref=e5134]: 1.913,45
+            - generic [ref=e5135]:
+              - generic [ref=e5136]:
+                - generic [ref=e5137]: 70%
+                - generic [ref=e5142]:
+                  - generic [ref=e5143]: Goal
+                  - generic [ref=e5144]: 8.420 €
+              - generic [ref=e5145]:
+                - generic [ref=e5146]: Budget left
+                - generic [ref=e5147]: 386,55 €
+            - generic [ref=e5150]:
+              - generic [ref=e5151]: HEADS UP
+              - generic [ref=e5154]: Dining out passes its 200 € limit on 24 Aug at this rate.
+            - generic [ref=e5155]:
+              - generic [ref=e5156]:
+                - generic [ref=e5157]: Latest
+                - generic [ref=e5158]: All 68 →
+              - generic [ref=e5159]:
+                - generic [ref=e5165]:
+                  - generic [ref=e5166]: Mercadona
+                  - generic [ref=e5167]: Groceries · Bank card
+                - generic [ref=e5168]: − 64,32 €
+              - generic [ref=e5169]:
+                - generic [ref=e5176]:
+                  - generic [ref=e5177]: Netflix
+                  - generic [ref=e5178]: Subscriptions · Current
+                - generic [ref=e5179]: − 12,99 €
+              - generic [ref=e5180]:
+                - generic [ref=e5185]:
+                  - generic [ref=e5186]: Salary
+                  - generic [ref=e5187]: Income · Current
+                - generic [ref=e5188]: + 2.640,00 €
+          - generic [ref=e5189]:
+            - generic [ref=e5190]: Home
+            - generic [ref=e5197]: Moves
+            - generic [ref=e5202]: Budgets
+            - generic [ref=e5208]: More
+        - generic [ref=e5215]: "Todo lo importante cabe sin hacer scroll: cuánto te queda, el objetivo, y el único aviso que exige acción. El FAB parte la barra en dos para que el pulgar lo encuentre sin mirar."
+      - generic [ref=e5216]:
+        - generic [ref=e5217]:
+          - generic [ref=e5218]: 2b
+          - heading "Hoja inferior" [level=3] [ref=e5219]
+          - generic [ref=e5220]: 2 toques
+        - generic [ref=e5221]:
+          - generic [ref=e5222]: Hey — good month
+          - generic [ref=e5227]:
+            - generic [ref=e5229]: New expense
+            - generic [ref=e5235]:
+              - generic [ref=e5236]: 18,50
+              - generic [ref=e5237]: €
+            - generic [ref=e5238]:
+              - generic [ref=e5239]: Dining out
+              - generic [ref=e5243]: Groceries
+              - generic [ref=e5248]: More
+            - generic [ref=e5255]:
+              - generic [ref=e5256]: Bizum
+              - generic [ref=e5259]: Today
+              - generic [ref=e5262]: Note
+            - generic [ref=e5266]:
+              - generic [ref=e5267]: "1"
+              - generic [ref=e5268]: "2"
+              - generic [ref=e5269]: "3"
+              - generic [ref=e5270]: "4"
+              - generic [ref=e5271]: "5"
+              - generic [ref=e5272]: "6"
+              - generic [ref=e5273]: "7"
+              - generic [ref=e5274]: "8"
+              - generic [ref=e5275]: "9"
+              - generic [ref=e5276]: ","
+              - generic [ref=e5277]: "0"
+            - generic [ref=e5283]: Save expense
+        - generic [ref=e5287]: "FAB → hoja. El teclado es propio, así que no hay salto de layout ni coma decimal escondida. Categoría, cuenta y fecha vienen pre-rellenadas con lo último que usaste: un gasto son dos toques si aciertas la predicción."
+      - generic [ref=e5288]:
+        - generic [ref=e5289]:
+          - generic [ref=e5290]: 2c
+          - heading "Pantalla completa" [level=3] [ref=e5291]
+          - generic [ref=e5292]: todo a la vista
+        - generic [ref=e5293]:
+          - generic [ref=e5294]: 9:41
+          - generic [ref=e5304]:
+            - generic [ref=e5309]:
+              - generic [ref=e5310]: Expense
+              - generic [ref=e5311]: Income
+            - generic [ref=e5312]:
+              - generic [ref=e5313]: 18,50
+              - generic [ref=e5314]: €
+          - generic [ref=e5315]:
+            - generic [ref=e5316]:
+              - generic [ref=e5317]: CATEGORY
+              - generic [ref=e5318]:
+                - generic [ref=e5319]: Dining
+                - generic [ref=e5324]: Grocery
+                - generic [ref=e5330]: Transp.
+                - generic [ref=e5336]: Home
+                - generic [ref=e5341]: Tech
+                - generic [ref=e5346]: Subs
+                - generic [ref=e5353]: Digital
+                - generic [ref=e5357]: More
+            - generic [ref=e5363]:
+              - generic [ref=e5364]: PAID WITH
+              - generic [ref=e5365]:
+                - generic [ref=e5366]: Bizum
+                - generic [ref=e5367]: Bank card
+                - generic [ref=e5368]: Current
+            - generic [ref=e5369]: Bar Manolo — add a note
+            - generic [ref=e5375]: Today, 28 jul
+            - generic [ref=e5384]: Save 18,50 €
+        - generic [ref=e5388]:
+          - text: El importe vive en una cabecera de color y las 12 categorías caben en una rejilla sin scroll. Más lento que
+          - link "2b" [ref=e5389] [cursor=pointer]:
+            - /url: "#2b"
+          - text: ", pero nunca tienes que adivinar dónde está una categoría rara. Buen candidato para el alta desde cero;"
+          - link "2b" [ref=e5390] [cursor=pointer]:
+            - /url: "#2b"
+          - text: para el día a día.
+      - generic [ref=e5391]:
+        - generic [ref=e5392]:
+          - generic [ref=e5393]: 2d
+          - heading "Formulario clásico" [level=3] [ref=e5394]
+          - generic [ref=e5395]: el de siempre
+        - generic [ref=e5396]:
+          - generic [ref=e5397]: 9:41
+          - generic [ref=e5407]: New movement
+          - generic [ref=e5412]:
+            - generic [ref=e5413]:
+              - generic [ref=e5414]: Amount
+              - generic [ref=e5415]:
+                - generic [ref=e5416]: 18,50
+                - generic [ref=e5417]: €
+                - generic [ref=e5418]:
+                  - generic [ref=e5419]: −
+                  - generic [ref=e5420]: +
+            - generic [ref=e5421]:
+              - generic [ref=e5422]: Category
+              - generic [ref=e5423]: Dining out
+            - generic [ref=e5432]:
+              - generic [ref=e5433]: Account
+              - generic [ref=e5434]: Bizum
+            - generic [ref=e5442]:
+              - generic [ref=e5443]:
+                - generic [ref=e5444]: Date
+                - generic [ref=e5445]: 28/07/2026
+              - generic [ref=e5450]:
+                - generic [ref=e5451]: Repeats
+                - generic [ref=e5452]: Never
+            - generic [ref=e5460]:
+              - generic [ref=e5461]: Note — optional
+              - generic [ref=e5462]: Bar Manolo, cañas con Ana
+          - generic [ref=e5464]:
+            - generic [ref=e5465]: Cancel
+            - generic [ref=e5466]: Save
+        - generic [ref=e5470]: "Predecible y completo: recurrencia, nota larga, signo explícito. Es el que quieres para editar un movimiento existente o dar de alta algo raro, no para el gasto de cada día. Mi recomendación: 2b para crear, 2d para editar."
+  - generic [ref=e5471]:
+    - generic [ref=e5472]:
+      - generic [ref=e5473]: RONDA 1 · DIRECCIONES
+      - heading "saveToWin — tres direcciones visuales" [level=1] [ref=e5476]
+      - paragraph [ref=e5477]:
+        - text: Cada dirección trae su paleta completa (claro + oscuro), el tratamiento del dashboard en desktop, y cómo se ven los KPIs, la tabla y la tarjeta de conclusión. Cada mockup tiene su propio interruptor claro/oscuro y el selector de rango es funcional. Dime
+        - link "1a" [ref=e5478] [cursor=pointer]:
+          - /url: "#1a"
+        - text: ","
+        - link "1b" [ref=e5479] [cursor=pointer]:
+          - /url: "#1b"
+        - text: o
+        - link "1c" [ref=e5480] [cursor=pointer]:
+          - /url: "#1c"
+        - text: (o una mezcla) y en la siguiente ronda bajo a las 5 pantallas en móvil y desktop, componentes, estados e iconografía.
+      - generic [ref=e5481]:
+        - generic [ref=e5482]: "Datos de ejemplo: julio 2026"
+        - generic [ref=e5483]: UI en inglés · importes es-ES
+        - generic [ref=e5484]: 12 categorías
+        - generic [ref=e5485]: Fuentes OFL auto-alojables
+    - generic [ref=e5486]:
+      - generic [ref=e5487]:
+        - generic [ref=e5488]:
+          - generic [ref=e5489]: 1a
+          - heading "Fintech minimal neutro" [level=2] [ref=e5490]
+          - generic [ref=e5491]: Grises fríos, un solo acento, densidad alta. El dato manda; el cromo desaparece.
+        - generic [ref=e5492]:
+          - generic [ref=e5493]:
+            - generic [ref=e5494]:
+              - generic [ref=e5495]: SEMÁNTICOS · LIGHT
+              - generic [ref=e5496]:
+                - generic [ref=e5497]: bg#F5F6F8
+                - generic [ref=e5500]: surface#FFFFFF
+                - generic [ref=e5503]: border#E3E6EA
+                - generic [ref=e5506]: fg#15171C
+                - generic [ref=e5509]: accent#2F57CC
+                - generic [ref=e5512]: income#0D6E6E
+                - generic [ref=e5515]: expense#8A5A12
+                - generic [ref=e5518]: savings#5A3FC0
+                - generic [ref=e5521]: warn#9A5B00
+                - generic [ref=e5524]: danger#B3261E
+            - generic [ref=e5527]:
+              - generic [ref=e5528]: SEMÁNTICOS · DARK
+              - generic [ref=e5529]:
+                - generic [ref=e5530]: bg#101216
+                - generic [ref=e5533]: surface#171A1F
+                - generic [ref=e5536]: border#272B33
+                - generic [ref=e5539]: fg#EEF0F3
+                - generic [ref=e5542]: accent#8AA8FF
+                - generic [ref=e5545]: income#45C9C1
+                - generic [ref=e5548]: expense#E2A44F
+                - generic [ref=e5551]: savings#B6A1FF
+                - generic [ref=e5554]: warn#E6B45C
+                - generic [ref=e5557]: danger#FF8F85
+          - generic [ref=e5560]:
+            - generic [ref=e5561]: CATEGÓRICA · 12 · LIGHT / DARK
+            - generic [ref=e5587]: Groceries · Dining out · Transport · Tech · Subscriptions · Digital & games · Shopping · Home & bills · Health · Education · Travel · Other
+          - generic [ref=e5588]:
+            - generic [ref=e5589]: SECUENCIAL · HEATMAP
+            - generic [ref=e5598]:
+              - generic [ref=e5599]: TIPOGRAFÍA
+              - generic [ref=e5600]: IBM Plex Sans 400 · 500 · 600
+              - generic [ref=e5601]: 1.234,56 € Plex Mono · tabular
+            - generic [ref=e5602]:
+              - generic [ref=e5603]: FUNDAMENTOS
+              - generic [ref=e5604]: "radius 8 / 12 · fila 44px · sombra: ningunaseparación por hairline 1px · escala 4px"
+        - generic [ref=e5607]:
+          - generic [ref=e5608]:
+            - generic [ref=e5609]: saveToWin
+            - generic [ref=e5612]:
+              - generic [ref=e5613]: Dashboard
+              - generic [ref=e5619]: Transactions
+              - generic [ref=e5623]: Budgets
+              - generic [ref=e5628]: Import
+            - generic [ref=e5632]:
+              - button "Month" [ref=e5633] [cursor=pointer]
+              - button "6 months" [ref=e5634] [cursor=pointer]
+              - button "Year" [ref=e5635] [cursor=pointer]
+            - button "Light / dark" [ref=e5636] [cursor=pointer]
+            - button "Add" [ref=e5639] [cursor=pointer]
+          - generic [ref=e5641]:
+            - heading "July 2026" [level=2] [ref=e5642]
+            - generic [ref=e5643]: 31 days · 68 transactions
+          - generic [ref=e5644]:
+            - generic [ref=e5645]:
+              - generic [ref=e5646]: Month balance
+              - generic [ref=e5647]: +726,55 €
+              - generic [ref=e5651]: 2.640,00 € in · 1.913,45 € out
+            - generic [ref=e5652]:
+              - generic [ref=e5653]: Savings rate
+              - generic [ref=e5654]: 27,5 %
+              - generic [ref=e5655]: +3,1 pts vs June
+            - generic [ref=e5659]:
+              - generic [ref=e5660]: Saved so far
+              - generic [ref=e5661]: 8.420,00 €
+              - generic [ref=e5662]: 70 % of 12.000 € goal
+            - generic [ref=e5666]:
+              - generic [ref=e5667]: Budget left
+              - generic [ref=e5668]: 386,55 €
+              - generic [ref=e5669]: 83 % of 2.300 € used
+            - generic [ref=e5673]:
+              - generic [ref=e5674]: Daily average
+              - generic [ref=e5675]: 61,72 €
+              - generic [ref=e5676]: Projection 1.913 € · budget 2.300 €
+          - generic [ref=e5677]:
+            - generic [ref=e5678]:
+              - generic [ref=e5679]:
+                - generic [ref=e5680]: Income vs expenses
+                - generic [ref=e5681]:
+                  - generic [ref=e5682]: Income
+                  - generic [ref=e5684]: Expenses
+              - generic [ref=e5686]:
+                - generic [ref=e5687]:
+                  - generic [ref=e5688]: "3.000"
+                  - generic [ref=e5689]: "2.000"
+                  - generic [ref=e5690]: "1.000"
+                  - generic [ref=e5691]: "0"
+                - generic [ref=e5698]:
+                  - generic [ref=e5699]: Feb
+                  - generic [ref=e5704]: Mar
+                  - generic [ref=e5709]: Apr
+                  - generic [ref=e5714]: May
+                  - generic [ref=e5719]: Jun
+                  - generic [ref=e5724]: Jul
+            - generic [ref=e5729]:
+              - generic [ref=e5730]: By category
+              - generic [ref=e5731]:
+                - generic [ref=e5741]:
+                  - generic [ref=e5742]: 1.913 €
+                  - generic [ref=e5743]: spent
+                - generic [ref=e5744]:
+                  - generic [ref=e5745]:
+                    - generic [ref=e5747]: Home & bills
+                    - generic [ref=e5748]: 620,00
+                  - generic [ref=e5749]:
+                    - generic [ref=e5751]: Groceries
+                    - generic [ref=e5752]: 341,20
+                  - generic [ref=e5753]:
+                    - generic [ref=e5755]: Dining out
+                    - generic [ref=e5756]: 238,90
+                  - generic [ref=e5757]:
+                    - generic [ref=e5759]: Transport
+                    - generic [ref=e5760]: 176,40
+                  - generic [ref=e5761]:
+                    - generic [ref=e5763]: Tech
+                    - generic [ref=e5764]: 149,99
+                  - generic [ref=e5765]:
+                    - generic [ref=e5767]: Subscriptions
+                    - generic [ref=e5768]: 118,45
+                  - generic [ref=e5769]:
+                    - generic [ref=e5771]: Other 4
+                    - generic [ref=e5772]: 268,51
+          - generic [ref=e5773]:
+            - generic [ref=e5774]:
+              - generic [ref=e5775]:
+                - generic [ref=e5776]: Recent transactions
+                - generic [ref=e5777]: View all
+              - generic [ref=e5778]:
+                - generic [ref=e5779]: Date
+                - generic [ref=e5780]: Description
+                - generic [ref=e5781]: Category
+                - generic [ref=e5782]: Account
+                - generic [ref=e5783]: Amount
+              - generic [ref=e5784]:
+                - generic [ref=e5785]: 31 jul
+                - generic [ref=e5786]: Mercadona
+                - generic [ref=e5787]: Groceries
+                - generic [ref=e5794]: Bank card
+                - generic [ref=e5795]: − 64,32 €
+              - generic [ref=e5796]:
+                - generic [ref=e5797]: 30 jul
+                - generic [ref=e5798]: Netflix
+                - generic [ref=e5799]: Subscriptions
+                - generic [ref=e5807]: Current account
+                - generic [ref=e5808]: − 12,99 €
+              - generic [ref=e5809]:
+                - generic [ref=e5810]: 29 jul
+                - generic [ref=e5811]: Salary
+                - generic [ref=e5812]: Income
+                - generic [ref=e5818]: Current account
+                - generic [ref=e5819]: + 2.640,00 €
+              - generic [ref=e5820]:
+                - generic [ref=e5821]: 28 jul
+                - generic [ref=e5822]: Bar Manolo
+                - generic [ref=e5823]: Dining out
+                - generic [ref=e5829]: Bizum
+                - generic [ref=e5830]: − 18,50 €
+              - generic [ref=e5831]:
+                - generic [ref=e5832]: 27 jul
+                - generic [ref=e5833]: Apple Store
+                - generic [ref=e5834]: Tech
+                - generic [ref=e5840]: Prepaid card
+                - generic [ref=e5841]: − 149,99 €
+            - generic [ref=e5842]:
+              - generic [ref=e5847]:
+                - generic [ref=e5848]: At this pace you'll pass your Dining out budget on 24 Aug.
+                - generic [ref=e5849]: 238,90 € of 200,00 € · 32 % above your 3-month average
+                - generic [ref=e5850]: See the 9 transactions →
+              - generic [ref=e5856]:
+                - generic [ref=e5857]: Savings on track — you're 4 days ahead of your 12.000 € goal pace.
+                - generic [ref=e5858]: Keeping 27,5 % gets you there by 12 Feb 2027
+              - generic [ref=e5859]:
+                - generic [ref=e5860]: Budgets
+                - generic [ref=e5862]:
+                  - generic [ref=e5863]: Groceries
+                  - generic [ref=e5864]: 341,20 / 350 €
+                - generic [ref=e5868]:
+                  - generic [ref=e5869]: Dining out
+                  - generic [ref=e5870]: 238,90 / 200 €
+                - generic [ref=e5874]:
+                  - generic [ref=e5875]: Transport
+                  - generic [ref=e5876]: 176,40 / 250 €
+        - generic [ref=e5879]: "Accesibilidad del par ingreso/gasto: aquí el par no es rojo/verde sino teal / ámbar (separables en deuteranopia y tritanopia), y además cada importe lleva signo + flecha + columna fija a la derecha. Quitando todo el color, la tabla se sigue leyendo. Las 12 categóricas son oklch de misma L y C (0.62/0.14 en claro, 0.74/0.13 en oscuro), así ninguna pesa más que otra en el donut."
+      - generic [ref=e5885]:
+        - generic [ref=e5886]:
+          - generic [ref=e5887]: 1b
+          - heading "Cálido y motivador" [level=2] [ref=e5888]
+          - generic [ref=e5889]: Papel cálido, terracota, esquinas generosas. El gasto es tinta neutra; solo el ahorro y los avisos llevan color.
+        - generic [ref=e5890]:
+          - generic [ref=e5891]:
+            - generic [ref=e5892]:
+              - generic [ref=e5893]: SEMÁNTICOS · LIGHT
+              - generic [ref=e5894]:
+                - generic [ref=e5895]: bg#FAF6F0
+                - generic [ref=e5898]: surface#FFFDFA
+                - generic [ref=e5901]: border#E9DFD1
+                - generic [ref=e5904]: fg#211B15
+                - generic [ref=e5907]: accent#A8471C
+                - generic [ref=e5910]: income#0E6A6F
+                - generic [ref=e5913]: expense#6D5F52
+                - generic [ref=e5916]: savings#2F6A43
+                - generic [ref=e5919]: warn#92600B
+                - generic [ref=e5922]: danger#B03024
+            - generic [ref=e5925]:
+              - generic [ref=e5926]: SEMÁNTICOS · DARK
+              - generic [ref=e5927]:
+                - generic [ref=e5928]: bg#191512
+                - generic [ref=e5931]: surface#211C18
+                - generic [ref=e5934]: border#3A3029
+                - generic [ref=e5937]: fg#F3ECE4
+                - generic [ref=e5940]: accent#F0885A
+                - generic [ref=e5943]: income#4FC9C0
+                - generic [ref=e5946]: expense#B6A698
+                - generic [ref=e5949]: savings#6CC78F
+                - generic [ref=e5952]: warn#E8B45F
+                - generic [ref=e5955]: danger#FF8F80
+          - generic [ref=e5958]:
+            - generic [ref=e5959]: "CATEGÓRICA · 12 · LIGHT / DARK (variante cálida: +6° de tono, +C)"
+            - generic [ref=e5985]: Groceries · Dining out · Transport · Tech · Subscriptions · Digital & games · Shopping · Home & bills · Health · Education · Travel · Other
+          - generic [ref=e5986]:
+            - generic [ref=e5987]: SECUENCIAL · HEATMAP
+            - generic [ref=e5996]:
+              - generic [ref=e5997]: TIPOGRAFÍA
+              - generic [ref=e5998]: Public Sans 400 · 600 · 800
+              - generic [ref=e5999]: 1.234,56 € tnum activado, sin mono
+            - generic [ref=e6000]:
+              - generic [ref=e6001]: FUNDAMENTOS
+              - generic [ref=e6002]: radius 14 / 20 · fila 52px · sombra suaveseparación por espacio, no por línea · escala 4px
+        - generic [ref=e6005]:
+          - generic [ref=e6006]:
+            - generic [ref=e6007]: saveToWin
+            - generic [ref=e6010]:
+              - generic [ref=e6011]: Dashboard
+              - generic [ref=e6017]: Transactions
+              - generic [ref=e6021]: Budgets
+              - generic [ref=e6026]: Import
+            - generic [ref=e6030]:
+              - button "Month" [ref=e6031] [cursor=pointer]
+              - button "6 months" [ref=e6032] [cursor=pointer]
+              - button "Year" [ref=e6033] [cursor=pointer]
+            - button "Light / dark" [ref=e6034] [cursor=pointer]
+            - button "New expense" [ref=e6037] [cursor=pointer]
+          - generic [ref=e6039]:
+            - generic [ref=e6040]:
+              - generic [ref=e6041]:
+                - generic [ref=e6042]: July 2026 · you kept
+                - generic [ref=e6043]: 31 days · 68 movements
+              - generic [ref=e6044]:
+                - generic [ref=e6045]: +726,55 €
+                - generic [ref=e6046]: 27,5 % saved
+              - generic [ref=e6050]:
+                - generic [ref=e6056]:
+                  - generic [ref=e6057]: Money in
+                  - generic [ref=e6058]: + 2.640,00 €
+                - generic [ref=e6064]:
+                  - generic [ref=e6065]: Money out
+                  - generic [ref=e6066]: − 1.913,45 €
+            - generic [ref=e6067]:
+              - generic [ref=e6072]:
+                - generic [ref=e6073]: 70 %
+                - generic [ref=e6074]: of goal
+              - generic [ref=e6075]:
+                - generic [ref=e6076]: Savings goal
+                - generic [ref=e6077]: 8.420,00 €
+                - generic [ref=e6078]: of 12.000 € · 3.580 € to go
+                - generic [ref=e6079]: 4 days ahead of plan
+          - generic [ref=e6082]:
+            - generic [ref=e6083]:
+              - generic [ref=e6084]: Budget left this month
+              - generic [ref=e6085]:
+                - generic [ref=e6086]: 386,55 €
+                - generic [ref=e6087]: 83 % used
+            - generic [ref=e6090]:
+              - generic [ref=e6091]: Daily average
+              - generic [ref=e6092]:
+                - generic [ref=e6093]: 61,72 €
+                - generic [ref=e6094]: / day
+              - generic [ref=e6095]: Month-end projection 1.913 € — inside your 2.300 € cap
+            - generic [ref=e6096]:
+              - generic [ref=e6097]: Savings streak
+              - generic [ref=e6098]: 5 months
+          - generic [ref=e6107]:
+            - generic [ref=e6108]:
+              - generic [ref=e6109]:
+                - generic [ref=e6110]: What you spend, month by month
+                - generic [ref=e6111]: Income 2.640 €
+              - generic [ref=e6113]:
+                - generic [ref=e6114]:
+                  - generic [ref=e6115]: "3.000"
+                  - generic [ref=e6116]: "2.000"
+                  - generic [ref=e6117]: "1.000"
+                  - generic [ref=e6118]: "0"
+                - generic [ref=e6121]:
+                  - generic [ref=e6122]: Feb
+                  - generic [ref=e6125]: Mar
+                  - generic [ref=e6128]: Apr
+                  - generic [ref=e6131]: May
+                  - generic [ref=e6134]: Jun
+                  - generic [ref=e6137]: Jul
+            - generic [ref=e6140]:
+              - generic [ref=e6141]: Where it went
+              - generic [ref=e6142]:
+                - generic [ref=e6144]:
+                  - generic [ref=e6149]: Home & bills
+                  - generic [ref=e6150]: 620,00 €
+                - generic [ref=e6154]:
+                  - generic [ref=e6160]: Groceries
+                  - generic [ref=e6161]: 341,20 €
+                - generic [ref=e6165]:
+                  - generic [ref=e6170]: Dining out
+                  - generic [ref=e6171]: 238,90 €
+                - generic [ref=e6175]:
+                  - generic [ref=e6181]: Transport
+                  - generic [ref=e6182]: 176,40 €
+                - generic [ref=e6186]:
+                  - generic [ref=e6191]: Tech
+                  - generic [ref=e6192]: 149,99 €
+              - generic [ref=e6195]: All 10 categories →
+          - generic [ref=e6196]:
+            - generic [ref=e6197]:
+              - generic [ref=e6198]:
+                - generic [ref=e6199]: Latest movements
+                - generic [ref=e6200]: View all 68 →
+              - generic [ref=e6201]:
+                - generic [ref=e6207]:
+                  - generic [ref=e6208]: Mercadona
+                  - generic [ref=e6209]: Groceries · 31 jul
+                - generic [ref=e6210]: Bank card
+                - generic [ref=e6211]: − 64,32 €
+              - generic [ref=e6212]:
+                - generic [ref=e6219]:
+                  - generic [ref=e6220]: Netflix
+                  - generic [ref=e6221]: Subscriptions · 30 jul
+                - generic [ref=e6222]: Current account
+                - generic [ref=e6223]: − 12,99 €
+              - generic [ref=e6224]:
+                - generic [ref=e6229]:
+                  - generic [ref=e6230]: Salary
+                  - generic [ref=e6231]: Income · 29 jul
+                - generic [ref=e6232]: Current account
+                - generic [ref=e6233]: + 2.640,00 €
+              - generic [ref=e6234]:
+                - generic [ref=e6239]:
+                  - generic [ref=e6240]: Bar Manolo
+                  - generic [ref=e6241]: Dining out · 28 jul
+                - generic [ref=e6242]: Bizum
+                - generic [ref=e6243]: − 18,50 €
+              - generic [ref=e6244]:
+                - generic [ref=e6249]:
+                  - generic [ref=e6250]: Apple Store
+                  - generic [ref=e6251]: Tech · 27 jul
+                - generic [ref=e6252]: Prepaid card
+                - generic [ref=e6253]: − 149,99 €
+            - generic [ref=e6254]:
+              - generic [ref=e6255]:
+                - generic [ref=e6256]: Heads up
+                - generic [ref=e6259]: At this pace you'll pass your Dining out budget on 24 Aug.
+                - generic [ref=e6260]: 238,90 € of 200,00 € — that's 32 % above your 3-month average.
+                - button "Review 9 transactions" [ref=e6261] [cursor=pointer]
+              - generic [ref=e6262]:
+                - generic [ref=e6263]: On track
+                - generic [ref=e6267]: You're 4 days ahead of your 12.000 € goal. Keep 27,5 % and you land it on 12 Feb 2027.
+        - generic [ref=e6273]:
+          - text: "Accesibilidad del par ingreso/gasto: aquí el gasto no tiene color propio — es tinta neutra. Solo se colorean el ingreso (teal), el ahorro (verde) y los avisos (ámbar). Un daltónico ve exactamente la misma jerarquía que tú, porque la señal es el signo, la flecha en el círculo y la etiqueta. El coste: los números grandes son menos \"escaneables\" que en"
+          - link "1a" [ref=e6274] [cursor=pointer]:
+            - /url: "#1a"
+          - text: . Densidad más baja (fila 52px) — mejor para móvil, peor para tablas largas.
+      - generic [ref=e6275]:
+        - generic [ref=e6276]:
+          - generic [ref=e6277]: 1c
+          - heading "Dashboard oscuro por defecto" [level=2] [ref=e6278]
+          - generic [ref=e6279]: Panel de instrumentos. Fondo casi negro, acentos vivos reservados a los datos, cifras en mono. Rail lateral en vez de nav superior.
+        - generic [ref=e6280]:
+          - generic [ref=e6281]:
+            - generic [ref=e6282]:
+              - generic [ref=e6283]: SEMÁNTICOS · DARK (por defecto)
+              - generic [ref=e6284]:
+                - generic [ref=e6285]: bg#0D0F13
+                - generic [ref=e6288]: surface#14171D
+                - generic [ref=e6291]: border#232833
+                - generic [ref=e6294]: fg#E9ECF2
+                - generic [ref=e6297]: accent#4DE2C0
+                - generic [ref=e6300]: income#4DD9E8
+                - generic [ref=e6303]: expense#FF9D4D
+                - generic [ref=e6306]: savings#A78BFA
+                - generic [ref=e6309]: warn#FFC447
+                - generic [ref=e6312]: danger#FF7A70
+            - generic [ref=e6315]:
+              - generic [ref=e6316]: SEMÁNTICOS · LIGHT (secundario)
+              - generic [ref=e6317]:
+                - generic [ref=e6318]: bg#EEF0F3
+                - generic [ref=e6321]: surface#FFFFFF
+                - generic [ref=e6324]: border#DFE3E9
+                - generic [ref=e6327]: fg#0D0F13
+                - generic [ref=e6330]: accent#0D7D68
+                - generic [ref=e6333]: income#0F6F80
+                - generic [ref=e6336]: expense#A35A06
+                - generic [ref=e6339]: savings#6B4FD0
+                - generic [ref=e6342]: warn#96650A
+                - generic [ref=e6345]: danger#B3261E
+          - generic [ref=e6348]:
+            - generic [ref=e6349]:
+              - text: CATEGÓRICA · 12 · DARK / LIGHT (misma rueda que
+              - link "1a" [ref=e6350] [cursor=pointer]:
+                - /url: "#1a"
+              - text: ", más viva en oscuro)"
+            - generic [ref=e6376]: Groceries · Dining out · Transport · Tech · Subscriptions · Digital & games · Shopping · Home & bills · Health · Education · Travel · Other
+          - generic [ref=e6377]:
+            - generic [ref=e6378]: SECUENCIAL · HEATMAP (en oscuro)
+            - generic [ref=e6387]:
+              - generic [ref=e6388]: TIPOGRAFÍA
+              - generic [ref=e6389]: Space Grotesk 400 · 500 · 700
+              - generic [ref=e6390]: 1.234,56 € Plex Mono para todo importe
+            - generic [ref=e6391]:
+              - generic [ref=e6392]: FUNDAMENTOS
+              - generic [ref=e6393]: radius 12 / 16 · fila 46px · sin sombraselevación por color de superficie + hairline · escala 4px
+        - generic [ref=e6396]:
+          - button "Light / dark" [ref=e6418] [cursor=pointer]
+          - generic [ref=e6429]:
+            - generic [ref=e6430]:
+              - generic [ref=e6431]:
+                - heading "July 2026" [level=2] [ref=e6432]
+                - generic [ref=e6433]: 31d · 68 tx
+              - generic [ref=e6434]: All accounts
+              - generic [ref=e6437]:
+                - button "1M" [ref=e6438] [cursor=pointer]
+                - button "6M" [ref=e6439] [cursor=pointer]
+                - button "1Y" [ref=e6440] [cursor=pointer]
+              - button "Add" [ref=e6441] [cursor=pointer]
+            - generic [ref=e6443]:
+              - generic [ref=e6444]:
+                - generic [ref=e6445]: MONTH BALANCE
+                - generic [ref=e6451]: +726,55 €
+                - generic [ref=e6452]: in 2.640,00 · out 1.913,45
+              - generic [ref=e6453]:
+                - generic [ref=e6454]: SAVINGS RATE
+                - generic [ref=e6460]: 27,5 %
+              - generic [ref=e6468]:
+                - generic [ref=e6469]: SAVED · GOAL 12.000
+                - generic [ref=e6476]: 8.420,00 €
+                - generic [ref=e6477]: 70 % · 4 days ahead
+              - generic [ref=e6481]:
+                - generic [ref=e6482]: BUDGET LEFT
+                - generic [ref=e6488]: 386,55 €
+                - generic [ref=e6489]: 83 % of 2.300 € · 61,72 €/day
+            - generic [ref=e6493]:
+              - generic [ref=e6494]:
+                - generic [ref=e6495]:
+                  - generic [ref=e6496]: Income vs expenses
+                  - generic [ref=e6497]:
+                    - generic [ref=e6498]: in
+                    - generic [ref=e6500]: out
+                - generic [ref=e6502]:
+                  - generic [ref=e6503]:
+                    - generic [ref=e6504]: "3.000"
+                    - generic [ref=e6505]: "2.000"
+                    - generic [ref=e6506]: "1.000"
+                    - generic [ref=e6507]: "0"
+                  - generic [ref=e6514]:
+                    - generic [ref=e6515]: Feb
+                    - generic [ref=e6520]: Mar
+                    - generic [ref=e6525]: Apr
+                    - generic [ref=e6530]: May
+                    - generic [ref=e6535]: Jun
+                    - generic [ref=e6540]: Jul
+              - generic [ref=e6545]:
+                - generic [ref=e6546]: By category
+                - generic [ref=e6547]:
+                  - generic [ref=e6557]:
+                    - generic [ref=e6558]: 1.913 €
+                    - generic [ref=e6559]: out
+                  - generic [ref=e6560]:
+                    - generic [ref=e6561]:
+                      - generic [ref=e6563]: Home
+                      - generic [ref=e6564]: 32 %
+                    - generic [ref=e6565]:
+                      - generic [ref=e6567]: Groceries
+                      - generic [ref=e6568]: 18 %
+                    - generic [ref=e6569]:
+                      - generic [ref=e6571]: Dining out
+                      - generic [ref=e6572]: 13 %
+                    - generic [ref=e6573]:
+                      - generic [ref=e6575]: Transport
+                      - generic [ref=e6576]: 9 %
+                    - generic [ref=e6577]:
+                      - generic [ref=e6579]: Tech
+                      - generic [ref=e6580]: 8 %
+                    - generic [ref=e6581]:
+                      - generic [ref=e6583]: Subs
+                      - generic [ref=e6584]: 6 %
+                    - generic [ref=e6585]:
+                      - generic [ref=e6587]: Other 4
+                      - generic [ref=e6588]: 14 %
+            - generic [ref=e6590]:
+              - generic [ref=e6591]:
+                - generic [ref=e6592]: Spending intensity · every day of July
+                - generic [ref=e6593]: 0 € 180 €
+              - generic [ref=e6632]:
+                - generic [ref=e6633]: "1"
+                - generic [ref=e6634]: "8"
+                - generic [ref=e6635]: "15"
+                - generic [ref=e6636]: "22"
+                - generic [ref=e6637]: "31"
+            - generic [ref=e6638]:
+              - generic [ref=e6639]:
+                - generic [ref=e6640]:
+                  - generic [ref=e6641]: Recent transactions
+                  - generic [ref=e6642]: view all →
+                - generic [ref=e6643]:
+                  - generic [ref=e6644]: DATE
+                  - generic [ref=e6645]: DESCRIPTION
+                  - generic [ref=e6646]: CATEGORY
+                  - generic [ref=e6647]: ACCOUNT
+                  - generic [ref=e6648]: AMOUNT
+                - generic [ref=e6649]:
+                  - generic [ref=e6650]: 31 jul
+                  - generic [ref=e6651]: Mercadona
+                  - generic [ref=e6652]: Groceries
+                  - generic [ref=e6655]: Bank card
+                  - generic [ref=e6656]: − 64,32 €
+                - generic [ref=e6657]:
+                  - generic [ref=e6658]: 30 jul
+                  - generic [ref=e6659]: Netflix
+                  - generic [ref=e6660]: Subscriptions
+                  - generic [ref=e6663]: Current account
+                  - generic [ref=e6664]: − 12,99 €
+                - generic [ref=e6665]:
+                  - generic [ref=e6666]: 29 jul
+                  - generic [ref=e6667]: Salary
+                  - generic [ref=e6668]: Income
+                  - generic [ref=e6673]: Current account
+                  - generic [ref=e6674]: + 2.640,00 €
+                - generic [ref=e6675]:
+                  - generic [ref=e6676]: 28 jul
+                  - generic [ref=e6677]: Bar Manolo
+                  - generic [ref=e6678]: Dining out
+                  - generic [ref=e6681]: Bizum
+                  - generic [ref=e6682]: − 18,50 €
+                - generic [ref=e6683]:
+                  - generic [ref=e6684]: 27 jul
+                  - generic [ref=e6685]: Apple Store
+                  - generic [ref=e6686]: Tech
+                  - generic [ref=e6689]: Prepaid card
+                  - generic [ref=e6690]: − 149,99 €
+              - generic [ref=e6691]:
+                - generic [ref=e6692]:
+                  - generic [ref=e6693]: OVER PACE
+                  - generic [ref=e6696]: Dining out crosses its 200 € limit on 24 Aug at this rate.
+                  - generic [ref=e6697]: 238,90 / 200,00 · +32 % vs 3-mo avg
+                  - generic [ref=e6700]: inspect 9 tx →
+                - generic [ref=e6701]:
+                  - generic [ref=e6702]: ON TRACK
+                  - generic [ref=e6706]: Goal reached 12 Feb 2027 — 4 days earlier than planned.
+                  - generic [ref=e6707]: 8.420,00 / 12.000,00 · 27,5 % rate
+                - generic [ref=e6708]:
+                  - generic [ref=e6709]: Budgets
+                  - generic [ref=e6711]:
+                    - generic [ref=e6712]: Groceries
+                    - generic [ref=e6713]: 341,20 / 350
+                  - generic [ref=e6717]:
+                    - generic [ref=e6718]: Dining out
+                    - generic [ref=e6719]: 238,90 / 200
+                  - generic [ref=e6723]:
+                    - generic [ref=e6724]: Transport
+                    - generic [ref=e6725]: 176,40 / 250
+        - generic [ref=e6728]: "Accesibilidad del par ingreso/gasto: cian / naranja, el par con mayor separación posible en las tres formas de daltonismo, más signo y flecha. El fondo oscuro permite subir la croma de las 12 categóricas a 0.15 sin que chillen. Ojo: el heatmap de 31 días solo funciona bien en oscuro; en el tema claro de esta dirección hay que invertir la escala secuencial (ya incluida). Es la dirección más \"instrumento\" y la que peor envejece si la app crece hacia lo doméstico."

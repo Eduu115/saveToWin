@@ -117,7 +117,7 @@ export function InsightsColumn({ insights }: { insights: Insight[] }) {
   return (
     <aside
       aria-labelledby="insights-title"
-      className="flex max-h-[480px] flex-col overflow-hidden rounded-card border border-line bg-surface shadow-raised xl:sticky xl:top-6 xl:max-h-[calc(100dvh-3rem)]"
+      className="flex max-h-[420px] flex-col overflow-hidden rounded-card border border-line bg-surface shadow-raised xl:max-h-[calc(100dvh-7.5rem)]"
     >
       <h2
         id="insights-title"

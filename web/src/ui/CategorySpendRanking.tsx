@@ -15,7 +15,7 @@ export function CategorySpendRanking({
   if (top.length === 0) return null
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 lg:gap-2">
       {top.map((row) => {
         const Icon = categoryIcon(row.key)
         const pct = max > 0 ? Math.round((row.expenseCents * 100) / max) : 0

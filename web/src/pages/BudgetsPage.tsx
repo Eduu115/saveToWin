@@ -223,13 +223,13 @@ export function BudgetsPage() {
           </p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex gap-0.5 rounded-pill bg-surface-2 p-0.5">
-            <span className="inline-flex items-center gap-1.5 rounded-pill bg-surface px-3.5 py-2.5 text-[12.5px] font-bold shadow-sm">
+          <div className="flex w-full gap-0.5 rounded-pill bg-surface-2 p-0.5 sm:w-auto">
+            <span className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-pill bg-surface px-3.5 py-2.5 text-[12.5px] font-bold shadow-sm sm:flex-none">
               <Target size={15} strokeWidth={2.2} aria-hidden />
               {t('budgets.limits')}
             </span>
             <span
-              className="relative inline-flex cursor-not-allowed items-center gap-1.5 rounded-pill px-3.5 py-2.5 text-[12.5px] font-semibold text-ink-3 opacity-70"
+              className="relative inline-flex flex-1 cursor-not-allowed items-center justify-center gap-1.5 rounded-pill px-3.5 py-2.5 text-[12.5px] font-semibold text-ink-3 opacity-70 sm:flex-none"
               aria-disabled="true"
               title={t('budgets.envelopesSoon')}
             >
@@ -240,7 +240,7 @@ export function BudgetsPage() {
               </span>
             </span>
           </div>
-          <div className="flex items-center gap-0.5 rounded-pill border border-line bg-surface p-0.5">
+          <div className="flex flex-1 items-center justify-between gap-0.5 rounded-pill border border-line bg-surface p-0.5 sm:flex-none">
             <button
               type="button"
               aria-label={t('budgets.prevMonth')}
@@ -263,7 +263,7 @@ export function BudgetsPage() {
             type="button"
             onClick={() => setOpen(true)}
             disabled={availableCats.length === 0}
-            className="inline-flex h-tap items-center gap-2 rounded-pill bg-accent px-4 text-[13px] font-bold text-accent-fg shadow-accent focus-visible:shadow-focus focus-visible:outline-none disabled:opacity-50"
+            className="hidden h-tap items-center gap-2 rounded-pill bg-accent px-4 text-[13px] font-bold text-accent-fg shadow-accent focus-visible:shadow-focus focus-visible:outline-none disabled:opacity-50 sm:inline-flex"
           >
             <Plus size={16} strokeWidth={2.4} aria-hidden />
             {t('budgets.add')}
@@ -272,17 +272,17 @@ export function BudgetsPage() {
       </div>
 
       {/* Resumen — Directions 12a */}
-      <section className="flex flex-col gap-4 rounded-card border border-line bg-surface p-5 shadow-raised lg:flex-row lg:items-center lg:gap-9">
+      <section className="grid grid-cols-3 gap-3 rounded-card border border-line bg-surface p-4 shadow-raised sm:p-5 lg:flex lg:flex-row lg:items-center lg:gap-9">
         <div className="flex flex-col gap-1">
           <span className="text-[12.5px] font-semibold text-ink-2">{t('budgets.budgeted')}</span>
-          <span className="text-[30px] font-extrabold tabular-nums tracking-tight">
+          <span className="text-[19px] font-extrabold tabular-nums tracking-tight sm:text-[30px]">
             {formatCents(totalBudgeted)}
           </span>
         </div>
         <div className="hidden h-11 w-px bg-line lg:block" />
         <div className="flex flex-col gap-1">
           <span className="text-[12.5px] font-semibold text-ink-2">{t('budgets.spent')}</span>
-          <span className="text-[30px] font-extrabold tabular-nums tracking-tight">
+          <span className="text-[19px] font-extrabold tabular-nums tracking-tight sm:text-[30px]">
             {formatCents(totalSpent)}
           </span>
         </div>
@@ -290,14 +290,14 @@ export function BudgetsPage() {
         <div className="flex flex-col gap-1">
           <span className="text-[12.5px] font-semibold text-savings">{t('budgets.rollsOver')}</span>
           <span
-            className={`text-[30px] font-extrabold tabular-nums tracking-tight ${
+            className={`text-[19px] font-extrabold tabular-nums tracking-tight sm:text-[30px] ${
               rollsOver >= 0 ? 'text-savings' : 'text-danger'
             }`}
           >
             {rollsOver >= 0 ? `+ ${formatCents(rollsOver)}` : formatCents(rollsOver)}
           </span>
         </div>
-        <div className="flex flex-1 flex-col gap-2 lg:pl-3">
+        <div className="col-span-3 flex flex-1 flex-col gap-2 lg:pl-3">
           <div className="flex h-4 overflow-hidden rounded-pill bg-track">
             {rows.length === 0 ? null : (
               <div
@@ -388,6 +388,19 @@ export function BudgetsPage() {
                   </div>
                 </div>
 
+                <div className="flex h-[9px] overflow-hidden rounded-pill bg-track sm:hidden" aria-hidden>
+                  <div
+                    className="h-full"
+                    style={{
+                      width: `${bar.withinBarPercent}%`,
+                      background: categoryCssVar(cat.color),
+                    }}
+                  />
+                  {bar.status === 'over' && (
+                    <div className="h-full bg-danger" style={{ width: `${bar.overBarPercent}%` }} />
+                  )}
+                </div>
+
                 <div className="flex items-center justify-between gap-2 sm:justify-end">
                   {editing ? (
                     <div className="flex items-center gap-2">
@@ -442,6 +455,18 @@ export function BudgetsPage() {
               </div>
             )
           })}
+          {availableCats.length > 0 && (
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              className="mt-3 flex min-h-[60px] w-full items-center gap-3 rounded-card border border-dashed border-line px-4 font-semibold text-ink-2 focus-visible:shadow-focus focus-visible:outline-none sm:hidden"
+            >
+              <span className="flex size-9 items-center justify-center rounded-tile bg-surface-2">
+                <Plus size={18} strokeWidth={2.2} aria-hidden />
+              </span>
+              {t('budgets.add')}
+            </button>
+          )}
         </section>
 
         {/* Objetivo — Directions 12a */}
@@ -458,10 +483,10 @@ export function BudgetsPage() {
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-50 flex items-end justify-center bg-black/50 p-4 sm:items-center">
+        <div className="fade-in fixed inset-0 z-50 flex items-end justify-center bg-black/50 sm:items-center sm:p-4">
           <form
             onSubmit={onCreate}
-            className="w-full max-w-md rounded-sheet bg-surface p-5 shadow-raised"
+            className="sheet-in w-full max-w-md rounded-t-sheet bg-surface p-5 pb-[max(1.25rem,env(safe-area-inset-bottom))] shadow-raised sm:rounded-sheet"
           >
             <h2 className="text-lg font-extrabold">{t('budgets.add')}</h2>
             <p className="mt-1 text-sm text-ink-2">

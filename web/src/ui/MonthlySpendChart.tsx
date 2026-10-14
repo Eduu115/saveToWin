@@ -100,7 +100,7 @@ export function MonthlySpendChart({
           </span>
         </div>
       )}
-      <div className={`h-[200px] w-full ${single ? 'mx-auto max-w-[200px]' : ''}`}>
+      <div className={`h-[200px] w-full lg:h-[160px] ${single ? 'mx-auto max-w-[200px]' : ''}`}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}

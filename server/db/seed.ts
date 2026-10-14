@@ -1,7 +1,7 @@
 import { and, eq } from 'drizzle-orm'
 import type { ColorToken } from '@savetowin/shared/types'
 import { db } from './client.js'
-import { accounts, categories, transactions } from './schema.js'
+import { accounts, cards, categories, transactions } from './schema.js'
 
 const CATEGORY_SEED: {
   key: string
@@ -48,13 +48,12 @@ const ACCOUNT_SEED: {
   name: string
 }[] = [
   { key: 'Current', label: 'Corriente', color: 'c1', name: 'Cuenta corriente' },
+  // Necesaria: ingreso/retirada de ahorro y el objetivo usan siempre la cuenta `Savings`.
   { key: 'Savings', label: 'Ahorro', color: 'c11', name: 'Cuenta de ahorro' },
-  { key: 'Transfer', label: 'Transferencia', color: 'c3', name: 'Transferencias' },
-  { key: 'Bizum', label: 'Bizum', color: 'c5', name: 'Bizum' },
-  { key: 'Bank card', label: 'Tarjeta bancaria', color: 'c4', name: 'Tarjeta bancaria' },
-  { key: 'Prepaid card', label: 'Tarjeta prepago', color: 'c7', name: 'Tarjeta prepago' },
-  { key: 'e-cash card', label: 'Monedero', color: 'c6', name: 'Monedero electrónico' },
 ]
+
+/** Formas de pago de la cuenta corriente al registrarse. */
+const CURRENT_CARDS = ['Débito', 'Bizum']
 
 /** Idempotente por `(userId, key)`. Invocar al registrar. */
 export async function seedForUser(userId: number) {
@@ -78,6 +77,19 @@ export async function seedForUser(userId: number) {
       .values({ ...row, userId, initialBalance: 0 })
       .onConflictDoNothing()
   }
+  const [current] = await db
+    .select({ id: accounts.id })
+    .from(accounts)
+    .where(and(eq(accounts.userId, userId), eq(accounts.key, 'Current')))
+    .limit(1)
+  if (current) {
+    for (const name of CURRENT_CARDS) {
+      await db
+        .insert(cards)
+        .values({ userId, accountId: current.id, name })
+        .onConflictDoNothing()
+    }
+  }
 }
 
 /** Aceptación P1.5: céntimos + aislamiento entre usuarios. */
@@ -92,7 +104,7 @@ export async function assertSeedIsolation(userA: number, userB: number) {
   if (catsA.length !== 15) throw new Error(`userA categories=${catsA.length}, expected 15`)
 
   const accsA = await db.select().from(accounts).where(eq(accounts.userId, userA))
-  if (accsA.length !== 7) throw new Error(`userA accounts=${accsA.length}, expected 7`)
+  if (accsA.length !== 2) throw new Error(`userA accounts=${accsA.length}, expected 2`)
 
   await seedForUser(userB)
   const catsB = await db
