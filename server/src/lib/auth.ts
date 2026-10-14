@@ -15,6 +15,7 @@ export type AuthVariables = {
 const PUBLIC_API = new Set([
   '/api/health',
   '/api/auth/login',
+  '/api/auth/login/2fa',
   '/api/auth/register',
   '/api/auth/registration',
 ])

@@ -1,6 +1,7 @@
 import { sql } from 'drizzle-orm'
 import {
   boolean,
+  index,
   integer,
   jsonb,
   pgEnum,
@@ -40,6 +41,11 @@ export const users = pgTable('users', {
   name: text('name'),
   /** Objetivo de ahorro (céntimos). Default canónico 12.000 €. */
   savingsGoalCents: integer('savings_goal_cents').notNull().default(1_200_000),
+  /** 2FA (TOTP, base32). Con secreto pero sin `totpEnabledAt` = alta a medias. */
+  totpSecret: text('totp_secret'),
+  totpEnabledAt: timestamp('totp_enabled_at', { withTimezone: true, mode: 'string' }),
+  /** Hashes SHA-256 de los códigos de recuperación aún sin usar. */
+  totpRecovery: text('totp_recovery').array().notNull().default(sql`'{}'`),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
     .notNull()
     .default(sql`now()`),
@@ -175,4 +181,25 @@ export const budgets = pgTable(
     limit: integer('limit_cents').notNull(),
   },
   (t) => [uniqueIndex('budgets_user_category_period').on(t.userId, t.categoryId, t.period)],
+)
+
+/** Códigos de 6 dígitos enviados por correo para confirmar cambios de contraseña o email. */
+export const authCodes = pgTable(
+  'auth_codes',
+  {
+    id: serial('id').primaryKey(),
+    userId: integer('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    purpose: text('purpose').$type<'password' | 'email'>().notNull(),
+    codeHash: text('code_hash').notNull(),
+    /** password: hash argon2 de la nueva · email: el email nuevo */
+    payload: text('payload').notNull(),
+    attempts: integer('attempts').notNull().default(0),
+    expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+      .notNull()
+      .default(sql`now()`),
+  },
+  (t) => [index('auth_codes_user_purpose').on(t.userId, t.purpose)],
 )
