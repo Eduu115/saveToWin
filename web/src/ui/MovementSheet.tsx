@@ -155,7 +155,7 @@ export function MovementSheet(props: Props) {
     <div
       role="radiogroup"
       aria-label={t('transactions.type')}
-      className={`flex gap-0.5 rounded-pill p-0.5 ${compact ? 'bg-surface-2' : 'bg-accent-fg/15'}`}
+      className={`flex gap-0.5 rounded-pill p-0.5 ${compact ? 'bg-surface-2' : 'bg-[color-mix(in_srgb,var(--on-accent)_15%,transparent)]'}`}
     >
       {(['expense', 'income', 'savings'] as const).map((type) => {
         const on = draft.type === type
@@ -173,7 +173,7 @@ export function MovementSheet(props: Props) {
                   : 'bg-accent-fg text-accent'
                 : compact
                   ? 'text-ink-2'
-                  : 'text-accent-fg/85'
+                  : 'text-accent-fg opacity-85'
             }`}
           >
             {t(`transactions.type.${type}`)}
@@ -185,7 +185,7 @@ export function MovementSheet(props: Props) {
 
   const iconButton = (onBg: boolean) =>
     `inline-flex size-tap flex-none items-center justify-center rounded-full focus-visible:shadow-focus focus-visible:outline-none ${
-      onBg ? 'bg-accent-fg/15 text-accent-fg hover:bg-accent-fg/25' : 'bg-surface-2 text-ink-2'
+      onBg ? 'bg-[color-mix(in_srgb,var(--on-accent)_15%,transparent)] text-accent-fg hover:bg-[color-mix(in_srgb,var(--on-accent)_25%,transparent)]' : 'bg-surface-2 text-ink-2'
     }`
 
   const closeButtons = (onBg: boolean) => (
@@ -228,7 +228,7 @@ export function MovementSheet(props: Props) {
       }}
     >
       <span
-        className={`h-1 w-10 rounded-pill ${compact ? 'bg-line' : 'bg-accent-fg/40'}`}
+        className={`h-1 w-10 rounded-pill ${compact ? 'bg-line' : 'bg-[color-mix(in_srgb,var(--on-accent)_40%,transparent)]'}`}
         aria-hidden
       />
     </div>
@@ -325,7 +325,7 @@ export function MovementSheet(props: Props) {
                 {closeButtons(true)}
               </div>
               {editing && typeTabs && (
-                <p className="mt-2 text-[12px] font-semibold text-accent-fg/80">{title}</p>
+                <p className="mt-2 text-[12px] font-semibold text-accent-fg opacity-80">{title}</p>
               )}
               {desktop ? (
                 <label className="mt-3 flex items-baseline justify-center gap-1">
@@ -337,7 +337,7 @@ export function MovementSheet(props: Props) {
                     value={draft.amount}
                     onChange={(e) => setDraft({ ...draft, amount: e.target.value })}
                     size={Math.max(4, draft.amount.length + 1)}
-                    className="min-w-0 max-w-full bg-transparent text-center text-[44px] font-extrabold leading-none tracking-tight tabular-nums placeholder:text-accent-fg/50 focus-visible:outline-none"
+                    className="min-w-0 max-w-full bg-transparent text-center text-[44px] font-extrabold leading-none tracking-tight tabular-nums placeholder:text-accent-fg placeholder:opacity-50 focus-visible:outline-none"
                   />
                   <span className="text-xl font-bold opacity-70">€</span>
                 </label>
