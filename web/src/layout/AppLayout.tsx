@@ -55,7 +55,9 @@ const nav = [
   { to: 'accounts', label: t('nav.accounts'), Icon: Landmark },
   { to: 'limits', label: t('nav.limits'), Icon: Target },
   // Pantallas de la extensión opcional (vacío si no hay)
-  ...extensionPages.map(({ path, label, Icon }) => ({ to: path, label, Icon })),
+  ...extensionPages
+    .filter((p) => p.nav !== false)
+    .map(({ path, label, Icon }) => ({ to: path, label, Icon })),
   { to: 'import', label: t('nav.import'), Icon: Upload },
   { to: 'settings', label: t('nav.settings'), Icon: Settings },
 ]

@@ -7,6 +7,8 @@ export type ExtensionPage = {
   label: string
   Icon: LucideIcon
   Page: ComponentType
+  /** `false` = ruta sin entrada en la navegación (se enlaza desde otra pantalla). */
+  nav?: boolean
 }
 
 // Extensión opcional: `src/pro/index.ts` no forma parte de este repo. Si no existe,
