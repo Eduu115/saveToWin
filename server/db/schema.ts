@@ -46,6 +46,8 @@ export const users = pgTable('users', {
   totpEnabledAt: timestamp('totp_enabled_at', { withTimezone: true, mode: 'string' }),
   /** Hashes SHA-256 de los códigos de recuperación aún sin usar. */
   totpRecovery: text('totp_recovery').array().notNull().default(sql`'{}'`),
+  /** Sube al cambiar la contraseña: invalida los tokens de sesión anteriores. */
+  sessionVersion: integer('session_version').notNull().default(0),
   createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
     .notNull()
     .default(sql`now()`),

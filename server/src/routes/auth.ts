@@ -58,7 +58,7 @@ authRoutes.post('/register', async (c) => {
     .returning()
 
   await seedForUser(user.id)
-  const token = await signAccessToken(user.id)
+  const token = await signAccessToken(user.id, user.sessionVersion)
   setAuthCookie(c, token)
   return c.json({ user: toPublicUser(user) }, 201)
 })
@@ -83,7 +83,7 @@ authRoutes.post('/login', async (c) => {
     return c.json({ twoFactorRequired: true, challenge: await signTwoFactorChallenge(user.id) })
   }
 
-  const token = await signAccessToken(user.id)
+  const token = await signAccessToken(user.id, user.sessionVersion)
   setAuthCookie(c, token)
   return c.json({ user: toPublicUser(user) })
 })
@@ -117,7 +117,7 @@ authRoutes.post('/login/2fa', async (c) => {
       .set({ totpRecovery: user.totpRecovery.filter((h) => h !== hashed) })
       .where(eq(users.id, user.id))
   }
-  setAuthCookie(c, await signAccessToken(user.id))
+  setAuthCookie(c, await signAccessToken(user.id, user.sessionVersion))
   return c.json({ user: toPublicUser(user) })
 })
 

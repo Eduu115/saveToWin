@@ -1,11 +1,12 @@
 import { hash, verify } from 'argon2'
-import { and, eq } from 'drizzle-orm'
+import { and, eq, sql } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { z } from 'zod'
 import { db } from '../../db/client.js'
 import { authCodes, users } from '../../db/schema.js'
 import type { AuthVariables } from '../lib/auth.js'
-import { clearAuthCookie } from '../lib/cookies.js'
+import { clearAuthCookie, setAuthCookie } from '../lib/cookies.js'
+import { signAccessToken } from '../lib/jwt.js'
 import { apiError } from '../lib/errors.js'
 import { mailConfigured, MailNotConfiguredError, maskEmail, sendMail } from '../lib/mail.js'
 import {
@@ -151,9 +152,14 @@ profileRoutes.post('/confirm', async (c) => {
   const user = await currentUser(userId)
   if (!user) return c.json(apiError('UNAUTHORIZED', 'Usuario no encontrado'), 401)
   if (body.purpose === 'password') {
-    // ponytail: las otras sesiones abiertas siguen valiendo hasta que caduque su JWT
-    // (JWT_EXPIRES_IN); añadir versión de sesión en el token si hace falta cortarlas ya.
-    await db.update(users).set({ passwordHash: pending.payload }).where(eq(users.id, userId))
+    // Nueva contraseña + nueva versión de sesión: se cierran todas las sesiones
+    // abiertas en otros dispositivos; esta recibe un token nuevo y sigue dentro.
+    const [updated] = await db
+      .update(users)
+      .set({ passwordHash: pending.payload, sessionVersion: sql`${users.sessionVersion} + 1` })
+      .where(eq(users.id, userId))
+      .returning({ sessionVersion: users.sessionVersion })
+    setAuthCookie(c, await signAccessToken(userId, updated.sessionVersion))
     await sendOrFail(user.email, 'saveToWin · tu contraseña ha cambiado', 'Tu contraseña de saveToWin se acaba de cambiar. Si no has sido tú, contacta con quien administra el servidor.\n\n— saveToWin')
     return c.json({ ok: true })
   }
