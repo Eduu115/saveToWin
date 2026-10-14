@@ -1,16 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
+import { Link, useParams } from 'react-router-dom'
 import { BarChart3, Check, Gift, History, Lightbulb, Sparkles, Target } from 'lucide-react'
-import { api } from '../api/client'
 import { t } from '../i18n/t'
+import { fetchMe } from './api'
 import { tp } from './i18n'
 
-type ProMe = {
-  plan: 'free' | 'premium'
-  validUntil: string | null
-  historyFrom: string | null
-  freeHistoryDays: number
-  enforced: boolean
-}
 
 function longDate(iso: string): string {
   return new Date(`${iso}T12:00:00`).toLocaleDateString('es-ES', {
@@ -21,7 +15,8 @@ function longDate(iso: string): string {
 }
 
 export function PremiumPage() {
-  const me = useQuery({ queryKey: ['pro', 'me'], queryFn: () => api<ProMe>('/api/pro/me') })
+  const { locale = 'es' } = useParams()
+  const me = useQuery({ queryKey: ['pro', 'me'], queryFn: fetchMe })
   const data = me.data
   const premium = data?.plan === 'premium'
 
@@ -93,6 +88,24 @@ export function PremiumPage() {
           <p className="mt-4 rounded-tile bg-surface-2 px-4 py-3 text-[13px] font-semibold text-ink-2">
             {tp('pro.cta.soon')}
           </p>
+        )}
+        {premium && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            <Link
+              to={`/${locale}/analysis`}
+              className="inline-flex h-tap items-center gap-2 rounded-pill bg-accent px-4 text-[13px] font-bold text-accent-fg shadow-accent focus-visible:shadow-focus focus-visible:outline-none"
+            >
+              <BarChart3 size={16} strokeWidth={2.2} aria-hidden />
+              {tp('pro.open.analysis')}
+            </Link>
+            <Link
+              to={`/${locale}/wrapped`}
+              className="inline-flex h-tap items-center gap-2 rounded-pill border border-line bg-surface px-4 text-[13px] font-semibold focus-visible:shadow-focus focus-visible:outline-none"
+            >
+              <Gift size={16} strokeWidth={2.2} aria-hidden />
+              {tp('pro.open.wrapped')}
+            </Link>
+          </div>
         )}
       </section>
     </div>

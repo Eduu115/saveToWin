@@ -20,6 +20,25 @@ export async function ensureProSchema() {
       updated_at timestamptz NOT NULL DEFAULT now()
     )
   `)
+  // Agrupaciones (Directions 6a/6c): conjuntos de categorías con límite mensual opcional.
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS pro_groups (
+      id serial PRIMARY KEY,
+      user_id integer NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      name text NOT NULL,
+      icon text NOT NULL DEFAULT 'shapes',
+      limit_cents integer CHECK (limit_cents IS NULL OR limit_cents > 0),
+      warn_percent integer NOT NULL DEFAULT 80 CHECK (warn_percent BETWEEN 1 AND 100),
+      created_at timestamptz NOT NULL DEFAULT now()
+    )
+  `)
+  await db.execute(sql`
+    CREATE TABLE IF NOT EXISTS pro_group_categories (
+      group_id integer NOT NULL REFERENCES pro_groups(id) ON DELETE CASCADE,
+      category_id integer NOT NULL REFERENCES categories(id) ON DELETE CASCADE,
+      PRIMARY KEY (group_id, category_id)
+    )
+  `)
 }
 
 function isoDate(d: Date): string {
