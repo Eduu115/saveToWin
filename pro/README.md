@@ -8,13 +8,17 @@ al repo público** (`Eduu115/saveToWin`, AGPL-3.0).
 | Qué | Dónde |
 |---|---|
 | Núcleo (todo lo que ya es open source, arreglos, mejoras generales) | repo **público** `saveToWin` |
-| Premium (estadísticas avanzadas, Wrapped, planes, cobro) | aquí, dentro de `pro/` |
+| Premium (estadísticas avanzadas, Wrapped, planes, cobro) | aquí: `server/pro/`, `web/src/pro/` y `pro/` |
 
 - Remotos: `origin` = este repo privado; `upstream` = el público con el push
   **deshabilitado** (`git remote set-url --push upstream DISABLED`).
-- Traer el núcleo: `git pull upstream main` (luego `git push origin main`).
-- Lo premium vive **solo** en `pro/` (y en los puntos de enganche mínimos del
-  núcleo) para que los pulls de `upstream` no den conflictos.
+- Traer el núcleo: `git pull --no-rebase upstream main` (merge, nunca rebase) y
+  luego `git push origin main`.
+- Lo premium vive **solo** en `server/pro/`, `web/src/pro/` y `pro/`; el núcleo
+  solo tiene los enganches genéricos (en el repo público) para cargarlos:
+  - servidor: `server/src/index.ts` llama a `register(app)` de `server/pro/index.ts`;
+  - web: `web/src/extension.ts` carga `pages` de `web/src/pro/index.ts`;
+  - ventana de historial: pro fija `historyFrom` y el núcleo bloquea lo anterior.
 - Producción (savetowin.app) despliega desde **este** repo con una deploy key
   de solo lectura.
 
@@ -26,3 +30,13 @@ al repo público** (`Eduu115/saveToWin`, AGPL-3.0).
   chocar con la secuencia del núcleo.
 - Los datos del usuario nunca se borran por bajar de plan: el plan gratis solo
   limita lo que se **muestra**.
+
+## Planes
+
+- Tabla `pro_plans` (DDL idempotente al arrancar). Sin fila = gratis.
+- Los límites del plan gratis solo se aplican con `PRO_ENFORCE_PLANS=true`.
+  Sin esa variable, el build pro se comporta como el núcleo (nadie pierde nada).
+- Plan gratis: gráficos y estadísticas de los últimos `FREE_HISTORY_DAYS` (60)
+  días; un mes que toca la ventana se ve entero.
+- Asignar plan a mano (hasta que haya cobro), dentro del contenedor:
+  `node dist/pro/set-plan.js <email> <free|premium> [YYYY-MM-DD]`
