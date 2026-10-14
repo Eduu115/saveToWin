@@ -4,14 +4,16 @@ import { env } from './env.js'
 export type JwtPayload = {
   /** userId */
   sub: string
+  /** Versión de sesión del usuario al emitir el token (tokens antiguos: 0). */
+  sv: number
 }
 
 function secretKey() {
   return new TextEncoder().encode(env.jwtSecret())
 }
 
-export async function signAccessToken(userId: number): Promise<string> {
-  return new SignJWT({})
+export async function signAccessToken(userId: number, sessionVersion = 0): Promise<string> {
+  return new SignJWT({ sv: sessionVersion })
     .setProtectedHeader({ alg: 'HS256' })
     .setSubject(String(userId))
     .setIssuedAt()
@@ -24,7 +26,7 @@ export async function verifyAccessToken(token: string): Promise<JwtPayload> {
   if (!payload.sub) throw new Error('token sin sub')
   // Un token con propósito (p. ej. el reto de 2FA) nunca vale como sesión.
   if (payload.purpose) throw new Error('no es un token de sesión')
-  return { sub: payload.sub }
+  return { sub: payload.sub, sv: typeof payload.sv === 'number' ? payload.sv : 0 }
 }
 
 /** Reto intermedio del login con 2FA: prueba que la contraseña fue correcta. 5 minutos. */
