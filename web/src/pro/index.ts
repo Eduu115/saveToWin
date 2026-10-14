@@ -1,6 +1,7 @@
 import { BarChart3, Gift, Sparkles } from 'lucide-react'
 import type { ExtensionPage } from '../extension'
 import { AnalysisPage } from './AnalysisPage'
+import { PlanSection } from './PlanSection'
 import { tp } from './i18n'
 import { PremiumPage } from './PremiumPage'
 import { WrappedPage } from './WrappedPage'
@@ -11,3 +12,6 @@ export const pages: ExtensionPage[] = [
   { path: 'wrapped', label: tp('an.wrapped'), Icon: Gift, Page: WrappedPage, nav: false },
   { path: 'premium', label: tp('pro.nav'), Icon: Sparkles, Page: PremiumPage, nav: false },
 ]
+
+/** Secciones que pro añade al perfil. */
+export const profileSections = [PlanSection]
