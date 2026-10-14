@@ -13,10 +13,18 @@ export type ExtensionPage = {
 
 // Extensión opcional: `src/pro/index.ts` no forma parte de este repo. Si no existe,
 // el glob no encuentra nada y la app funciona completa sin pantallas extra.
-const modules = import.meta.glob<{ pages?: ExtensionPage[] }>('./pro/index.ts', {
+const modules = import.meta.glob<{
+  pages?: ExtensionPage[]
+  /** Secciones extra al final del perfil (p. ej. «Tu plan»). */
+  profileSections?: ComponentType[]
+}>('./pro/index.ts', {
   eager: true,
 })
 
 export const extensionPages: ExtensionPage[] = Object.values(modules).flatMap(
   (m) => m.pages ?? [],
+)
+
+export const extensionProfileSections: ComponentType[] = Object.values(modules).flatMap(
+  (m) => m.profileSections ?? [],
 )

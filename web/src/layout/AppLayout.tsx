@@ -5,6 +5,8 @@ import {
   LayoutDashboard,
   LogOut,
   Moon,
+  ShieldCheck,
+  UserRound,
   MoreHorizontal,
   Plus,
   Settings,
@@ -16,6 +18,7 @@ import {
 import { useEffect, useState } from 'react'
 import { NavLink, Outlet, useLocation, useNavigate, useParams } from 'react-router-dom'
 import { logout } from '../api/auth'
+import { fetchProfile } from '../api/profile'
 import { fetchStats } from '../api/stats'
 import { DEFAULT_LOCALE } from '../i18n/locales'
 import { extensionPages } from '../extension'
@@ -65,6 +68,66 @@ const nav = [
 /** Directions 2a — barra inferior móvil: 2 + FAB + 2; el resto vive en «Más». */
 const mobileMain = nav.filter((n) => ['dashboard', 'transactions', 'limits'].includes(n.to))
 const mobileMore = nav.filter((n) => !mobileMain.includes(n))
+
+/**
+ * Recordatorio de 2FA: solo si no está activa, con la cuenta de ≥3 días (no
+ * agobiar al recién llegado), nunca dentro del perfil y, tras «Ahora no», no
+ * vuelve hasta dentro de 3 semanas (por dispositivo).
+ */
+const NAG_KEY = 'stw.2fa-nag'
+const DAY_MS = 24 * 60 * 60 * 1000
+const NAG_EVERY_MS = 21 * DAY_MS
+const NAG_MIN_ACCOUNT_AGE_MS = 3 * DAY_MS
+
+function TwoFactorNag({ locale }: { locale: string }) {
+  const { pathname } = useLocation()
+  const profile = useQuery({ queryKey: ['profile'], queryFn: fetchProfile, staleTime: 5 * 60_000 })
+  const [hidden, setHidden] = useState(() => {
+    try {
+      return Date.now() - Number(localStorage.getItem(NAG_KEY) ?? 0) < NAG_EVERY_MS
+    } catch {
+      return false
+    }
+  })
+  const p = profile.data
+  const youngAccount = p != null && Date.now() - new Date(`${p.createdAt.slice(0, 10)}T00:00:00`).getTime() < NAG_MIN_ACCOUNT_AGE_MS
+  if (hidden || !p || p.twoFactorEnabled || youngAccount || pathname.endsWith('/profile')) return null
+  const dismiss = () => {
+    try {
+      localStorage.setItem(NAG_KEY, String(Date.now()))
+    } catch {
+      // sin almacenamiento: se oculta solo en esta visita
+    }
+    setHidden(true)
+  }
+  return (
+    <div role="status" className="mb-4 flex flex-col gap-3 rounded-card border border-line bg-surface p-4 shadow-raised sm:flex-row sm:items-center">
+      <span className="flex size-10 flex-none items-center justify-center rounded-tile bg-warn-weak text-warn">
+        <ShieldCheck size={20} strokeWidth={2.2} aria-hidden />
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="text-[14px] font-bold">{t('nag.2fa.title')}</p>
+        <p className="text-[12.5px] text-ink-2">{t('nag.2fa.body')}</p>
+      </div>
+      <div className="flex gap-2">
+        <NavLink
+          to={`/${locale}/profile#two-factor`}
+          onClick={dismiss}
+          className="inline-flex h-tap items-center rounded-pill bg-accent px-4 text-[13px] font-bold text-accent-fg focus-visible:shadow-focus focus-visible:outline-none"
+        >
+          {t('nag.2fa.cta')}
+        </NavLink>
+        <button
+          type="button"
+          onClick={dismiss}
+          className="inline-flex h-tap items-center rounded-pill bg-surface-2 px-4 text-[13px] font-semibold text-ink-2 focus-visible:shadow-focus focus-visible:outline-none"
+        >
+          {t('nag.2fa.later')}
+        </button>
+      </div>
+    </div>
+  )
+}
 
 function currentPeriod(): string {
   const d = new Date()
@@ -130,6 +193,18 @@ export function AppLayout() {
             </nav>
           </div>
           <div className="flex items-center gap-2">
+            <NavLink
+              to={`/${locale}/profile`}
+              aria-label={t('nav.profile')}
+              title={t('nav.profile')}
+              className={({ isActive }) =>
+                `inline-flex size-tap shrink-0 items-center justify-center rounded-full focus-visible:shadow-focus focus-visible:outline-none ${
+                  isActive ? 'bg-accent text-accent-fg' : 'bg-surface-2 text-ink-2'
+                }`
+              }
+            >
+              <UserRound size={18} strokeWidth={2} aria-hidden />
+            </NavLink>
             <ThemeToggle />
             <button
               type="button"
@@ -143,6 +218,7 @@ export function AppLayout() {
         </div>
       </header>
       <main className="mx-auto max-w-6xl p-4 pb-32 md:p-6 lg:py-5">
+        <TwoFactorNag locale={locale} />
         <Outlet />
       </main>
 

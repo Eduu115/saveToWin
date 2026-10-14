@@ -1,8 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowRight, CircleAlert, Eye, EyeOff, Lock, Server } from 'lucide-react'
+import { ArrowLeft, ArrowRight, CircleAlert, Eye, EyeOff, Lock, Server, ShieldCheck } from 'lucide-react'
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
-import { fetchRegistration, login, register } from '../api/auth'
+import { fetchRegistration, login, loginTwoFactor, register } from '../api/auth'
 import { ApiClientError } from '../api/client'
 import { DEFAULT_LOCALE } from '../i18n/locales'
 import { t } from '../i18n/t'
@@ -21,6 +21,9 @@ export function AuthPage({ mode }: { mode: Mode }) {
   const [name, setName] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  // Segundo paso del login cuando la cuenta tiene 2FA.
+  const [challenge, setChallenge] = useState<string | null>(null)
+  const [code, setCode] = useState('')
 
   const registration = useQuery({
     queryKey: ['auth', 'registration'],
@@ -34,10 +37,17 @@ export function AuthPage({ mode }: { mode: Mode }) {
 
   const mutation = useMutation({
     mutationFn: () =>
-      mode === 'login'
-        ? login({ email, password })
-        : register({ email, password, name: name || undefined }),
-    onSuccess: async () => {
+      challenge
+        ? loginTwoFactor({ challenge, code })
+        : mode === 'login'
+          ? login({ email, password })
+          : register({ email, password, name: name || undefined }),
+    onSuccess: async (res) => {
+      if ('twoFactorRequired' in res) {
+        setChallenge(res.challenge)
+        setCode('')
+        return
+      }
       await qc.invalidateQueries({ queryKey: ['auth', 'me'] })
       navigate(`/${locale}/dashboard`, { replace: true })
     },
@@ -115,8 +125,62 @@ export function AuthPage({ mode }: { mode: Mode }) {
     </div>
   )
 
+  const twoFactorForm = (
+    <form onSubmit={onSubmit} className="flex w-full max-w-[420px] flex-col gap-6 md:gap-[26px]">
+      <div className="flex flex-col gap-2">
+        <span className="flex size-11 items-center justify-center rounded-tile bg-accent-weak text-accent">
+          <ShieldCheck size={22} strokeWidth={2.2} aria-hidden />
+        </span>
+        <h1 className="text-[26px] font-extrabold tracking-tight md:text-[32px]">{t('auth.2fa.title')}</h1>
+        <p className="text-[13.5px] leading-relaxed text-ink-2 md:text-[14.5px]">{t('auth.2fa.hint')}</p>
+      </div>
+      <label className="flex flex-col gap-2">
+        <span className={`text-[12.5px] font-semibold ${error ? 'text-danger' : 'text-ink-2'}`}>{t('auth.2fa.code')}</span>
+        <input
+          className={`h-[60px] rounded-field border-2 bg-surface px-4 text-center text-[24px] font-bold tracking-[0.3em] text-ink focus-visible:shadow-focus focus-visible:outline-none ${
+            error ? 'border-danger' : 'border-accent'
+          }`}
+          required
+          autoFocus
+          inputMode="text"
+          autoComplete="one-time-code"
+          maxLength={12}
+          value={code}
+          onChange={(e) => setCode(e.target.value)}
+        />
+        <span className="text-[12px] text-ink-3">{t('auth.2fa.recoveryHint')}</span>
+        {error && (
+          <span className="flex items-start gap-2 text-[12.5px] font-semibold leading-snug text-danger">
+            <CircleAlert size={14} strokeWidth={2.6} className="mt-0.5 shrink-0" aria-hidden />
+            {error}
+          </span>
+        )}
+      </label>
+      <button
+        type="submit"
+        disabled={mutation.isPending}
+        className="flex h-[58px] items-center justify-center gap-2 rounded-field bg-accent text-[15.5px] font-bold text-accent-fg shadow-accent focus-visible:shadow-focus focus-visible:outline-none disabled:opacity-60"
+      >
+        <ArrowRight size={19} strokeWidth={2.6} aria-hidden />
+        {t('auth.2fa.submit')}
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          setChallenge(null)
+          setError(null)
+        }}
+        className="inline-flex min-h-tap items-center justify-center gap-2 text-sm font-semibold text-ink-2 focus-visible:shadow-focus focus-visible:outline-none"
+      >
+        <ArrowLeft size={16} strokeWidth={2.2} aria-hidden />
+        {t('auth.2fa.back')}
+      </button>
+    </form>
+  )
+
   const formPanel = (
     <div className="relative -mt-7 flex flex-1 items-start justify-center rounded-t-sheet bg-bg px-5 py-8 md:mt-0 md:items-center md:rounded-none md:px-20">
+      {challenge ? twoFactorForm : (
       <form
         onSubmit={onSubmit}
         className="flex w-full max-w-[420px] flex-col gap-6 md:gap-[26px]"
@@ -245,6 +309,7 @@ export function AuthPage({ mode }: { mode: Mode }) {
           <span>{t('auth.selfHosted')}</span>
         </div>
       </form>
+      )}
     </div>
   )
 
