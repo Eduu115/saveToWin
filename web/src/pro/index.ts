@@ -1,9 +1,13 @@
-import { Sparkles } from 'lucide-react'
+import { BarChart3, Gift, Sparkles } from 'lucide-react'
 import type { ExtensionPage } from '../extension'
+import { AnalysisPage } from './AnalysisPage'
 import { tp } from './i18n'
 import { PremiumPage } from './PremiumPage'
+import { WrappedPage } from './WrappedPage'
 
 /** Pantallas que pro añade al núcleo (ver `src/extension.ts`). */
 export const pages: ExtensionPage[] = [
-  { path: 'premium', label: tp('pro.nav'), Icon: Sparkles, Page: PremiumPage },
+  { path: 'analysis', label: tp('an.nav'), Icon: BarChart3, Page: AnalysisPage },
+  { path: 'wrapped', label: tp('an.wrapped'), Icon: Gift, Page: WrappedPage, nav: false },
+  { path: 'premium', label: tp('pro.nav'), Icon: Sparkles, Page: PremiumPage, nav: false },
 ]

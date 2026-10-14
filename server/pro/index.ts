@@ -1,10 +1,13 @@
 import type { Hono } from 'hono'
 import type { AuthVariables } from '../src/lib/auth.js'
 import { ensureProSchema, FREE_HISTORY_DAYS, freeHistoryFrom, planFor } from './plans.js'
+import { proRoutes } from './routes.js'
 
 /**
- * Límites de plan activos solo con `PRO_ENFORCE_PLANS=true`: hasta que exista el
- * cobro, desplegar pro no recorta el historial a nadie.
+ * La ventana de 60 días del plan gratis solo se aplica con `PRO_ENFORCE_PLANS=true`:
+ * hasta que exista el cobro, desplegar pro no recorta el historial a nadie.
+ * Las funciones nuevas (análisis, agrupaciones, consejos, Wrapped completo) exigen
+ * premium siempre: no quitan nada a nadie, solo se añaden.
  */
 const enforcePlans = () => process.env.PRO_ENFORCE_PLANS === 'true'
 
@@ -35,4 +38,6 @@ export async function register(app: Hono) {
       enforced: enforcePlans(),
     })
   })
+
+  api.route('/api/pro', proRoutes)
 }

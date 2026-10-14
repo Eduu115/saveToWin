@@ -31,11 +31,25 @@ al repo público** (`Eduu115/saveToWin`, AGPL-3.0).
 - Los datos del usuario nunca se borran por bajar de plan: el plan gratis solo
   limita lo que se **muestra**.
 
+## Funciones premium
+
+| Función | Servidor | Web |
+|---|---|---|
+| Gráficos avanzados (11a): 12 meses, donut, ranking, ahorro acumulado, heatmap, límites visualizados | `GET /api/pro/analytics` | Análisis › Gráficos |
+| Agrupaciones (6a/6c): conjuntos de categorías con límite opcional, cobertura | `/api/pro/groups` (CRUD) | Análisis › Agrupaciones |
+| Consejos: heurísticas deterministas (`server/pro/insights.ts`) | `GET /api/pro/insights` | Análisis › Consejos |
+| Wrapped: resumen anual en historias + imagen para compartir | `GET /api/pro/wrapped` | `/wrapped` |
+
+- Todas exigen **premium en el servidor** (`402 PREMIUM_REQUIRED`). Excepción:
+  la portada del Wrapped es gratis (para compartir y atraer).
+- Tests de la lógica pura (heurísticas y Wrapped): `npx vitest run pro/tests`.
+
 ## Planes
 
 - Tabla `pro_plans` (DDL idempotente al arrancar). Sin fila = gratis.
-- Los límites del plan gratis solo se aplican con `PRO_ENFORCE_PLANS=true`.
-  Sin esa variable, el build pro se comporta como el núcleo (nadie pierde nada).
+- La ventana de 60 días del plan gratis solo se aplica con `PRO_ENFORCE_PLANS=true`.
+  Sin esa variable, nadie pierde historial. Las funciones nuevas (tabla de arriba)
+  exigen premium siempre: no quitan nada, solo se añaden.
 - Plan gratis: gráficos y estadísticas de los últimos `FREE_HISTORY_DAYS` (60)
   días; un mes que toca la ventana se ve entero.
 - Asignar plan a mano (hasta que haya cobro), dentro del contenedor:
