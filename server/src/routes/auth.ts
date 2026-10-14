@@ -1,13 +1,20 @@
 import { hash, verify } from 'argon2'
 import { eq } from 'drizzle-orm'
 import { Hono } from 'hono'
+import { z } from 'zod'
 import { db } from '../../db/client.js'
 import { users } from '../../db/schema.js'
 import { seedForUser } from '../../db/seed.js'
 import { clearAuthCookie, readAuthCookie, setAuthCookie } from '../lib/cookies.js'
 import { env } from '../lib/env.js'
 import { apiError } from '../lib/errors.js'
-import { signAccessToken, verifyAccessToken } from '../lib/jwt.js'
+import {
+  signAccessToken,
+  signTwoFactorChallenge,
+  verifyAccessToken,
+  verifyTwoFactorChallenge,
+} from '../lib/jwt.js'
+import { normalizeRecovery, sha256, verifyTotp } from '../lib/totp.js'
 import { loginSchema, registerSchema, updateMeSchema } from '../lib/schemas.js'
 import { parseBody } from '../lib/validate.js'
 
@@ -71,8 +78,46 @@ authRoutes.post('/login', async (c) => {
     return c.json(apiError('UNAUTHORIZED', 'Credenciales incorrectas'), 401)
   }
 
+  // Con 2FA activa no hay sesión todavía: se devuelve un reto para el segundo paso.
+  if (user.totpEnabledAt) {
+    return c.json({ twoFactorRequired: true, challenge: await signTwoFactorChallenge(user.id) })
+  }
+
   const token = await signAccessToken(user.id)
   setAuthCookie(c, token)
+  return c.json({ user: toPublicUser(user) })
+})
+
+const twoFactorSchema = z.object({
+  challenge: z.string().min(1),
+  code: z.string().trim().min(6).max(12),
+})
+
+/** Segundo paso: código de la app (6 dígitos) o un código de recuperación (se gasta). */
+authRoutes.post('/login/2fa', async (c) => {
+  const parsed = await parseBody(c, twoFactorSchema)
+  if (parsed instanceof Response) return parsed
+  let userId: number
+  try {
+    userId = await verifyTwoFactorChallenge(parsed.challenge)
+  } catch {
+    return c.json(apiError('CHALLENGE_EXPIRED', 'Ha pasado demasiado tiempo. Vuelve a entrar.'), 401)
+  }
+  const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1)
+  if (!user?.totpEnabledAt || !user.totpSecret) {
+    return c.json(apiError('UNAUTHORIZED', 'Credenciales incorrectas'), 401)
+  }
+  if (!verifyTotp(user.totpSecret, parsed.code)) {
+    const hashed = sha256(normalizeRecovery(parsed.code))
+    if (!user.totpRecovery.includes(hashed)) {
+      return c.json(apiError('CODE_INVALID', 'El código no es correcto'), 401)
+    }
+    await db
+      .update(users)
+      .set({ totpRecovery: user.totpRecovery.filter((h) => h !== hashed) })
+      .where(eq(users.id, user.id))
+  }
+  setAuthCookie(c, await signAccessToken(user.id))
   return c.json({ user: toPublicUser(user) })
 })
 

@@ -104,6 +104,10 @@ PWA instalable en build de producción (manifest + service worker).
 - Rate-limit en register/login.
 - Aislamiento estricto por `userId` en toda la API.
 - Cerrar altas: `REGISTRATION_OPEN=false`.
+- **Verificación en dos pasos** opcional (TOTP, app de autenticación) con códigos de
+  recuperación de un solo uso; la app la recomienda de vez en cuando.
+- Cambiar email o contraseña exige la contraseña actual **y** un código enviado por
+  correo (al email nuevo, en el caso del email). Requiere SMTP (`SMTP_*` en `.env`).
 - Si se expone a internet: **HTTPS** (perfil `https` / Caddy).
 
 ---

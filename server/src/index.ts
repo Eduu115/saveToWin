@@ -19,6 +19,7 @@ const { statsRoutes } = await import('./routes/stats.js')
 const { backupRoutes } = await import('./routes/backup.js')
 const { cardsRoutes } = await import('./routes/cards.js')
 const { subscriptionsRoutes } = await import('./routes/subscriptions.js')
+const { profileRoutes } = await import('./routes/profile.js')
 
 export type {
   Account,
@@ -34,6 +35,11 @@ const app = new Hono()
 
 app.use('/api/auth/login', rateLimitAuth)
 app.use('/api/auth/register', rateLimitAuth)
+app.use('/api/auth/login/2fa', rateLimitAuth)
+app.use('/api/profile/confirm', rateLimitAuth)
+app.use('/api/profile/password', rateLimitAuth)
+app.use('/api/profile/email', rateLimitAuth)
+app.use('/api/profile/2fa/*', rateLimitAuth)
 app.use('/api/*', requireAuth)
 
 // Extensión opcional: si existe `server/pro/` (no forma parte de este repo), se
@@ -56,6 +62,7 @@ app.route('/api/subscriptions', subscriptionsRoutes)
 app.route('/api/budgets', budgetsRoutes)
 app.route('/api/stats', statsRoutes)
 app.route('/api/backup', backupRoutes)
+app.route('/api/profile', profileRoutes)
 
 // ponytail: solo monta estáticos si hay build de web (dev API-only no tiene public/)
 if (existsSync('./public')) {

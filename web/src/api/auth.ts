@@ -9,8 +9,16 @@ export function fetchMe() {
   return api<{ user: User }>('/api/auth/me')
 }
 
+/** Con 2FA activa no hay sesión aún: devuelve un reto para `loginTwoFactor`. */
 export function login(body: { email: string; password: string }) {
-  return api<{ user: User }>('/api/auth/login', {
+  return api<{ user: User } | { twoFactorRequired: true; challenge: string }>('/api/auth/login', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
+}
+
+export function loginTwoFactor(body: { challenge: string; code: string }) {
+  return api<{ user: User }>('/api/auth/login/2fa', {
     method: 'POST',
     body: JSON.stringify(body),
   })

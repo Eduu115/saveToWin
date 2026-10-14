@@ -9,6 +9,7 @@ import { AuthPage } from './pages/AuthPage'
 import { BudgetsPage } from './pages/BudgetsPage'
 import { DashboardPage } from './pages/DashboardPage'
 import { ImportPage } from './pages/ImportPage'
+import { ProfilePage } from './pages/ProfilePage'
 import { LocaleLayout } from './pages/LocaleLayout'
 import { SettingsPage } from './pages/SettingsPage'
 import { SubscriptionsPage } from './pages/SubscriptionsPage'
@@ -43,6 +44,7 @@ export function App() {
                 <Route path="budgets" element={<Navigate to="../limits" replace />} />
                 <Route path="import" element={<ImportPage />} />
                 <Route path="settings" element={<SettingsPage />} />
+                <Route path="profile" element={<ProfilePage />} />
                 {extensionPages.map(({ path, Page }) => (
                   <Route key={path} path={path} element={<Page />} />
                 ))}
