@@ -3,6 +3,7 @@ import type { ExtensionPage } from '../extension'
 import { AnalysisPage } from './AnalysisPage'
 import { PlanSection } from './PlanSection'
 import { tp } from './i18n'
+import { legalLinks as legal, legalPublicPages } from './legal/LegalPage'
 import { PremiumPage } from './PremiumPage'
 import { WrappedPage } from './WrappedPage'
 
@@ -15,3 +16,7 @@ export const pages: ExtensionPage[] = [
 
 /** Secciones que pro añade al perfil. */
 export const profileSections = [PlanSection]
+
+/** Textos legales de savetowin.app: páginas públicas y enlaces (login, registro, perfil). */
+export const publicPages = legalPublicPages
+export const legalLinks = legal

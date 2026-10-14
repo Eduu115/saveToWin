@@ -16,7 +16,7 @@ const es = {
   'pro.f.history': 'Historial completo: gráficos y estadísticas de más de {n} días',
   'pro.f.groups': 'Agrupaciones: cuánto va a Ocio, Transporte… como conjuntos tuyos',
   'pro.f.charts': 'Gráficos avanzados y límites visualizados',
-  'pro.f.insights': 'Analítica con sugerencias y consejos, calculados en tu servidor',
+  'pro.f.insights': 'Analítica con sugerencias y consejos, calculados en nuestro servidor, sin terceros',
   'pro.f.wrapped': 'Tu Wrapped: el resumen de tu año en finanzas',
   'pro.cta.soon': 'El pago llega pronto',
   'pro.open.analysis': 'Abrir Análisis',
@@ -35,7 +35,7 @@ const es = {
   'an.wrapped': 'Wrapped',
   'an.locked.title': 'Análisis es parte de Premium',
   'an.locked.body':
-    'Gráficos de todo tu historial, agrupaciones, límites visualizados y consejos calculados en tu servidor.',
+    'Gráficos de todo tu historial, agrupaciones, límites visualizados y consejos calculados en nuestro servidor, sin ceder tus datos a nadie.',
   'an.locked.cta': 'Ver Premium',
 
   // Gráficos
@@ -92,7 +92,7 @@ const es = {
 
   // Consejos (heurísticas del servidor)
   'in.empty': 'Nada que destacar este mes. Cuando haya algo, aparecerá aquí.',
-  'in.hint': 'Calculado en tu servidor con tus datos; nada sale de esta máquina.',
+  'in.hint': 'Calculado en nuestro servidor dedicado con tus datos; no se ceden a terceros ni se usan para publicidad.',
   'in.trend_up.title': '{cat} va un {percent} % por encima de tu media',
   'in.trend_up.body': '{diff} más que la media de tus últimos meses{projected}.',
   'in.trend_up.projected': ' (proyectando el mes)',
