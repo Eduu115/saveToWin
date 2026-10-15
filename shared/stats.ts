@@ -20,6 +20,10 @@ export interface ComputePeriodStatsInput {
   savingsGoalCents: number
   /** Ya ahorrado hacia el objetivo (céntimos) */
   savedCents: number
+  /** Gasto que cuenta contra el límite: solo categorías con límite. Por defecto, todo el gasto. */
+  budgetSpentCents?: number
+  /** Hoy (`YYYY-MM-DD`). Si cae dentro del periodo, la media usa solo los días transcurridos. */
+  asOfDate?: string
 }
 
 export interface PeriodStats {
@@ -41,9 +45,13 @@ export interface PeriodStats {
   budgetRemainingCents: number
   /** % del límite usado (entero). */
   budgetUsedPercent: number
-  /** Media diaria de gasto (céntimos), redondeada. */
+  /** Media diaria de gasto (céntimos) sobre los días transcurridos, redondeada. */
   dailyAverageCents: number
+  /** Gasto previsto a fin de periodo a este ritmo (= gasto real si el mes ya cerró). */
+  projectedExpenseCents: number
   daysInPeriod: number
+  /** Días ya transcurridos del periodo (todos si el mes ya cerró). */
+  daysElapsed: number
 }
 
 function assertIntegerCents(n: number, label: string): void {
@@ -129,6 +137,7 @@ export function computePeriodStats(input: ComputePeriodStatsInput): PeriodStats 
     budgetLimitCents,
     savingsGoalCents,
     savedCents,
+    asOfDate,
   } = input
 
   assertIntegerCents(budgetLimitCents, 'budgetLimitCents')
@@ -158,14 +167,20 @@ export function computePeriodStats(input: ComputePeriodStatsInput): PeriodStats 
 
   const goalPct = computeGoalProgressPercent(savedCents, savingsGoalCents)
 
-  const budgetRemainingCents = budgetLimitCents - expenseCents
+  const budgetSpentCents = input.budgetSpentCents ?? expenseCents
+  assertIntegerCents(budgetSpentCents, 'budgetSpentCents')
+  const budgetRemainingCents = budgetLimitCents - budgetSpentCents
   const budgetUsedPercent =
     budgetLimitCents === 0
       ? 0
-      : divRound(expenseCents * 100, budgetLimitCents)
+      : divRound(budgetSpentCents * 100, budgetLimitCents)
 
+  const daysElapsed =
+    asOfDate && inPeriod(asOfDate, period) ? Number(asOfDate.slice(8, 10)) : days
   const dailyAverageCents =
-    days === 0 ? 0 : divRound(expenseCents, days)
+    daysElapsed === 0 ? 0 : divRound(expenseCents, daysElapsed)
+  const projectedExpenseCents =
+    daysElapsed === 0 ? expenseCents : divRound(expenseCents * days, daysElapsed)
 
   return {
     period,
@@ -181,7 +196,9 @@ export function computePeriodStats(input: ComputePeriodStatsInput): PeriodStats 
     budgetRemainingCents,
     budgetUsedPercent,
     dailyAverageCents,
+    projectedExpenseCents,
     daysInPeriod: days,
+    daysElapsed,
   }
 }
 

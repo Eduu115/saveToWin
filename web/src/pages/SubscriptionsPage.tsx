@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { formatCents, parseAmountToCents } from '@savetowin/shared/money'
+import { yearlyCostCents } from '@savetowin/shared/subscription'
+import { Plus, Repeat } from 'lucide-react'
 import { useMemo, useState, type FormEvent } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { listAccounts, listCards } from '../api/accounts'
@@ -164,6 +166,10 @@ export function SubscriptionsPage() {
   }
 
   const items = subs.data?.items ?? []
+  const yearly = items
+    .filter((s) => s.status === 'active')
+    .reduce((sum, s) => sum + yearlyCostCents(s.amount, s.recurrence, s.customEvery, s.customUnit), 0)
+  const newHref = `/${locale}/transactions?new=subscription`
 
   return (
     <div>
@@ -172,21 +178,49 @@ export function SubscriptionsPage() {
           <h1 className="text-2xl font-extrabold tracking-tight">
             {t('subscriptions.title')}
           </h1>
-          <p className="mt-1 text-sm text-ink-2">{t('subscriptions.hint')}</p>
+          <p className="mt-1 text-sm text-ink-2">
+            {yearly > 0
+              ? t('subscriptions.total')
+                  .replace('{month}', formatCents(Math.round(yearly / 12)))
+                  .replace('{year}', formatCents(yearly))
+              : t('subscriptions.hint')}
+          </p>
         </div>
-        <Link
-          to={`/${locale}/transactions`}
-          className="inline-flex h-tap items-center rounded-pill bg-surface-2 px-4 text-ink-2 focus-visible:shadow-focus focus-visible:outline-none"
-        >
-          {t('subscriptions.back')}
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            to={`/${locale}/transactions`}
+            className="inline-flex h-tap items-center rounded-pill bg-surface-2 px-4 text-sm font-semibold text-ink-2 focus-visible:shadow-focus focus-visible:outline-none"
+          >
+            {t('subscriptions.back')}
+          </Link>
+          <Link
+            to={newHref}
+            className="inline-flex h-tap items-center gap-2 rounded-pill bg-accent px-4 text-sm font-bold text-accent-fg shadow-accent focus-visible:shadow-focus focus-visible:outline-none"
+          >
+            <Plus size={16} strokeWidth={2.4} aria-hidden />
+            {t('subscriptions.new')}
+          </Link>
+        </div>
       </div>
 
       {subs.isPending && <p className="text-ink-2">{t('common.loading')}</p>}
       {subs.isError && <p className="text-danger">{t('common.error')}</p>}
 
       {subs.data && items.length === 0 && (
-        <p className="text-ink-2">{t('subscriptions.empty')}</p>
+        <div className="flex flex-col items-center rounded-card border border-dashed border-line bg-surface px-6 py-12 text-center">
+          <span className="flex size-14 items-center justify-center rounded-full bg-surface-2 text-ink-2">
+            <Repeat size={24} strokeWidth={2} aria-hidden />
+          </span>
+          <h2 className="mt-4 text-lg font-bold">{t('subscriptions.empty')}</h2>
+          <p className="mt-1 max-w-sm text-sm text-ink-2">{t('subscriptions.emptyHint')}</p>
+          <Link
+            to={newHref}
+            className="mt-5 inline-flex h-tap items-center gap-2 rounded-pill bg-accent px-5 text-sm font-bold text-accent-fg shadow-accent focus-visible:shadow-focus focus-visible:outline-none"
+          >
+            <Plus size={16} strokeWidth={2.4} aria-hidden />
+            {t('subscriptions.new')}
+          </Link>
+        </div>
       )}
 
       {items.length > 0 && (
@@ -212,7 +246,7 @@ export function SubscriptionsPage() {
                     ? ` · ${cardMap.get(sub.cardId)}`
                     : ''}
                   {sub.status === 'active'
-                    ? ` · ${t('subscriptions.next')}: ${sub.nextDate}`
+                    ? ` · ${t('subscriptions.next')}: ${new Date(`${sub.nextDate}T12:00:00`).toLocaleDateString('es-ES', { day: 'numeric', month: 'short' })}`
                     : ` · ${t('subscriptions.status.cancelled')}`}
                 </span>
               </button>

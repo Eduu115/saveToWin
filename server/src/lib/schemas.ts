@@ -56,14 +56,19 @@ export const cardPatchSchema = z.object({
 })
 
 export const categoryCreateSchema = z.object({
-  key: z.string().min(1),
-  label: z.string().min(1),
+  key: z.string().trim().min(1).max(60),
+  label: z.string().trim().min(1, 'El nombre es obligatorio').max(40, 'Máximo 40 caracteres'),
   color: colorTokenSchema,
   type: flowTypeSchema,
   parentId: z.number().int().positive().nullable().optional(),
 })
 
-export const categoryPatchSchema = categoryCreateSchema.partial()
+/** Sin `key` ni `type`: la clave la usa la lógica y el tipo debe casar con sus movimientos. */
+export const categoryPatchSchema = z.object({
+  label: categoryCreateSchema.shape.label.optional(),
+  color: colorTokenSchema.optional(),
+  archived: z.boolean().optional(),
+})
 
 export const transactionCreateSchema = z.object({
   date: isoDateSchema,
@@ -83,12 +88,26 @@ export const transactionBatchSchema = z.object({
 
 export const transactionPatchSchema = transactionCreateSchema.partial()
 
+/** `1,2,3` → [1, 2, 3] */
+const idListSchema = z
+  .string()
+  .regex(/^\d+(,\d+)*$/, 'lista de ids separada por comas')
+  .transform((s) => s.split(',').map(Number))
+
 export const transactionListQuerySchema = z.object({
   from: isoDateSchema.optional(),
   to: isoDateSchema.optional(),
   categoryId: z.coerce.number().int().positive().optional(),
   accountId: z.coerce.number().int().positive().optional(),
+  categoryIds: idListSchema.optional(),
+  accountIds: idListSchema.optional(),
   type: flowTypeSchema.optional(),
+  /** Busca en la descripción y en el nombre de la categoría. */
+  q: z.string().trim().max(100).optional(),
+  /** Céntimos */
+  minAmount: z.coerce.number().int().min(0).optional(),
+  maxAmount: z.coerce.number().int().min(0).optional(),
+  sort: z.enum(['asc', 'desc']).optional().default('desc'),
   limit: z.coerce.number().int().min(1).max(100).optional().default(50),
   offset: z.coerce.number().int().min(0).optional().default(0),
 })

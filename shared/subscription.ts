@@ -58,3 +58,22 @@ export function advanceSubscriptionDate(
     }
   }
 }
+
+/** Coste anual de una suscripción (céntimos, redondeado). */
+export function yearlyCostCents(
+  amount: number,
+  recurrence: SubscriptionRecurrence,
+  customEvery?: number | null,
+  customUnit?: SubscriptionCustomUnit | null,
+): number {
+  const every = customEvery && customEvery > 0 ? customEvery : 1
+  const perYear: Record<SubscriptionRecurrence, number> = {
+    weekly: 52,
+    monthly: 12,
+    quarterly: 4,
+    yearly: 1,
+    custom: customUnit === 'weeks' ? 52 : customUnit === 'years' ? 1 : 12,
+  }
+  const div = recurrence === 'custom' ? every : 1
+  return Math.round((amount * perYear[recurrence]) / div)
+}

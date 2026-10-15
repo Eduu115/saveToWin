@@ -4,21 +4,34 @@ import { listAccounts } from './accounts'
 
 export { listAccounts }
 
-export function listTransactions(params: {
+export type TransactionQuery = {
   from?: string
   to?: string
+  categoryIds?: number[]
+  accountIds?: number[]
+  type?: 'expense' | 'income' | 'savings'
+  q?: string
+  minAmount?: number
+  maxAmount?: number
+  sort?: 'asc' | 'desc'
   limit?: number
   offset?: number
-}) {
+}
+
+export type TransactionPage = {
+  items: Transaction[]
+  total: number
+  totals: { incomeCents: number; expenseCents: number }
+}
+
+export function listTransactions(params: TransactionQuery) {
   const q = new URLSearchParams()
-  if (params.from) q.set('from', params.from)
-  if (params.to) q.set('to', params.to)
-  if (params.limit) q.set('limit', String(params.limit))
-  if (params.offset) q.set('offset', String(params.offset))
+  for (const [k, v] of Object.entries(params)) {
+    if (v == null || v === '' || (Array.isArray(v) && v.length === 0)) continue
+    q.set(k, Array.isArray(v) ? v.join(',') : String(v))
+  }
   const qs = q.toString()
-  return api<{ items: Transaction[]; total: number }>(
-    `/api/transactions${qs ? `?${qs}` : ''}`,
-  )
+  return api<TransactionPage>(`/api/transactions${qs ? `?${qs}` : ''}`)
 }
 
 export function createTransaction(body: {
@@ -81,4 +94,15 @@ export function deleteTransaction(id: number) {
 
 export function listCategories() {
   return api<{ items: Category[] }>('/api/categories')
+}
+
+export function createCategory(body: { key: string; label: string; color: Category['color']; type: 'expense' | 'income' }) {
+  return api<Category>('/api/categories', { method: 'POST', body: JSON.stringify(body) })
+}
+
+export function updateCategory(
+  id: number,
+  body: Partial<{ label: string; color: Category['color']; archived: boolean }>,
+) {
+  return api<Category>(`/api/categories/${id}`, { method: 'PATCH', body: JSON.stringify(body) })
 }

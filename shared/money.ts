@@ -66,7 +66,8 @@ export function formatCents(cents: number): string {
   const whole = Math.floor(abs / 100)
   const frac = abs % 100
   const wholeStr = String(whole).replace(/\B(?=(\d{3})+(?!\d))/g, '.')
-  const body = `${wholeStr},${String(frac).padStart(2, '0')} €`
+  // Espacio de no separación: el € nunca salta solo a otra línea.
+  const body = `${wholeStr},${String(frac).padStart(2, '0')}\u00a0€`
   return neg ? `-${body}` : body
 }
 
