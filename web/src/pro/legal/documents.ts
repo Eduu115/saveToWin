@@ -51,25 +51,26 @@ const privacy: LegalDoc = {
     {
       heading: '4. Dónde se guardan y quién más interviene',
       paragraphs: [
-        'Tus datos se almacenan en un servidor dedicado e independiente, gestionado por el titular y ubicado en España (Unión Europea). No se alojan en plataformas de terceros.',
+        'Tus datos se almacenan en un servidor dedicado e independiente, gestionado por el titular y ubicado en España (Unión Europea). La base de datos no se aloja en plataformas de terceros: fuera del servidor solo se guarda una copia de seguridad cifrada, como se indica abajo.',
         'Para que el servicio funcione intervienen estos proveedores, como encargados del tratamiento y solo en lo necesario:',
       ],
       list: [
         'Cloudflare, Inc. (EE. UU.): red y túnel por los que pasa el tráfico entre tu navegador y nuestro servidor, con protección frente a ataques. Trata los datos en tránsito y datos técnicos de conexión.',
         'Resend (EE. UU.): envío de los correos operativos. Trata tu dirección de email y el contenido de esos correos (por ejemplo, un código de verificación).',
+        'Backblaze, Inc. (EE. UU.; almacenamiento en los Países Bajos, Unión Europea): guarda una copia de seguridad de la base de datos para recuperarla si el servidor falla. La copia se cifra en nuestro servidor antes de enviarse y Backblaze no tiene la clave, así que no puede leer su contenido.',
       ],
     },
     {
       heading: '5. Transferencias internacionales',
       paragraphs: [
-        'Los proveedores anteriores tienen sede en Estados Unidos. Las transferencias se amparan en el Marco de Privacidad de Datos UE-EE. UU. cuando el proveedor está adherido y, en todo caso, en las cláusulas contractuales tipo aprobadas por la Comisión Europea, que forman parte de sus acuerdos de tratamiento de datos.',
+        'Los proveedores anteriores tienen sede en Estados Unidos (Backblaze guarda la copia cifrada en la Unión Europea). Las transferencias se amparan en el Marco de Privacidad de Datos UE-EE. UU. cuando el proveedor está adherido y, en todo caso, en las cláusulas contractuales tipo aprobadas por la Comisión Europea, que forman parte de sus acuerdos de tratamiento de datos.',
       ],
     },
     {
       heading: '6. Cuánto tiempo los conservamos',
       list: [
         'Tus datos de cuenta y los que introduces: mientras tu cuenta exista. Si bajas al plan gratuito, tus datos se conservan aunque algunos gráficos dejen de mostrarse.',
-        'Al eliminar tu cuenta, tus datos se borran de inmediato de la base de datos. Pueden permanecer en las copias de seguridad del servidor durante un máximo de 30 días, hasta que se sobrescriben.',
+        'Al eliminar tu cuenta, tus datos se borran de inmediato de la base de datos. Pueden permanecer en las copias de seguridad (en el servidor y en la copia cifrada externa) durante un máximo de 35 días, hasta que se borran.',
         'Códigos de verificación por correo: 15 minutos o hasta que se usan.',
         'Datos técnicos para limitar intentos de acceso: se guardan en memoria y se descartan en minutos.',
       ],
@@ -90,7 +91,7 @@ const privacy: LegalDoc = {
     {
       heading: '8. Seguridad',
       paragraphs: [
-        'Aplicamos medidas técnicas y organizativas adecuadas: conexión cifrada (HTTPS), contraseñas cifradas con argon2, sesión en una cookie protegida (httpOnly), verificación en dos pasos opcional, separación estricta de los datos de cada usuario y copias de seguridad. Ningún sistema es infalible: si detectamos una brecha que afecte a tus datos, te lo comunicaremos y lo notificaremos a la autoridad de control cuando la ley lo exija.',
+        'Aplicamos medidas técnicas y organizativas adecuadas: conexión cifrada (HTTPS), contraseñas cifradas con argon2, sesión en una cookie protegida (httpOnly), verificación en dos pasos opcional, separación estricta de los datos de cada usuario y copias de seguridad, también cifradas fuera del servidor. Ningún sistema es infalible: si detectamos una brecha que afecte a tus datos, te lo comunicaremos y lo notificaremos a la autoridad de control cuando la ley lo exija.',
       ],
     },
     {

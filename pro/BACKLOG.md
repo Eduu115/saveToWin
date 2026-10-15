@@ -5,10 +5,6 @@ Al hacer uno, se mueve a «Hecho» con la fecha y el PR.
 
 ## Fiabilidad y operación
 
-- [ ] **Copias fuera del servidor** (núcleo/ops): copiar cifrado lo que deja `ops/backup.sh`
-      a otro sitio (p. ej. `restic` → Backblaze B2). Hoy las copias viven en el mismo disco.
-- [ ] **Aviso de caída**: monitor externo (healthchecks.io / UptimeRobot) sobre `/api/health`;
-      que `backup.sh` y `deploy.sh` hagan ping al terminar para detectar si dejan de correr.
 - [ ] **Disco del servidor al 84 %**: revisar volúmenes huérfanos (≈4,5 GB reclamables, de
       varios proyectos: confirmar antes de borrar nada que no sea de saveToWin).
 
@@ -37,3 +33,5 @@ Al hacer uno, se mueve a «Hecho» con la fecha y el PR.
 - 2026-10-15 · Copias cada 2 días y despliegue diario a las 4:00 por cron (núcleo #15).
 - 2026-10-15 · Versión nueva a la primera (SW con red primero), fecha por defecto en hora
   local (TZ=Europe/Madrid) y CI en GitHub Actions para los dos repos (núcleo #16).
+- 2026-10-15 · Copia cifrada en Backblaze B2 (restic, región UE) con restauración probada, y
+  avisos de healthchecks.io para copia, despliegue y web (núcleo #17, pro #8).
