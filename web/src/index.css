@@ -7,6 +7,16 @@
 @layer base {
   html {
     font-family: var(--font-sans);
+    /* Con barras de desplazamiento visibles (macOS con ratón, Windows) el hueco de la
+       barra se reserva siempre: cambiar entre páginas con y sin scroll no mueve nada. */
+    overflow-y: scroll;
+  }
+
+  @supports (scrollbar-gutter: stable) {
+    html {
+      overflow-y: auto;
+      scrollbar-gutter: stable;
+    }
   }
 
   body {
