@@ -18,7 +18,7 @@ export function BackupCard() {
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
       const url = URL.createObjectURL(blob)
       const a = document.createElement('a')
-      const day = new Date().toISOString().slice(0, 10)
+      const day = new Date().toLocaleDateString('sv-SE')
       a.href = url
       a.download = `savetowin-backup-${day}.json`
       a.click()

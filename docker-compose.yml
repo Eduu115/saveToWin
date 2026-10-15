@@ -26,6 +26,8 @@ services:
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1d}
       PORT: 3010
       NODE_ENV: production
+      # Zona horaria de «hoy» (suscripciones, mes actual). Cámbiala en .env.
+      TZ: ${TZ:-Europe/Madrid}
       REGISTRATION_OPEN: ${REGISTRATION_OPEN:-true}
       # Correo saliente (cambio de email/contraseña). Sin SMTP_HOST no se envía.
       SMTP_HOST: ${SMTP_HOST:-}
