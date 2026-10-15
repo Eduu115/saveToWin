@@ -153,7 +153,11 @@ export const es = {
   'subscriptions.hint':
     'Plantillas recurrentes: se generan solas al abrir movimientos. Date de baja sin borrar el histórico.',
   'subscriptions.back': 'Volver a movimientos',
-  'subscriptions.empty': 'Aún no hay suscripciones. Crea un movimiento en Suscripciones.',
+  'subscriptions.empty': 'Aún no tienes suscripciones',
+  'subscriptions.emptyHint':
+    'Añade Netflix, el gimnasio o el móvil una vez y cada cargo se apuntará solo en su fecha.',
+  'subscriptions.new': 'Nueva suscripción',
+  'subscriptions.total': '{month} al mes · {year} al año en suscripciones activas',
   'subscriptions.edit': 'Editar suscripción',
   'subscriptions.save': 'Guardar',
   'subscriptions.unsubscribe': 'Darse de baja',

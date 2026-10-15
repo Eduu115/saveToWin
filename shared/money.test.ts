@@ -29,9 +29,9 @@ describe('parseAmountToCents', () => {
 
 describe('formatCents', () => {
   it('formatea es-ES con euro', () => {
-    expect(formatCents(123456)).toBe('1.234,56 €')
-    expect(formatCents(0)).toBe('0,00 €')
-    expect(formatCents(-350)).toBe('-3,50 €')
+    expect(formatCents(123456)).toBe('1.234,56\u00a0€')
+    expect(formatCents(0)).toBe('0,00\u00a0€')
+    expect(formatCents(-350)).toBe('-3,50\u00a0€')
   })
 })
 

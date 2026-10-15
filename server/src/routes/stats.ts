@@ -154,13 +154,24 @@ statsRoutes.get('/', async (c) => {
 
   const budgetLimitCents = sumLimits(period)
   const savedCents = await savedFromSavingsAccount(userId)
+  // El límite se compara solo con el gasto de las categorías que tienen límite (igual que en Límites).
+  const limitedIn = (p: string) => new Set(effectiveBudgets(budgetRows, p).map((b) => b.categoryId))
+  const limited = limitedIn(period)
+  const budgetSpentCents = txs
+    .filter((tx) => tx.type === 'expense' && limited.has(tx.categoryId))
+    .reduce((s, tx) => s + tx.amount, 0)
+
+  const today = new Date()
+  const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
 
   const stats = computePeriodStats({
     transactions: txs as StatsTransaction[],
     period,
     budgetLimitCents,
+    budgetSpentCents,
     savingsGoalCents: user.savingsGoalCents,
     savedCents,
+    asOfDate: todayIso,
   })
 
   const allTxs = await db
@@ -168,6 +179,7 @@ statsRoutes.get('/', async (c) => {
       date: transactions.date,
       amount: transactions.amount,
       type: transactions.type,
+      categoryId: transactions.categoryId,
     })
     .from(transactions)
     .where(eq(transactions.userId, userId))
@@ -189,6 +201,12 @@ statsRoutes.get('/', async (c) => {
   const savingsStreakMonths = computeSavingsStreak(monthlyBalance, period)
 
   const months = lastNPeriods(period, 6)
+  const limitedSpend = (p: string) => {
+    const ids = limitedIn(p)
+    return allTxs
+      .filter((tx) => tx.type === 'expense' && tx.date.startsWith(`${p}-`) && ids.has(tx.categoryId))
+      .reduce((s, tx) => s + tx.amount, 0)
+  }
   const monthly = months.map((p) => {
     // Mes fuera de la ventana de historial: se marca y no se sirven sus cifras.
     const locked = isLocked(p)
@@ -200,7 +218,7 @@ statsRoutes.get('/', async (c) => {
       label: shortLabel(p),
       expenseCents,
       incomeCents,
-      overBudget: limit > 0 && expenseCents > limit,
+      overBudget: !locked && limit > 0 && limitedSpend(p) > limit,
       isCurrent: p === period,
       locked,
     }
@@ -261,8 +279,6 @@ statsRoutes.get('/', async (c) => {
     }
   })
 
-  const today = new Date()
-  const todayIso = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
   const asOfDate =
     todayIso.startsWith(period)
       ? todayIso

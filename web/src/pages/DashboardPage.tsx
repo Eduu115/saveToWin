@@ -237,7 +237,7 @@ export function DashboardPage() {
             </>
           ) : (
             <>
-              <div className="flex items-baseline gap-2">
+              <div className="flex flex-wrap items-baseline gap-x-2">
                 <span className="text-[24px] font-extrabold tabular-nums tracking-tight sm:text-[30px] lg:text-[26px]">
                   {formatCents(Math.max(0, data.budgetRemainingCents))}
                 </span>
@@ -266,7 +266,7 @@ export function DashboardPage() {
             </>
           ) : (
             <>
-              <div className="flex items-baseline gap-2">
+              <div className="flex flex-wrap items-baseline gap-x-2">
                 <span className="text-[24px] font-extrabold tabular-nums tracking-tight sm:text-[30px] lg:text-[26px]">
                   {formatCents(data.dailyAverageCents)}
                 </span>
@@ -276,7 +276,7 @@ export function DashboardPage() {
               </div>
               <p className="text-[12.5px] font-medium leading-snug text-ink-2">
                 {t('dashboard.kpi.projection')}{' '}
-                <b>{formatCents(data.expenseCents)}</b>
+                <b>{formatCents(data.projectedExpenseCents)}</b>
                 {data.budgetLimitCents > 0 && (
                   <>
                     {' '}
@@ -292,7 +292,7 @@ export function DashboardPage() {
           <div className="text-[12.5px] font-semibold text-ink-2">
             {t('dashboard.kpi.streak')}
           </div>
-          <div className="flex items-baseline gap-2">
+          <div className="flex flex-wrap items-baseline gap-x-2">
             <span className="text-[24px] font-extrabold tabular-nums tracking-tight sm:text-[30px] lg:text-[26px]">
               {data.savingsStreakMonths}{' '}
               <span className="text-[18px] font-bold">
