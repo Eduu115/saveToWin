@@ -9,11 +9,6 @@ Al hacer uno, se mueve a «Hecho» con la fecha y el PR.
       a otro sitio (p. ej. `restic` → Backblaze B2). Hoy las copias viven en el mismo disco.
 - [ ] **Aviso de caída**: monitor externo (healthchecks.io / UptimeRobot) sobre `/api/health`;
       que `backup.sh` y `deploy.sh` hagan ping al terminar para detectar si dejan de correr.
-- [ ] **Versión nueva a la primera** (núcleo): el service worker sirve primero la caché y tras
-      un despliegue hay que recargar dos veces. Pasar `index.html` a «red primero».
-- [ ] **Fecha por defecto en UTC** (núcleo): entre las 00:00 y la 01:00/02:00 el alta de
-      movimiento propone el día anterior (`toISOString`). Usar la fecha local.
-- [ ] **CI en GitHub Actions** (núcleo y pro): `tsc` + tests en cada PR.
 - [ ] **Disco del servidor al 84 %**: revisar volúmenes huérfanos (≈4,5 GB reclamables, de
       varios proyectos: confirmar antes de borrar nada que no sea de saveToWin).
 
@@ -40,3 +35,5 @@ Al hacer uno, se mueve a «Hecho» con la fecha y el PR.
 
 - 2026-10-15 · Cambiar la contraseña cierra las demás sesiones (núcleo #14).
 - 2026-10-15 · Copias cada 2 días y despliegue diario a las 4:00 por cron (núcleo #15).
+- 2026-10-15 · Versión nueva a la primera (SW con red primero), fecha por defecto en hora
+  local (TZ=Europe/Madrid) y CI en GitHub Actions para los dos repos (núcleo #16).
