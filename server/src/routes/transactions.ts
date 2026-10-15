@@ -1,4 +1,4 @@
-import { and, count, eq, gte, lte, sql } from 'drizzle-orm'
+import { and, count, eq, gte, ilike, inArray, lte, or, sql } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { db } from '../../db/client.js'
 import { accounts, cards, categories, transactions } from '../../db/schema.js'
@@ -67,18 +67,44 @@ transactionsRoutes.get('/', async (c) => {
   if (query.categoryId) conditions.push(eq(transactions.categoryId, query.categoryId))
   if (query.accountId) conditions.push(eq(transactions.accountId, query.accountId))
   if (query.type) conditions.push(eq(transactions.type, query.type))
+  if (query.categoryIds) conditions.push(inArray(transactions.categoryId, query.categoryIds))
+  if (query.accountIds) conditions.push(inArray(transactions.accountId, query.accountIds))
+  if (query.minAmount != null) conditions.push(gte(transactions.amount, query.minAmount))
+  if (query.maxAmount != null) conditions.push(lte(transactions.amount, query.maxAmount))
+  if (query.q) {
+    const pattern = `%${query.q.replace(/[\\%_]/g, (ch) => `\\${ch}`)}%`
+    conditions.push(
+      or(
+        ilike(transactions.note, pattern),
+        sql`${transactions.categoryId} in (select ${categories.id} from ${categories} where ${categories.userId} = ${userId} and ${categories.label} ilike ${pattern})`,
+      )!,
+    )
+  }
 
   const where = and(...conditions)
-  const [{ total }] = await db.select({ total: count() }).from(transactions).where(where)
+  // Totales de TODO lo filtrado (no solo de la página): cabecera «N movimientos · X € gastos · Y € ingresos».
+  const [agg] = await db
+    .select({
+      total: count(),
+      incomeCents: sql<number>`coalesce(sum(${transactions.amount}) filter (where ${transactions.type} = 'income'), 0)::int`,
+      expenseCents: sql<number>`coalesce(sum(${transactions.amount}) filter (where ${transactions.type} = 'expense'), 0)::int`,
+    })
+    .from(transactions)
+    .where(where)
+  const dir = query.sort === 'asc' ? sql`asc` : sql`desc`
   const items = await db
     .select()
     .from(transactions)
     .where(where)
-    .orderBy(sql`${transactions.date} desc, ${transactions.id} desc`)
+    .orderBy(sql`${transactions.date} ${dir}, ${transactions.id} ${dir}`)
     .limit(query.limit)
     .offset(query.offset)
 
-  return c.json({ items, total })
+  return c.json({
+    items,
+    total: agg.total,
+    totals: { incomeCents: agg.incomeCents, expenseCents: agg.expenseCents },
+  })
 })
 
 transactionsRoutes.post('/', async (c) => {
