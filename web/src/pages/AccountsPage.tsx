@@ -27,6 +27,7 @@ import {
 import { ApiClientError } from '../api/client'
 import type { Account, Card } from '../domain'
 import { t } from '../i18n/t'
+import { CategoriesSection } from '../ui/CategoriesSection'
 
 const field =
   'h-field w-full rounded-field border border-line bg-surface px-3 text-ink focus-visible:shadow-focus focus-visible:outline-none'
@@ -357,6 +358,8 @@ export function AccountsPage() {
           )}
         </li>
       </ul>
+
+      <CategoriesSection />
     </div>
   )
 }

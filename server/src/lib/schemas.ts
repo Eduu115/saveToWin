@@ -56,14 +56,19 @@ export const cardPatchSchema = z.object({
 })
 
 export const categoryCreateSchema = z.object({
-  key: z.string().min(1),
-  label: z.string().min(1),
+  key: z.string().trim().min(1).max(60),
+  label: z.string().trim().min(1, 'El nombre es obligatorio').max(40, 'Máximo 40 caracteres'),
   color: colorTokenSchema,
   type: flowTypeSchema,
   parentId: z.number().int().positive().nullable().optional(),
 })
 
-export const categoryPatchSchema = categoryCreateSchema.partial()
+/** Sin `key` ni `type`: la clave la usa la lógica y el tipo debe casar con sus movimientos. */
+export const categoryPatchSchema = z.object({
+  label: categoryCreateSchema.shape.label.optional(),
+  color: colorTokenSchema.optional(),
+  archived: z.boolean().optional(),
+})
 
 export const transactionCreateSchema = z.object({
   date: isoDateSchema,
