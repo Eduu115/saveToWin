@@ -94,7 +94,7 @@ export function SavingsGoalCard({
       if (!savings || !savingsCat) throw new Error('missing seed')
       if (rollOverCents <= 0) throw new Error('nothing to move')
       return createTransaction({
-        date: new Date().toISOString().slice(0, 10),
+        date: new Date().toLocaleDateString('sv-SE'),
         amount: rollOverCents,
         type: 'savings',
         categoryId: savingsCat.id,

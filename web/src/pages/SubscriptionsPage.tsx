@@ -38,7 +38,7 @@ function emptyDraft(): Draft {
     recurrence: 'monthly',
     customEvery: '1',
     customUnit: 'months',
-    nextDate: new Date().toISOString().slice(0, 10),
+    nextDate: new Date().toLocaleDateString('sv-SE'),
     note: '',
   }
 }

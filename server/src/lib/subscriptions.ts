@@ -3,8 +3,9 @@ import { and, eq } from 'drizzle-orm'
 import { db } from '../../db/client.js'
 import { subscriptions, transactions } from '../../db/schema.js'
 
+/** Hoy en hora local (`YYYY-MM-DD`; sv-SE da formato ISO). El contenedor fija TZ. */
 function todayIso(): string {
-  return new Date().toISOString().slice(0, 10)
+  return new Date().toLocaleDateString('sv-SE')
 }
 
 /**

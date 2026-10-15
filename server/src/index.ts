@@ -2,7 +2,7 @@ import { existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { serve } from '@hono/node-server'
 import { serveStatic } from '@hono/node-server/serve-static'
-import { Hono } from 'hono'
+import { Hono, type Context } from 'hono'
 import { requireAuth } from './lib/auth.js'
 import { assertAuthEnv, env } from './lib/env.js'
 import { rateLimitAuth } from './lib/rate-limit.js'
@@ -68,9 +68,14 @@ app.route('/api/profile', profileRoutes)
 
 // ponytail: solo monta estáticos si hay build de web (dev API-only no tiene public/)
 if (existsSync('./public')) {
-  app.use('/*', serveStatic({ root: './public' }))
+  // Assets con hash de Vite: para siempre. Lo demás (index.html, sw.js…): revalidar
+  // siempre, para que una versión nueva se vea a la primera.
+  const onFound = (path: string, c: Context) => {
+    c.header('Cache-Control', path.includes('/assets/') ? 'public, max-age=31536000, immutable' : 'no-cache')
+  }
+  app.use('/*', serveStatic({ root: './public', onFound }))
   // SPA fallback para rutas del cliente (/{locale}/…)
-  app.get('*', serveStatic({ root: './public', path: './index.html' }))
+  app.get('*', serveStatic({ root: './public', path: './index.html', onFound }))
 }
 
 const port = env.port()

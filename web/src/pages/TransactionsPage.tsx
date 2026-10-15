@@ -26,7 +26,7 @@ import { MovementSheet, type FlowDraft, type MovementDraft } from '../ui/Movemen
 type Draft = MovementDraft
 
 const emptyDraft = (): Draft => ({
-  date: new Date().toISOString().slice(0, 10),
+  date: new Date().toLocaleDateString('sv-SE'),
   amount: '',
   type: 'expense',
   categoryId: '',
