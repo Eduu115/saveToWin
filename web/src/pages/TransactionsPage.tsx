@@ -650,8 +650,8 @@ export function TransactionsPage() {
                   return (
                     <li
                       key={tx.id}
-                      className={`flex items-center border-b border-line last:border-0 ${
-                        tx.type === 'income' ? 'bg-income-weak' : ''
+                      className={`group flex items-center border-b border-line last:border-0 ${
+                        tx.type === 'income' ? 'bg-income-weak' : 'hover:bg-surface-2'
                       }`}
                     >
                       <label className="hidden min-h-row cursor-pointer items-center self-stretch pl-4 md:flex">
@@ -666,9 +666,7 @@ export function TransactionsPage() {
                       <button
                         type="button"
                         onClick={() => openEdit(tx)}
-                        className={`group flex min-h-row min-w-0 flex-1 items-center gap-3 px-4 py-2.5 text-left focus-visible:shadow-focus focus-visible:outline-none ${
-                          tx.type === 'income' ? '' : 'hover:bg-surface-2'
-                        }`}
+                        className="flex min-h-row min-w-0 flex-1 items-center gap-3 px-4 py-2.5 text-left focus-visible:shadow-focus focus-visible:outline-none"
                       >
                         <span
                           className={`flex size-8 flex-none items-center justify-center rounded-icon text-white ${cat ? categoryBgClass(cat.color) : 'bg-ink-3'}`}
