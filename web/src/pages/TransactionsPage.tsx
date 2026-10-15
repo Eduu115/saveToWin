@@ -255,7 +255,7 @@ export function TransactionsPage() {
     return () => document.removeEventListener('keydown', onKey)
   }, [open])
 
-  function openNew() {
+  function openNew(subscription = false) {
     setEditing(null)
     const d = emptyDraft()
     // Directions 3a: sugerencias = última categoría y última cuenta usadas en un gasto.
@@ -275,18 +275,21 @@ export function TransactionsPage() {
     if (expense) d.categoryId = String(expense.id)
     const firstAcc = lastAcc ?? (accs.data?.items ?? []).find((a) => !a.archived)
     if (firstAcc) d.accountId = String(firstAcc.id)
+    // Desde Suscripciones → «Nueva suscripción»: el alta ya viene en esa categoría.
+    if (subscription && subsId != null) d.categoryId = String(subsId)
     setDraft(d)
     setFormError(null)
     setOpen(true)
   }
 
-  // FAB de la barra inferior móvil → /transactions?new=1
+  // FAB de la barra inferior móvil → /transactions?new=1 · Suscripciones → ?new=subscription
   const [params, setParams] = useSearchParams()
   const ready = Boolean(txs.data && cats.data && accs.data)
   useEffect(() => {
-    if (params.get('new') !== '1' || !ready) return
+    const kind = params.get('new')
+    if ((kind !== '1' && kind !== 'subscription') || !ready) return
     setParams({}, { replace: true })
-    openNew()
+    openNew(kind === 'subscription')
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params, ready])
 
@@ -322,7 +325,7 @@ export function TransactionsPage() {
           </Link>
           <button
             type="button"
-            onClick={openNew}
+            onClick={() => openNew()}
             className="hidden h-tap items-center gap-2 rounded-pill bg-accent px-4 text-sm font-bold text-accent-fg shadow-accent focus-visible:shadow-focus focus-visible:outline-none md:inline-flex"
           >
             <Plus size={16} strokeWidth={2.4} aria-hidden />

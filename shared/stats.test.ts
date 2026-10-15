@@ -98,6 +98,52 @@ describe('computePeriodStats — dataset canónico julio 2026', () => {
     expect(stats.daysInPeriod).toBe(31)
     expect(stats.dailyAverageCents).toBe(6_172)
   })
+
+  it('mes cerrado: proyección = gasto real', () => {
+    expect(stats.daysElapsed).toBe(31)
+    expect(stats.projectedExpenseCents).toBe(191_345)
+  })
+})
+
+describe('computePeriodStats — mes en curso', () => {
+  // 316,44 € gastados a 15 de octubre; límites solo en algunas categorías (261,66 € de ese gasto).
+  const s = computePeriodStats({
+    transactions: [
+      { date: '2026-10-05', amount: 10_000, type: 'expense' },
+      { date: '2026-10-12', amount: 21_644, type: 'expense' },
+      { date: '2026-10-01', amount: 264_000, type: 'income' },
+    ],
+    period: '2026-10',
+    budgetLimitCents: 58_000,
+    budgetSpentCents: 26_166,
+    savingsGoalCents: 1_200_000,
+    savedCents: 0,
+    asOfDate: '2026-10-15',
+  })
+
+  it('media sobre los días transcurridos y proyección a fin de mes', () => {
+    expect(s.daysElapsed).toBe(15)
+    expect(s.dailyAverageCents).toBe(2_110)
+    expect(s.projectedExpenseCents).toBe(65_398)
+  })
+
+  it('el límite solo cuenta el gasto de las categorías con límite', () => {
+    expect(s.budgetRemainingCents).toBe(31_834)
+    expect(s.budgetUsedPercent).toBe(45)
+  })
+
+  it('hoy fuera del periodo → mes completo', () => {
+    const closed = computePeriodStats({
+      transactions: [{ date: '2026-09-10', amount: 3_100, type: 'expense' }],
+      period: '2026-09',
+      budgetLimitCents: 0,
+      savingsGoalCents: 0,
+      savedCents: 0,
+      asOfDate: '2026-10-15',
+    })
+    expect(closed.daysElapsed).toBe(30)
+    expect(closed.projectedExpenseCents).toBe(3_100)
+  })
 })
 
 describe('computeSavingsStreak', () => {

@@ -348,7 +348,7 @@ export function ImportReview(props: {
                   ].join(' ')}
                 >
                   {d.type === 'income' ? '+ ' : '− '}
-                  {formatCents(d.amount).replace(' €', '')} €
+                  {formatCents(d.amount)}
                 </span>
               </div>
             )
