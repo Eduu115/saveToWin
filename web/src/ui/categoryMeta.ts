@@ -14,6 +14,7 @@ import {
   Repeat,
   Shirt,
   ShoppingCart,
+  Tag,
   Utensils,
   Wine,
 } from 'lucide-react'
@@ -40,8 +41,9 @@ export const CATEGORY_ICONS: Record<string, LucideIcon> = {
   Shopping: Shirt,
 }
 
+/** Las categorías propias (claves que no son de la semilla) llevan una etiqueta. */
 export function categoryIcon(key: string): LucideIcon {
-  return CATEGORY_ICONS[key] ?? MoreHorizontal
+  return CATEGORY_ICONS[key] ?? Tag
 }
 
 /**

@@ -95,3 +95,14 @@ export function deleteTransaction(id: number) {
 export function listCategories() {
   return api<{ items: Category[] }>('/api/categories')
 }
+
+export function createCategory(body: { key: string; label: string; color: Category['color']; type: 'expense' | 'income' }) {
+  return api<Category>('/api/categories', { method: 'POST', body: JSON.stringify(body) })
+}
+
+export function updateCategory(
+  id: number,
+  body: Partial<{ label: string; color: Category['color']; archived: boolean }>,
+) {
+  return api<Category>(`/api/categories/${id}`, { method: 'PATCH', body: JSON.stringify(body) })
+}

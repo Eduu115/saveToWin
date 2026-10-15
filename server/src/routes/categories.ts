@@ -9,6 +9,9 @@ import { parseBody } from '../lib/validate.js'
 
 export const categoriesRoutes = new Hono<{ Variables: AuthVariables }>()
 
+/** Categorías de las que depende la lógica (suscripciones, ahorro, comodín): no se archivan. */
+const SYSTEM_KEYS = new Set(['Subscriptions', 'Savings transfer', 'Savings withdrawal', 'Other'])
+
 categoriesRoutes.get('/', async (c) => {
   const userId = c.get('userId')
   const items = await db.select().from(categories).where(eq(categories.userId, userId))
@@ -34,7 +37,7 @@ categoriesRoutes.post('/', async (c) => {
       .returning()
     return c.json(row, 201)
   } catch {
-    return c.json(apiError('CONFLICT', 'No se pudo crear la categoría (¿key duplicada?)'), 409)
+    return c.json(apiError('CONFLICT', 'Ya tienes una categoría con ese nombre'), 409)
   }
 })
 
@@ -48,6 +51,16 @@ categoriesRoutes.patch('/:id', async (c) => {
   if (body instanceof Response) return body
   if (Object.keys(body).length === 0) {
     return c.json(apiError('VALIDATION_ERROR', 'Nada que actualizar'), 400)
+  }
+  if (body.archived) {
+    const [cur] = await db
+      .select({ key: categories.key })
+      .from(categories)
+      .where(and(eq(categories.id, id), eq(categories.userId, userId)))
+      .limit(1)
+    if (cur && SYSTEM_KEYS.has(cur.key)) {
+      return c.json(apiError('VALIDATION_ERROR', 'Esta categoría la usa la app y no se puede archivar'), 400)
+    }
   }
 
   const [row] = await db
