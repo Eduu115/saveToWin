@@ -104,12 +104,25 @@ PWA instalable en build de producción (manifest + service worker).
 - `ops/deploy.sh`: si hay commits nuevos en `origin/main`, hace una copia, actualiza,
   reconstruye la app y comprueba `/api/health`; si no responde, **vuelve sola** a la
   versión anterior. Sin cambios no hace nada (`--force` reconstruye igualmente).
+- `ops/restic.sh` (opcional): copia **fuera del servidor**, cifrada con
+  [restic](https://restic.net) (en Docker) en un bucket de Backblaze B2. Con
+  `B2_ENDPOINT`, `B2_BUCKET`, `B2_KEY_ID`, `B2_APP_KEY` y `RESTIC_PASSWORD` en `.env`,
+  `backup.sh` sube cada copia y aplica la misma retención. Una vez:
+  `ops/restic.sh init`. Restaurar: `ops/restic.sh restore latest --target ~/backups/restore`.
+  **Guarda `RESTIC_PASSWORD` también fuera del servidor**: sin ella no se descifra.
+  En el bucket, *Lifecycle: keep only the last version* (si no, lo borrado se oculta
+  pero no se borra).
+- `ops/health.sh` (opcional): latido para [healthchecks.io](https://healthchecks.io).
+  Con `HC_UP_URL` (y `HEALTH_URL`, la URL pública) avisa si la web, el servidor o la
+  conexión caen. `HC_BACKUP_URL` y `HC_DEPLOY_URL` avisan si la copia o el despliegue
+  fallan o dejan de ejecutarse.
 
-Ejemplo de `crontab -e` (copia cada 2 días y despliegue diario a las 4:00):
+Ejemplo de `crontab -e` (copia cada 2 días, despliegue diario a las 4:00, latido cada 5 min):
 
 ```cron
 45 3 */2 * * $HOME/apps/saveToWin/ops/backup.sh >> $HOME/logs/savetowin-backup.log 2>&1
 0 4 * * *    $HOME/apps/saveToWin/ops/deploy.sh >> $HOME/logs/savetowin-deploy.log 2>&1
+*/5 * * * *  $HOME/apps/saveToWin/ops/health.sh >> $HOME/logs/savetowin-health.log 2>&1
 ```
 
 ---

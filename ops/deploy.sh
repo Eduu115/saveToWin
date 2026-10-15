@@ -6,7 +6,8 @@
 #   ops/deploy.sh            # despliega solo si hay cambios
 #   ops/deploy.sh --force    # reconstruye aunque no haya cambios
 #
-# Variables (opcionales): DEPLOY_BRANCH (main), APP_PORT (el de .env o 3010).
+# Variables (opcionales): DEPLOY_BRANCH (main), APP_PORT (el de .env o 3010),
+# HC_DEPLOY_URL (en .env: aviso de healthchecks.io si falla o deja de ejecutarse).
 set -euo pipefail
 export PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
 cd "$(dirname "$0")/.."
@@ -15,10 +16,14 @@ BRANCH="${DEPLOY_BRANCH:-main}"
 PORT="${APP_PORT:-$(grep -E '^APP_PORT=' .env 2>/dev/null | cut -d= -f2 || true)}"
 PORT="${PORT:-3010}"
 PROJECT="$(basename "$PWD" | tr '[:upper:]' '[:lower:]')"
+HC_URL="${HC_DEPLOY_URL:-$(grep -E '^HC_DEPLOY_URL=' .env 2>/dev/null | cut -d= -f2- | tr -d '"' || true)}"
 log() { echo "[$(date '+%F %T')] deploy: $*"; }
+hc() { [ -z "$HC_URL" ] || curl -fsS -m 10 --retry 3 -o /dev/null "$HC_URL$1" || true; }
 
 exec 9>/tmp/savetowin-deploy.lock
 flock -n 9 || { log "ya hay un despliegue en curso; salgo"; exit 0; }
+hc /start
+trap 'hc "/$?"' EXIT
 
 git fetch -q origin "$BRANCH"
 prev="$(git rev-parse HEAD)"
