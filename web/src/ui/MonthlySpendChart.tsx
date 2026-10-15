@@ -88,7 +88,7 @@ export function MonthlySpendChart({
       : null
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2 xl:min-h-0 xl:flex-1">
       {incomeLabel && (
         <div className="flex justify-end">
           <span className="inline-flex items-center gap-1.5 text-xs font-medium text-ink-2">
@@ -100,7 +100,9 @@ export function MonthlySpendChart({
           </span>
         </div>
       )}
-      <div className={`h-[200px] w-full lg:h-[160px] ${single ? 'mx-auto max-w-[200px]' : ''}`}>
+      <div
+        className={`h-[200px] w-full lg:h-[160px] xl:h-auto xl:min-h-[160px] xl:flex-1 ${single ? 'mx-auto max-w-[200px]' : ''}`}
+      >
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
             data={data}

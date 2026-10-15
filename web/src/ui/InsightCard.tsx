@@ -112,12 +112,15 @@ export function InsightCard({ insight }: { insight: Insight }) {
   )
 }
 
-export function InsightsColumn({ insights }: { insights: Insight[] }) {
+/** `fill`: ocupa todo su contenedor (columna del dashboard en xl); si no, caja de 420 px. */
+export function InsightsColumn({ insights, fill = false }: { insights: Insight[]; fill?: boolean }) {
   if (insights.length === 0) return null
   return (
     <aside
       aria-labelledby="insights-title"
-      className="flex max-h-[420px] flex-col overflow-hidden rounded-card border border-line bg-surface shadow-raised xl:max-h-[calc(100dvh-7.5rem)]"
+      className={`flex flex-col overflow-hidden rounded-card border border-line bg-surface shadow-raised ${
+        fill ? 'absolute inset-0' : 'max-h-[420px]'
+      }`}
     >
       <h2
         id="insights-title"
