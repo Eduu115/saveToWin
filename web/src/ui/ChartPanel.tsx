@@ -27,7 +27,7 @@ export function ChartPanel({
 
       {state === 'loading' && (
         <div
-          className="flex h-[200px] lg:h-[160px] items-end gap-2.5 rounded-field border border-grid px-5 pb-5 pt-[18px]"
+          className="flex h-[200px] lg:h-[160px] xl:h-auto xl:min-h-[160px] xl:flex-1 items-end gap-2.5 rounded-field border border-grid px-5 pb-5 pt-[18px]"
           aria-busy
           aria-label={t('common.loading')}
         >
@@ -42,7 +42,7 @@ export function ChartPanel({
       )}
 
       {state === 'empty' && (
-        <div className="flex h-[200px] lg:h-[160px] flex-col items-center justify-center gap-3 rounded-field border border-dashed border-line px-6">
+        <div className="flex h-[200px] lg:h-[160px] xl:h-auto xl:min-h-[160px] xl:flex-1 flex-col items-center justify-center gap-3 rounded-field border border-dashed border-line px-6">
           <span className="flex h-12 w-12 items-center justify-center rounded-pill bg-surface-2 text-ink-3">
             <ChartColumn size={22} strokeWidth={1.8} aria-hidden />
           </span>
@@ -53,7 +53,7 @@ export function ChartPanel({
       )}
 
       {state === 'error' && (
-        <div className="flex h-[200px] lg:h-[160px] items-center justify-center rounded-field border border-line px-6">
+        <div className="flex h-[200px] lg:h-[160px] xl:h-auto xl:min-h-[160px] xl:flex-1 items-center justify-center rounded-field border border-line px-6">
           <p className="text-[12.5px] font-semibold text-warn">{t('common.error')}</p>
         </div>
       )}

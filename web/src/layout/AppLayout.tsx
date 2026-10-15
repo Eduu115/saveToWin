@@ -174,8 +174,8 @@ export function AppLayout() {
 
   return (
     <div className="min-h-dvh bg-bg text-ink">
-      <header className="border-b border-line bg-surface px-4 py-3">
-        <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
+      <header className="border-b border-line bg-surface py-3">
+        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 md:px-6">
           <div className="flex flex-wrap items-center gap-2">
             <div className="mr-2 flex items-center gap-2.5">
               <BrandMark percent={goalPercent} size={24} />
@@ -215,7 +215,7 @@ export function AppLayout() {
           </div>
         </div>
       </header>
-      <main className="mx-auto max-w-6xl p-4 pb-32 md:p-6 lg:py-5">
+      <main className="mx-auto max-w-7xl p-4 pb-32 md:p-6 lg:py-5">
         <TwoFactorNag locale={locale} />
         <Outlet />
       </main>

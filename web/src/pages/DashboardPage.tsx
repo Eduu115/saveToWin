@@ -105,8 +105,10 @@ export function DashboardPage() {
 
   return (
     // Sin avisos no hay columna derecha: el dashboard ocupa todo el ancho, centrado.
+    // xl: llena el alto de la ventana (cabecera 69 px + 2 × 20 px de margen); los
+    // gráficos crecen hasta abajo y los avisos ocupan ese mismo alto con scroll propio.
     <div
-      className={`grid items-start gap-4 lg:gap-3 ${data.insights.length > 0 ? 'xl:grid-cols-[minmax(0,1fr)_300px]' : ''}`}
+      className={`grid items-start gap-4 lg:gap-3 xl:min-h-[calc(100dvh-109px)] xl:items-stretch ${data.insights.length > 0 ? 'xl:grid-cols-[minmax(0,1fr)_320px]' : ''}`}
     >
     <div className="flex min-w-0 flex-col gap-4 lg:gap-3">
       <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr] lg:gap-3">
@@ -324,7 +326,7 @@ export function DashboardPage() {
       <LatestMovements locale={locale} />
 
       {/* Gráficos — Directions 1b / 11a / 11b */}
-      <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr] lg:gap-3">
+      <div className="grid gap-4 lg:grid-cols-[1.55fr_1fr] lg:gap-3 xl:flex-1">
         <ChartPanel
           title={t('dashboard.chart.spendTitle')}
           state={chartState}
@@ -349,16 +351,17 @@ export function DashboardPage() {
             ) : null
           }
         >
-          <CategorySpendRanking items={data.charts.byCategory} />
+          <CategorySpendRanking items={data.charts.byCategory} tallItems={8} />
         </ChartPanel>
       </div>
 
     </div>
 
-      {/* Avisos: columna propia con caja fija y scroll interno */}
+      {/* Avisos: columna propia del alto del dashboard, con scroll interno
+          (absoluta para que muchos avisos no estiren la página) */}
       {data.insights.length > 0 && (
-        <div className="hidden xl:sticky xl:top-6 xl:block">
-          <InsightsColumn insights={data.insights} />
+        <div className="relative hidden xl:block">
+          <InsightsColumn insights={data.insights} fill />
         </div>
       )}
     </div>
