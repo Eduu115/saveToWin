@@ -46,6 +46,10 @@ export function AuthPage({ mode }: { mode: Mode }) {
     setFaviconPercent(70)
   }, [])
 
+  useEffect(() => {
+    document.title = mode === 'login' ? t('auth.pageTitle.login') : t('auth.pageTitle.register')
+  }, [mode])
+
   const mutation = useMutation({
     mutationFn: (): Promise<AuthResult> =>
       challenge
@@ -189,7 +193,7 @@ export function AuthPage({ mode }: { mode: Mode }) {
           value={code}
           onChange={(e) => setCode(e.target.value)}
         />
-        <span className="text-[12px] text-ink-3">
+        <span className="text-[12px] text-ink-2">
           {isEmailStep ? t('auth.verify.spam') : t('auth.2fa.recoveryHint')}
         </span>
         {error && (
@@ -338,7 +342,7 @@ export function AuthPage({ mode }: { mode: Mode }) {
 
         <div className="flex items-center gap-3">
           <div className="h-px flex-1 bg-line" />
-          <span className="text-[11.5px] font-medium text-ink-3">{t('auth.or')}</span>
+          <span className="text-[11.5px] font-medium text-ink-2">{t('auth.or')}</span>
           <div className="h-px flex-1 bg-line" />
         </div>
 
@@ -365,13 +369,13 @@ export function AuthPage({ mode }: { mode: Mode }) {
         </p>
 
         {mode === 'register' && extensionLegalLinks.length > 0 && (
-          <div className="text-[12px] leading-relaxed text-ink-3">
+          <div className="text-[12px] leading-relaxed text-ink-2">
             {t('auth.legalConsent')} <LegalLinks className="mt-1" />
           </div>
         )}
 
         <div className="flex flex-col gap-2 pt-1">
-          <div className="flex items-center gap-2 text-xs text-ink-3">
+          <div className="flex items-center gap-2 text-xs text-ink-2">
             <Server size={14} strokeWidth={2.2} aria-hidden />
             <span>{t('auth.selfHosted')}</span>
           </div>

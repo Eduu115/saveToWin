@@ -200,9 +200,8 @@ authRoutes.post('/logout', (c) => {
 
 authRoutes.get('/me', async (c) => {
   const token = readAuthCookie(c)
-  if (!token) {
-    return c.json(apiError('UNAUTHORIZED', 'No autenticado'), 401)
-  }
+  // Sin cookie no hay sesión, y no es un error: el cliente lleva al login.
+  if (!token) return c.json({ user: null })
 
   let payload
   try {

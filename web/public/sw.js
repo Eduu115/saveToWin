@@ -3,7 +3,7 @@
  * la primera; sin red, la última guardada. Lo demás → caché primero.
  * ponytail: sin precache de hashes; offline solo sirve lo ya visitado.
  */
-const CACHE = 'savetowin-v2'
+const CACHE = 'savetowin-v3'
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/', '/manifest.webmanifest'])))
@@ -33,12 +33,14 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url)
   if (url.origin !== self.location.origin || url.pathname.startsWith('/api/')) return
 
-  // La SPA sirve el mismo index.html en todas las rutas: se guarda bajo '/'.
+  // La app sirve el mismo index.html en todas sus rutas: se guarda bajo '/app'.
+  // '/' va aparte (en una instancia alojada puede ser una landing).
   if (request.mode === 'navigate') {
+    const key = url.pathname === '/' ? '/' : '/app'
     event.respondWith(
       fetch(request)
-        .then((res) => save('/', res))
-        .catch(() => caches.match('/')),
+        .then((res) => save(key, res))
+        .catch(() => caches.match(key).then((hit) => hit || caches.match('/'))),
     )
     return
   }

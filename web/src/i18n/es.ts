@@ -15,6 +15,8 @@ export const es = {
   'auth.2fa.recoveryHint': '¿Sin el móvil? Usa uno de tus códigos de recuperación.',
   'auth.2fa.submit': 'Verificar y entrar',
   'auth.2fa.back': 'Volver',
+  'auth.pageTitle.login': 'Entrar · saveToWin',
+  'auth.pageTitle.register': 'Crea tu cuenta gratis · saveToWin',
   'auth.verify.title': 'Confirma tu email',
   'auth.verify.hint': 'Te hemos enviado un código de 6 dígitos a {to}. Caduca en 15 minutos.',
   'auth.verify.spam': '¿No llega? Mira en la carpeta de spam o pide otro.',
