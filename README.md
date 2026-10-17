@@ -131,7 +131,9 @@ Ejemplo de `crontab -e` (copia cada 2 días, despliegue diario a las 4:00, latid
 
 - Passwords con **argon2** (nunca en claro).
 - **JWT** de acceso en cookie **httpOnly + SameSite** (+ Secure en prod).
-- Rate-limit en register/login.
+- Rate-limit en register/login (10 intentos/min por IP). Detrás de un proxy, indica de
+  qué cabecera sale la IP real con `TRUSTED_PROXY=cloudflare` o `TRUSTED_PROXY=proxy`;
+  sin proxy, déjalo sin definir (las cabeceras se pueden falsificar).
 - Aislamiento estricto por `userId` en toda la API.
 - Cerrar altas: `REGISTRATION_OPEN=false`.
 - **Verificación en dos pasos** opcional (TOTP, app de autenticación) con códigos de
