@@ -1,18 +1,25 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { lazy, Suspense, type ComponentType } from 'react'
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AuthGuard } from './auth/AuthGuard'
 import { extensionPages, extensionPublicPages } from './extension'
 import { DEFAULT_LOCALE } from './i18n/locales'
-import { AppLayout } from './layout/AppLayout'
-import { AccountsPage } from './pages/AccountsPage'
 import { AuthPage } from './pages/AuthPage'
-import { BudgetsPage } from './pages/BudgetsPage'
-import { DashboardPage } from './pages/DashboardPage'
-import { ImportPage } from './pages/ImportPage'
-import { ProfilePage } from './pages/ProfilePage'
 import { LocaleLayout } from './pages/LocaleLayout'
-import { SubscriptionsPage } from './pages/SubscriptionsPage'
-import { TransactionsPage } from './pages/TransactionsPage'
+import { t } from './i18n/t'
+
+// Cada pantalla con sesión va en su propio trozo: el login (lo primero que ve
+// alguien nuevo) no descarga gráficos, tablas ni el importador.
+const named = <K extends string>(load: () => Promise<Record<K, ComponentType>>, key: K) =>
+  lazy(() => load().then((m) => ({ default: m[key] })))
+const AppLayout = named(() => import('./layout/AppLayout'), 'AppLayout')
+const AccountsPage = named(() => import('./pages/AccountsPage'), 'AccountsPage')
+const BudgetsPage = named(() => import('./pages/BudgetsPage'), 'BudgetsPage')
+const DashboardPage = named(() => import('./pages/DashboardPage'), 'DashboardPage')
+const ImportPage = named(() => import('./pages/ImportPage'), 'ImportPage')
+const ProfilePage = named(() => import('./pages/ProfilePage'), 'ProfilePage')
+const SubscriptionsPage = named(() => import('./pages/SubscriptionsPage'), 'SubscriptionsPage')
+const TransactionsPage = named(() => import('./pages/TransactionsPage'), 'TransactionsPage')
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,6 +34,7 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
+        <Suspense fallback={<div className="min-h-dvh bg-bg p-6 text-ink-2">{t('common.loading')}</div>}>
         <Routes>
           <Route path="/" element={<Navigate to={`/${DEFAULT_LOCALE}`} replace />} />
           <Route path="/:locale" element={<LocaleLayout />}>
@@ -55,6 +63,7 @@ export function App() {
           </Route>
           <Route path="*" element={<Navigate to={`/${DEFAULT_LOCALE}`} replace />} />
         </Routes>
+        </Suspense>
       </BrowserRouter>
     </QueryClientProvider>
   )

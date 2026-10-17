@@ -6,7 +6,7 @@ export function fetchRegistration() {
 }
 
 export function fetchMe() {
-  return api<{ user: User }>('/api/auth/me')
+  return api<{ user: User | null }>('/api/auth/me')
 }
 
 /** Con 2FA activa no hay sesión aún: devuelve un reto para `loginTwoFactor`. */

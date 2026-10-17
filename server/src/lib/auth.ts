@@ -22,6 +22,8 @@ const PUBLIC_API = new Set([
   '/api/auth/register',
   '/api/auth/register/confirm',
   '/api/auth/registration',
+  // Valida el token ella misma: sin cookie responde { user: null } en vez de un 401.
+  '/api/auth/me',
   // Cerrar sesión siempre funciona, aunque la sesión ya no sea válida.
   '/api/auth/logout',
 ])

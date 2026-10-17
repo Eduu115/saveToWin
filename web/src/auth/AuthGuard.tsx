@@ -29,5 +29,7 @@ export function AuthGuard() {
     )
   }
 
+  if (!me.data.user) return <Navigate to={`/${locale}/login`} replace />
+
   return <Outlet context={{ user: me.data.user }} />
 }
