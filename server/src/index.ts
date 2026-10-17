@@ -10,7 +10,7 @@ import { rateLimitAuth } from './lib/rate-limit.js'
 assertAuthEnv()
 
 const { getDatabaseUrl } = await import('../db/client.js')
-const { authRoutes } = await import('./routes/auth.js')
+const { authRoutes, purgeExpiredCodes } = await import('./routes/auth.js')
 const { accountsRoutes } = await import('./routes/accounts.js')
 const { categoriesRoutes } = await import('./routes/categories.js')
 const { transactionsRoutes } = await import('./routes/transactions.js')
@@ -35,6 +35,7 @@ const app = new Hono()
 
 app.use('/api/auth/login', rateLimitAuth)
 app.use('/api/auth/register', rateLimitAuth)
+app.use('/api/auth/register/confirm', rateLimitAuth)
 app.use('/api/auth/login/2fa', rateLimitAuth)
 app.use('/api/profile/confirm', rateLimitAuth)
 app.use('/api/profile/password', rateLimitAuth)
@@ -79,6 +80,9 @@ if (existsSync('./public')) {
 }
 
 const port = env.port()
+
+// Cada hora: fuera altas sin confirmar y códigos de correo caducados.
+setInterval(() => void purgeExpiredCodes().catch((err) => console.error('[purge]', err)), 60 * 60_000).unref()
 
 serve({ fetch: app.fetch, port }, (info) => {
   console.log(`server listening on http://localhost:${info.port}`)

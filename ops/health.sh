@@ -16,7 +16,8 @@ HC_URL="${HC_UP_URL:-$(get HC_UP_URL)}"
 [ -n "$HC_URL" ] || exit 0
 PORT="${APP_PORT:-$(get APP_PORT)}"
 URL="${HEALTH_URL:-$(get HEALTH_URL)}"
-URL="${URL:-http://127.0.0.1:${PORT:-3010}/api/health}"
+PORT="${PORT:-3010}"
+URL="${URL:-http://127.0.0.1:${PORT##*:}/api/health}"
 
 # Reintentos para no avisar por un corte de segundos.
 if curl -fsS -m 20 --retry 2 --retry-delay 20 --retry-all-errors "$URL" | grep -q '"ok":true'; then

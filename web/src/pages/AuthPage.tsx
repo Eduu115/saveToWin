@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { ArrowLeft, ArrowRight, CircleAlert, Eye, EyeOff, Lock, Server, ShieldCheck } from 'lucide-react'
+import { ArrowLeft, ArrowRight, CircleAlert, Eye, EyeOff, Lock, MailCheck, Server, ShieldCheck } from 'lucide-react'
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
-import { fetchRegistration, login, loginTwoFactor, register } from '../api/auth'
+import { confirmRegistration, fetchRegistration, login, loginTwoFactor, register } from '../api/auth'
 import { ApiClientError } from '../api/client'
+import type { User } from '../domain'
 import { DEFAULT_LOCALE } from '../i18n/locales'
 import { t } from '../i18n/t'
 import { extensionLegalLinks } from '../extension'
@@ -13,6 +14,11 @@ import { BrandMark } from '../ui/BrandMark'
 import { setFaviconPercent } from '../ui/ProgressRing'
 
 type Mode = 'login' | 'register'
+/** Entrar, pedir el código 2FA o pedir que se confirme el email. */
+type AuthResult =
+  | { user: User }
+  | { twoFactorRequired: true; challenge: string }
+  | { verifyEmail: true; to: string }
 
 export function AuthPage({ mode }: { mode: Mode }) {
   const { locale = DEFAULT_LOCALE } = useParams()
@@ -26,6 +32,9 @@ export function AuthPage({ mode }: { mode: Mode }) {
   // Segundo paso del login cuando la cuenta tiene 2FA.
   const [challenge, setChallenge] = useState<string | null>(null)
   const [code, setCode] = useState('')
+  // Segundo paso del registro: código enviado al email (a dónde, enmascarado).
+  const [verifyTo, setVerifyTo] = useState<string | null>(null)
+  const [notice, setNotice] = useState<string | null>(null)
 
   const registration = useQuery({
     queryKey: ['auth', 'registration'],
@@ -38,15 +47,22 @@ export function AuthPage({ mode }: { mode: Mode }) {
   }, [])
 
   const mutation = useMutation({
-    mutationFn: () =>
+    mutationFn: (): Promise<AuthResult> =>
       challenge
         ? loginTwoFactor({ challenge, code })
-        : mode === 'login'
-          ? login({ email, password })
-          : register({ email, password, name: name || undefined }),
+        : verifyTo
+          ? confirmRegistration({ email, code })
+          : mode === 'login'
+            ? login({ email, password })
+            : register({ email, password, name: name || undefined }),
     onSuccess: async (res) => {
       if ('twoFactorRequired' in res) {
         setChallenge(res.challenge)
+        setCode('')
+        return
+      }
+      if ('verifyEmail' in res) {
+        setVerifyTo(res.to)
         setCode('')
         return
       }
@@ -59,6 +75,19 @@ export function AuthPage({ mode }: { mode: Mode }) {
           ? err.body?.error.message ?? t('auth.error')
           : t('auth.error'),
       )
+    },
+  })
+
+  const resend = useMutation({
+    mutationFn: () => register({ email, password, name: name || undefined }),
+    onSuccess: () => {
+      setError(null)
+      setCode('')
+      setNotice(t('auth.verify.resent'))
+    },
+    onError: (err) => {
+      setNotice(null)
+      setError(err instanceof ApiClientError ? err.body?.error.message ?? t('auth.error') : t('auth.error'))
     },
   })
 
@@ -127,14 +156,24 @@ export function AuthPage({ mode }: { mode: Mode }) {
     </div>
   )
 
-  const twoFactorForm = (
+  // Paso de código: 2FA al entrar o confirmación del email al registrarse.
+  const isEmailStep = verifyTo != null
+  const codeForm = (
     <form onSubmit={onSubmit} className="flex w-full max-w-[420px] flex-col gap-6 md:gap-[26px]">
       <div className="flex flex-col gap-2">
         <span className="flex size-11 items-center justify-center rounded-tile bg-accent-weak text-accent">
-          <ShieldCheck size={22} strokeWidth={2.2} aria-hidden />
+          {isEmailStep ? (
+            <MailCheck size={22} strokeWidth={2.2} aria-hidden />
+          ) : (
+            <ShieldCheck size={22} strokeWidth={2.2} aria-hidden />
+          )}
         </span>
-        <h1 className="text-[26px] font-extrabold tracking-tight md:text-[32px]">{t('auth.2fa.title')}</h1>
-        <p className="text-[13.5px] leading-relaxed text-ink-2 md:text-[14.5px]">{t('auth.2fa.hint')}</p>
+        <h1 className="text-[26px] font-extrabold tracking-tight md:text-[32px]">
+          {isEmailStep ? t('auth.verify.title') : t('auth.2fa.title')}
+        </h1>
+        <p className="text-[13.5px] leading-relaxed text-ink-2 md:text-[14.5px]">
+          {isEmailStep ? t('auth.verify.hint').replace('{to}', verifyTo) : t('auth.2fa.hint')}
+        </p>
       </div>
       <label className="flex flex-col gap-2">
         <span className={`text-[12.5px] font-semibold ${error ? 'text-danger' : 'text-ink-2'}`}>{t('auth.2fa.code')}</span>
@@ -144,17 +183,24 @@ export function AuthPage({ mode }: { mode: Mode }) {
           }`}
           required
           autoFocus
-          inputMode="text"
+          inputMode={isEmailStep ? 'numeric' : 'text'}
           autoComplete="one-time-code"
-          maxLength={12}
+          maxLength={isEmailStep ? 6 : 12}
           value={code}
           onChange={(e) => setCode(e.target.value)}
         />
-        <span className="text-[12px] text-ink-3">{t('auth.2fa.recoveryHint')}</span>
+        <span className="text-[12px] text-ink-3">
+          {isEmailStep ? t('auth.verify.spam') : t('auth.2fa.recoveryHint')}
+        </span>
         {error && (
           <span className="flex items-start gap-2 text-[12.5px] font-semibold leading-snug text-danger">
             <CircleAlert size={14} strokeWidth={2.6} className="mt-0.5 shrink-0" aria-hidden />
             {error}
+          </span>
+        )}
+        {notice && !error && (
+          <span className="text-[12.5px] font-semibold text-income" role="status">
+            {notice}
           </span>
         )}
       </label>
@@ -164,25 +210,37 @@ export function AuthPage({ mode }: { mode: Mode }) {
         className="flex h-[58px] items-center justify-center gap-2 rounded-field bg-accent text-[15.5px] font-bold text-accent-fg shadow-accent focus-visible:shadow-focus focus-visible:outline-none disabled:opacity-60"
       >
         <ArrowRight size={19} strokeWidth={2.6} aria-hidden />
-        {t('auth.2fa.submit')}
+        {isEmailStep ? t('auth.verify.submit') : t('auth.2fa.submit')}
       </button>
+      {isEmailStep && (
+        <button
+          type="button"
+          disabled={resend.isPending}
+          onClick={() => resend.mutate()}
+          className="inline-flex min-h-tap items-center justify-center text-sm font-bold text-accent focus-visible:shadow-focus focus-visible:outline-none disabled:opacity-60"
+        >
+          {t('auth.verify.resend')}
+        </button>
+      )}
       <button
         type="button"
         onClick={() => {
           setChallenge(null)
+          setVerifyTo(null)
+          setNotice(null)
           setError(null)
         }}
         className="inline-flex min-h-tap items-center justify-center gap-2 text-sm font-semibold text-ink-2 focus-visible:shadow-focus focus-visible:outline-none"
       >
         <ArrowLeft size={16} strokeWidth={2.2} aria-hidden />
-        {t('auth.2fa.back')}
+        {isEmailStep ? t('auth.verify.back') : t('auth.2fa.back')}
       </button>
     </form>
   )
 
   const formPanel = (
     <div className="relative -mt-7 flex flex-1 items-start justify-center rounded-t-sheet bg-bg px-5 py-8 md:mt-0 md:items-center md:rounded-none md:px-20">
-      {challenge ? twoFactorForm : (
+      {challenge || verifyTo ? codeForm : (
       <form
         onSubmit={onSubmit}
         className="flex w-full max-w-[420px] flex-col gap-6 md:gap-[26px]"

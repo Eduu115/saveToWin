@@ -205,3 +205,20 @@ export const authCodes = pgTable(
   },
   (t) => [index('auth_codes_user_purpose').on(t.userId, t.purpose)],
 )
+
+/**
+ * Altas a medias: la cuenta se crea al confirmar el código enviado al email.
+ * Se borran al confirmar, al caducar (limpieza periódica) o al pedir otro código.
+ */
+export const pendingRegistrations = pgTable('pending_registrations', {
+  id: serial('id').primaryKey(),
+  email: text('email').notNull().unique(),
+  passwordHash: text('password_hash').notNull(),
+  name: text('name'),
+  codeHash: text('code_hash').notNull(),
+  attempts: integer('attempts').notNull().default(0),
+  expiresAt: timestamp('expires_at', { withTimezone: true, mode: 'date' }).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'date' })
+    .notNull()
+    .default(sql`now()`),
+})
