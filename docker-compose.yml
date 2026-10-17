@@ -3,7 +3,9 @@ services:
     image: postgres:16-alpine
     environment:
       POSTGRES_USER: savetowin
-      POSTGRES_PASSWORD: savetowin
+      # En producción, una propia en .env (solo se aplica al crear el volumen; para
+      # cambiarla después: ALTER USER, ver README).
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-savetowin}
       POSTGRES_DB: savetowin
     # Solo en local (desarrollo y copias): la app entra por la red interna de Docker.
     # Abierto a la red, cualquiera con la contraseña de ejemplo leería los datos.
@@ -23,7 +25,7 @@ services:
     ports:
       - '${APP_PORT:-3010}:3010'
     environment:
-      DATABASE_URL: postgres://savetowin:savetowin@db:5432/savetowin
+      DATABASE_URL: postgres://savetowin:${POSTGRES_PASSWORD:-savetowin}@db:5432/savetowin
       JWT_SECRET: ${JWT_SECRET:?set JWT_SECRET in .env}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-1d}
       PORT: 3010
