@@ -1,11 +1,14 @@
 import { BarChart3, Gift, Sparkles } from 'lucide-react'
+import { lazy } from 'react'
 import type { ExtensionPage } from '../extension'
-import { AnalysisPage } from './AnalysisPage'
 import { PlanSection } from './PlanSection'
 import { tp } from './i18n'
 import { legalLinks as legal, legalPublicPages } from './legal/LegalPage'
-import { PremiumPage } from './PremiumPage'
-import { WrappedPage } from './WrappedPage'
+
+// En trozos aparte: los gráficos de Análisis y el Wrapped no pesan en el login.
+const AnalysisPage = lazy(() => import('./AnalysisPage').then((m) => ({ default: m.AnalysisPage })))
+const WrappedPage = lazy(() => import('./WrappedPage').then((m) => ({ default: m.WrappedPage })))
+const PremiumPage = lazy(() => import('./PremiumPage').then((m) => ({ default: m.PremiumPage })))
 
 /** Pantallas que pro añade al núcleo (ver `src/extension.ts`). */
 export const pages: ExtensionPage[] = [

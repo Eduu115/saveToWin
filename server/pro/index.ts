@@ -1,6 +1,7 @@
 import type { Hono } from 'hono'
 import type { AuthVariables } from '../src/lib/auth.js'
 import { ensureProSchema, FREE_HISTORY_DAYS, freeHistoryFrom, planFor } from './plans.js'
+import { registerLanding } from './landing.js'
 import { proRoutes } from './routes.js'
 
 /**
@@ -14,6 +15,7 @@ const enforcePlans = () => process.env.PRO_ENFORCE_PLANS === 'true'
 /** Punto de entrada que carga el núcleo (`server/src/index.ts`) si existe `server/pro/`. */
 export async function register(app: Hono) {
   await ensureProSchema()
+  registerLanding(app)
   const api = app as unknown as Hono<{ Variables: AuthVariables }>
 
   // Tras requireAuth: el plan gratis solo ve FREE_HISTORY_DAYS días de gráficos/estadísticas.
