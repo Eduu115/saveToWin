@@ -142,6 +142,10 @@ Ejemplo de `crontab -e` (copia cada 2 días, despliegue diario a las 4:00, latid
   recuperación de un solo uso; la app la recomienda de vez en cuando.
 - Cambiar email o contraseña exige la contraseña actual **y** un código enviado por
   correo (al email nuevo, en el caso del email). Requiere SMTP (`SMTP_*` en `.env`).
+- Contraseña propia de Postgres: `POSTGRES_PASSWORD` en `.env` (letras y números) antes del
+  primer arranque. Con datos ya creados, cámbiala en Postgres y luego en `.env`:
+  `docker compose exec db psql -U savetowin -c "ALTER USER savetowin PASSWORD '…'"` y
+  `docker compose up -d`. La base solo se publica en `127.0.0.1:5433`.
 - Si se expone a internet: **HTTPS** (perfil `https` / Caddy). Con túnel o proxy en la
   misma máquina, publica la app solo en local: `APP_PORT=127.0.0.1:3010`.
 
