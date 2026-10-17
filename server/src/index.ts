@@ -69,10 +69,18 @@ app.route('/api/profile', profileRoutes)
 
 // ponytail: solo monta estáticos si hay build de web (dev API-only no tiene public/)
 if (existsSync('./public')) {
-  // Assets con hash de Vite: para siempre. Lo demás (index.html, sw.js…): revalidar
+  // Assets con hash de Vite: para siempre. index.html, sw.js y el manifest: revalidar
   // siempre, para que una versión nueva se vea a la primera.
+  // Imágenes y fuentes sueltas (logos, iconos, landing): 30 días; cambian muy rara vez.
   const onFound = (path: string, c: Context) => {
-    c.header('Cache-Control', path.includes('/assets/') ? 'public, max-age=31536000, immutable' : 'no-cache')
+    c.header(
+      'Cache-Control',
+      path.includes('/assets/')
+        ? 'public, max-age=31536000, immutable'
+        : /\.(webp|png|jpe?g|svg|ico|woff2)$/.test(path)
+          ? 'public, max-age=2592000'
+          : 'no-cache',
+    )
   }
   app.use('/*', serveStatic({ root: './public', onFound }))
   // SPA fallback para rutas del cliente (/{locale}/…)
