@@ -6,7 +6,7 @@ export function LegalLinks({ className = '' }: { className?: string }) {
   const { locale = 'es' } = useParams()
   if (extensionLegalLinks.length === 0) return null
   return (
-    <nav aria-label="Legal" className={`flex flex-wrap gap-x-3 gap-y-1 text-[12px] text-ink-3 ${className}`}>
+    <nav aria-label="Legal" className={`flex flex-wrap gap-x-3 gap-y-1 text-[12px] text-ink-2 ${className}`}>
       {extensionLegalLinks.map((l) => (
         <Link key={l.path} to={`/${locale}/${l.path}`} className="hover:text-ink-2 hover:underline focus-visible:shadow-focus focus-visible:outline-none">
           {l.label}

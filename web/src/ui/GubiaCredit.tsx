@@ -19,7 +19,7 @@ export function GubiaCredit({ variant }: { variant: 'lockup' | 'inline' }) {
         aria-label={t('credit.aria')}
         className="flex flex-none items-center gap-2 rounded-field focus-visible:shadow-focus focus-visible:outline-none"
       >
-        <span className="text-xs font-semibold tracking-wide opacity-75">{t('credit.by')}</span>
+        <span className="text-xs font-semibold tracking-wide">{t('credit.by')}</span>
         <img
           src="/brand/gubia-lockup-blanco.svg"
           alt="gubia digital"
