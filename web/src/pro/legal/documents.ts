@@ -39,7 +39,7 @@ const privacy: LegalDoc = {
       heading: '3. Para qué los usamos y con qué base legal',
       list: [
         'Prestarte el servicio: guardar tus movimientos, calcular tus estadísticas, gráficos, consejos y tu resumen anual, y mostrártelos solo a ti. Base: ejecución del contrato que aceptas al registrarte (art. 6.1.b RGPD).',
-        'Enviarte correos operativos: códigos de verificación y avisos de seguridad (por ejemplo, que tu email o tu contraseña han cambiado). Base: ejecución del contrato.',
+        'Enviarte correos operativos: el código para confirmar tu email al registrarte, códigos de verificación y avisos de seguridad (por ejemplo, que tu email o tu contraseña han cambiado). Base: ejecución del contrato y medidas precontractuales a petición tuya (art. 6.1.b RGPD).',
         'Proteger el servicio y tu cuenta: limitar intentos de acceso y prevenir abusos. Base: interés legítimo en la seguridad (art. 6.1.f RGPD).',
         'Cumplir obligaciones legales cuando correspondan (por ejemplo, fiscales si en el futuro contratas un plan de pago). Base: obligación legal (art. 6.1.c RGPD).',
       ],
@@ -72,6 +72,7 @@ const privacy: LegalDoc = {
         'Tus datos de cuenta y los que introduces: mientras tu cuenta exista. Si bajas al plan gratuito, tus datos se conservan aunque algunos gráficos dejen de mostrarse.',
         'Al eliminar tu cuenta, tus datos se borran de inmediato de la base de datos. Pueden permanecer en las copias de seguridad (en el servidor y en la copia cifrada externa) durante un máximo de 35 días, hasta que se borran.',
         'Códigos de verificación por correo: 15 minutos o hasta que se usan.',
+        'Altas sin confirmar: si no confirmas el código que te enviamos al registrarte, tu email y tu contraseña cifrada se borran en menos de dos horas.',
         'Datos técnicos para limitar intentos de acceso: se guardan en memoria y se descartan en minutos.',
       ],
     },
