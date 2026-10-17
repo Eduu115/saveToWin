@@ -5,8 +5,10 @@ services:
       POSTGRES_USER: savetowin
       POSTGRES_PASSWORD: savetowin
       POSTGRES_DB: savetowin
+    # Solo en local (desarrollo y copias): la app entra por la red interna de Docker.
+    # Abierto a la red, cualquiera con la contraseña de ejemplo leería los datos.
     ports:
-      - '5433:5432'
+      - '127.0.0.1:5433:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
