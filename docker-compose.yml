@@ -29,6 +29,8 @@ services:
       # Zona horaria de «hoy» (suscripciones, mes actual). Cámbiala en .env.
       TZ: ${TZ:-Europe/Madrid}
       REGISTRATION_OPEN: ${REGISTRATION_OPEN:-true}
+      # IP real para el límite de intentos: cloudflare (túnel/proxy de Cloudflare) o proxy (Caddy…).
+      TRUSTED_PROXY: ${TRUSTED_PROXY:-}
       # Correo saliente (cambio de email/contraseña). Sin SMTP_HOST no se envía.
       SMTP_HOST: ${SMTP_HOST:-}
       SMTP_PORT: ${SMTP_PORT:-587}

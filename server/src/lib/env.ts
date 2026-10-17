@@ -13,6 +13,15 @@ export const env = {
   isProd: () => process.env.NODE_ENV === 'production',
   /** Default abierto. `REGISTRATION_OPEN=false` cierra altas nuevas. */
   registrationOpen: () => process.env.REGISTRATION_OPEN !== 'false',
+  /**
+   * Qué cabecera trae la IP real del cliente (límite de intentos). Solo si hay un
+   * proxy delante que la fije: `cloudflare` → CF-Connecting-IP · `proxy` → última
+   * entrada de X-Forwarded-For. Sin definir: la IP de la conexión.
+   */
+  trustedProxy: () => {
+    const v = process.env.TRUSTED_PROXY
+    return v === 'cloudflare' || v === 'proxy' ? v : null
+  },
 }
 
 export function assertAuthEnv() {
