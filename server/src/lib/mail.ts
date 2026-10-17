@@ -1,5 +1,6 @@
 import nodemailer, { type Transporter } from 'nodemailer'
 import { env } from './env.js'
+import { apiError } from './errors.js'
 
 /**
  * Correo saliente por SMTP (cualquier proveedor: Gmail con contraseña de
@@ -44,4 +45,18 @@ export async function sendMail(to: string, subject: string, text: string) {
 export function maskEmail(email: string): string {
   const [user, domain] = email.split('@')
   return `${user.slice(0, 2)}${'*'.repeat(Math.max(1, user.length - 2))}@${domain}`
+}
+
+/** Envía y traduce el fallo a un error de API (null si fue bien). */
+export async function sendOrFail(to: string, subject: string, text: string) {
+  try {
+    await sendMail(to, subject, text)
+    return null
+  } catch (err) {
+    if (err instanceof MailNotConfiguredError) {
+      return apiError('EMAIL_NOT_CONFIGURED', 'Este servidor no tiene el correo configurado')
+    }
+    console.error('[mail]', err)
+    return apiError('EMAIL_FAILED', 'No se pudo enviar el correo, inténtalo más tarde')
+  }
 }

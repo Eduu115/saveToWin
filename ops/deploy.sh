@@ -15,6 +15,7 @@ cd "$(dirname "$0")/.."
 BRANCH="${DEPLOY_BRANCH:-main}"
 PORT="${APP_PORT:-$(grep -E '^APP_PORT=' .env 2>/dev/null | cut -d= -f2 || true)}"
 PORT="${PORT:-3010}"
+PORT="${PORT##*:}" # APP_PORT=127.0.0.1:3010 → 3010
 PROJECT="$(basename "$PWD" | tr '[:upper:]' '[:lower:]')"
 HC_URL="${HC_DEPLOY_URL:-$(grep -E '^HC_DEPLOY_URL=' .env 2>/dev/null | cut -d= -f2- | tr -d '"' || true)}"
 log() { echo "[$(date '+%F %T')] deploy: $*"; }

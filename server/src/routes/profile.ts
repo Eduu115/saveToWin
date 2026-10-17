@@ -8,7 +8,7 @@ import type { AuthVariables } from '../lib/auth.js'
 import { clearAuthCookie, setAuthCookie } from '../lib/cookies.js'
 import { signAccessToken } from '../lib/jwt.js'
 import { apiError } from '../lib/errors.js'
-import { mailConfigured, MailNotConfiguredError, maskEmail, sendMail } from '../lib/mail.js'
+import { mailConfigured, maskEmail, sendOrFail } from '../lib/mail.js'
 import {
   emailCode,
   generateRecoveryCodes,
@@ -40,19 +40,6 @@ async function checkPassword(userId: number, password: string) {
 }
 
 const wrongPassword = () => apiError('UNAUTHORIZED', 'La contraseña actual no es correcta')
-
-async function sendOrFail(to: string, subject: string, text: string) {
-  try {
-    await sendMail(to, subject, text)
-    return null
-  } catch (err) {
-    if (err instanceof MailNotConfiguredError) {
-      return apiError('EMAIL_NOT_CONFIGURED', 'Este servidor no tiene el correo configurado')
-    }
-    console.error('[mail]', err)
-    return apiError('EMAIL_FAILED', 'No se pudo enviar el correo, inténtalo más tarde')
-  }
-}
 
 /** Guarda (sustituyendo el anterior) un código de confirmación y lo envía. */
 async function issueCode(userId: number, purpose: 'password' | 'email', payload: string, to: string) {
