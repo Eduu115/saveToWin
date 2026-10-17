@@ -135,12 +135,15 @@ Ejemplo de `crontab -e` (copia cada 2 días, despliegue diario a las 4:00, latid
   qué cabecera sale la IP real con `TRUSTED_PROXY=cloudflare` o `TRUSTED_PROXY=proxy`;
   sin proxy, déjalo sin definir (las cabeceras se pueden falsificar).
 - Aislamiento estricto por `userId` en toda la API.
-- Cerrar altas: `REGISTRATION_OPEN=false`.
+- Cerrar altas: `REGISTRATION_OPEN=false`. Con correo configurado, el alta pide confirmar
+  el email con un código de 6 dígitos (15 min, 5 intentos, uno por minuto); sin correo,
+  el alta es directa.
 - **Verificación en dos pasos** opcional (TOTP, app de autenticación) con códigos de
   recuperación de un solo uso; la app la recomienda de vez en cuando.
 - Cambiar email o contraseña exige la contraseña actual **y** un código enviado por
   correo (al email nuevo, en el caso del email). Requiere SMTP (`SMTP_*` en `.env`).
-- Si se expone a internet: **HTTPS** (perfil `https` / Caddy).
+- Si se expone a internet: **HTTPS** (perfil `https` / Caddy). Con túnel o proxy en la
+  misma máquina, publica la app solo en local: `APP_PORT=127.0.0.1:3010`.
 
 ---
 

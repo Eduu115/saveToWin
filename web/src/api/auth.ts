@@ -24,8 +24,16 @@ export function loginTwoFactor(body: { challenge: string; code: string }) {
   })
 }
 
+/** Con correo en el servidor no crea la cuenta: envía un código al email (`confirmRegistration`). */
 export function register(body: { email: string; password: string; name?: string }) {
-  return api<{ user: User }>('/api/auth/register', {
+  return api<{ user: User } | { verifyEmail: true; to: string }>('/api/auth/register', {
+    method: 'POST',
+    body: JSON.stringify(body),
+  })
+}
+
+export function confirmRegistration(body: { email: string; code: string }) {
+  return api<{ user: User }>('/api/auth/register/confirm', {
     method: 'POST',
     body: JSON.stringify(body),
   })

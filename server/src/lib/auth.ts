@@ -20,6 +20,7 @@ const PUBLIC_API = new Set([
   '/api/auth/login',
   '/api/auth/login/2fa',
   '/api/auth/register',
+  '/api/auth/register/confirm',
   '/api/auth/registration',
   // Cerrar sesión siempre funciona, aunque la sesión ya no sea válida.
   '/api/auth/logout',

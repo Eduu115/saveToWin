@@ -1,9 +1,9 @@
 import { hash, verify } from 'argon2'
-import { eq } from 'drizzle-orm'
-import { Hono } from 'hono'
+import { eq, lt } from 'drizzle-orm'
+import { Hono, type Context } from 'hono'
 import { z } from 'zod'
 import { db } from '../../db/client.js'
-import { users } from '../../db/schema.js'
+import { authCodes, pendingRegistrations, users } from '../../db/schema.js'
 import { seedForUser } from '../../db/seed.js'
 import { clearAuthCookie, readAuthCookie, setAuthCookie } from '../lib/cookies.js'
 import { env } from '../lib/env.js'
@@ -14,8 +14,9 @@ import {
   verifyAccessToken,
   verifyTwoFactorChallenge,
 } from '../lib/jwt.js'
-import { normalizeRecovery, sha256, verifyTotp } from '../lib/totp.js'
-import { loginSchema, registerSchema, updateMeSchema } from '../lib/schemas.js'
+import { mailConfigured, maskEmail, sendOrFail } from '../lib/mail.js'
+import { emailCode, normalizeRecovery, sha256, verifyTotp } from '../lib/totp.js'
+import { loginSchema, registerConfirmSchema, registerSchema, updateMeSchema } from '../lib/schemas.js'
 import { parseBody } from '../lib/validate.js'
 
 function toPublicUser(row: typeof users.$inferSelect) {
@@ -29,6 +30,11 @@ function toPublicUser(row: typeof users.$inferSelect) {
 }
 
 export const authRoutes = new Hono()
+
+const CODE_TTL_MIN = 15
+const MAX_CODE_ATTEMPTS = 5
+/** Un código por minuto y email: que no se pueda bombardear un buzón con altas. */
+const RESEND_AFTER_MS = 60_000
 
 authRoutes.get('/registration', (c) => {
   return c.json({ open: env.registrationOpen() })
@@ -48,20 +54,86 @@ authRoutes.post('/register', async (c) => {
   }
 
   const passwordHash = await hash(parsed.password)
-  const [user] = await db
-    .insert(users)
-    .values({
-      email,
-      passwordHash,
-      name: parsed.name ?? null,
-    })
-    .returning()
+  const name = parsed.name ?? null
 
-  await seedForUser(user.id)
-  const token = await signAccessToken(user.id, user.sessionVersion)
-  setAuthCookie(c, token)
-  return c.json({ user: toPublicUser(user) }, 201)
+  // Sin correo en este servidor (self-hosted sin SMTP): alta directa, como siempre.
+  if (!mailConfigured()) return createAccount(c, { email, passwordHash, name })
+
+  // Con correo: la cuenta se crea al confirmar el código enviado a ese email.
+  const [prev] = await db
+    .select({ createdAt: pendingRegistrations.createdAt })
+    .from(pendingRegistrations)
+    .where(eq(pendingRegistrations.email, email))
+    .limit(1)
+  if (prev && Date.now() - prev.createdAt.getTime() < RESEND_AFTER_MS) {
+    return c.json(apiError('RATE_LIMITED', 'Espera un minuto antes de pedir otro código'), 429)
+  }
+  const code = emailCode()
+  await db.delete(pendingRegistrations).where(eq(pendingRegistrations.email, email))
+  await db.insert(pendingRegistrations).values({
+    email,
+    passwordHash,
+    name,
+    codeHash: sha256(code),
+    expiresAt: new Date(Date.now() + CODE_TTL_MIN * 60_000),
+  })
+  const failed = await sendOrFail(
+    email,
+    'saveToWin · confirma tu email',
+    `Tu código para crear tu cuenta de saveToWin es:\n\n    ${code}\n\nCaduca en ${CODE_TTL_MIN} minutos. Si no has sido tú, ignora este correo: no se creará ninguna cuenta.\n\n— saveToWin`,
+  )
+  if (failed) {
+    await db.delete(pendingRegistrations).where(eq(pendingRegistrations.email, email))
+    return c.json(failed, 503)
+  }
+  return c.json({ verifyEmail: true, to: maskEmail(email) }, 202)
 })
+
+authRoutes.post('/register/confirm', async (c) => {
+  if (!env.registrationOpen()) {
+    return c.json(apiError('FORBIDDEN', 'El registro está cerrado'), 403)
+  }
+  const body = await parseBody(c, registerConfirmSchema)
+  if (body instanceof Response) return body
+  const email = body.email.trim().toLowerCase()
+  const [pending] = await db
+    .select()
+    .from(pendingRegistrations)
+    .where(eq(pendingRegistrations.email, email))
+    .limit(1)
+  if (!pending || pending.expiresAt.getTime() < Date.now() || pending.attempts >= MAX_CODE_ATTEMPTS) {
+    if (pending) await db.delete(pendingRegistrations).where(eq(pendingRegistrations.id, pending.id))
+    return c.json(apiError('CODE_EXPIRED', 'El código ha caducado. Pide uno nuevo.'), 410)
+  }
+  if (pending.codeHash !== sha256(body.code)) {
+    await db
+      .update(pendingRegistrations)
+      .set({ attempts: pending.attempts + 1 })
+      .where(eq(pendingRegistrations.id, pending.id))
+    return c.json(apiError('CODE_INVALID', 'El código no es correcto'), 400)
+  }
+  await db.delete(pendingRegistrations).where(eq(pendingRegistrations.id, pending.id))
+  const [taken] = await db.select({ id: users.id }).from(users).where(eq(users.email, email)).limit(1)
+  if (taken) return c.json(apiError('CONFLICT', 'El email ya está registrado'), 409)
+  return createAccount(c, { email, passwordHash: pending.passwordHash, name: pending.name })
+})
+
+async function createAccount(
+  c: Context,
+  values: { email: string; passwordHash: string; name: string | null },
+) {
+  const [user] = await db.insert(users).values(values).returning()
+  await seedForUser(user.id)
+  setAuthCookie(c, await signAccessToken(user.id, user.sessionVersion))
+  return c.json({ user: toPublicUser(user) }, 201)
+}
+
+/** Altas y códigos caducados fuera (la política de privacidad lo promete). */
+export async function purgeExpiredCodes() {
+  const now = new Date()
+  await db.delete(pendingRegistrations).where(lt(pendingRegistrations.expiresAt, now))
+  await db.delete(authCodes).where(lt(authCodes.expiresAt, now))
+}
 
 authRoutes.post('/login', async (c) => {
   const parsed = await parseBody(c, loginSchema)
