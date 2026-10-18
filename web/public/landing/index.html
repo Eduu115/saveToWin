@@ -133,6 +133,9 @@
       footer .wrap { display: flex; flex-wrap: wrap; gap: 14px 24px; align-items: center; justify-content: space-between; }
       footer nav { display: flex; flex-wrap: wrap; gap: 8px 18px; }
       footer a { text-decoration: none; }
+      footer .gd { display: inline-flex; align-items: center; gap: 4px; }
+      footer .gd:hover { text-decoration: none; }
+      footer .gd:hover span { text-decoration: underline; }
       footer a:hover { text-decoration: underline; }
 
       @media (min-width: 900px) {
@@ -263,7 +266,10 @@
 
     <footer>
       <div class="wrap">
-        <span>saveToWin · una app de <a href="https://gubiadigital.es" rel="noopener">gubia digital</a></span>
+        <a class="gd" href="https://gubiadigital.es" rel="noopener">
+          <span>saveToWin es una app de</span>
+          <img src="/landing/gubia-lockup-color.svg" width="150" height="58" alt="gubia digital" loading="lazy" />
+        </a>
         <nav aria-label="Legal">
           <a href="/es/legal/privacy">Privacidad</a>
           <a href="/es/legal/cookies">Cookies</a>
