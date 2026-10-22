@@ -19,6 +19,7 @@ services:
       timeout: 5s
       retries: 10
     restart: unless-stopped
+    mem_limit: 512m
 
   app:
     build: .
@@ -45,6 +46,7 @@ services:
       db:
         condition: service_healthy
     restart: unless-stopped
+    mem_limit: 512m
 
   caddy:
     profiles: ['https']
@@ -59,6 +61,7 @@ services:
     depends_on:
       - app
     restart: unless-stopped
+    mem_limit: 128m
 
 volumes:
   pgdata:
