@@ -21,6 +21,11 @@ export function clearAuthCookie(c: Context) {
   deleteCookie(c, AUTH_COOKIE, { path: '/' })
 }
 
+/** Solo la cookie httpOnly (landing, redirects). */
+export function readAuthCookie(c: Context) {
+  return getCookie(c, AUTH_COOKIE)
+}
+
 /** Cookie de la web, o `Authorization: Bearer` de la extensión del navegador. */
 export function readAuthToken(c: Context): string | undefined {
   const header = c.req.header('Authorization')
