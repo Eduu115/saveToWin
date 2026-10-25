@@ -83,6 +83,11 @@ export const transactionCreateSchema = z.object({
 
 export const transactionBatchSchema = z.object({
   items: z.array(transactionCreateSchema).min(1).max(2000),
+  /**
+   * Qué hacer con las filas que ya existen (misma fecha, importe y texto).
+   * Si no viene, manda `skipDuplicates` (por defecto, omitirlas).
+   */
+  onDuplicate: z.enum(['skip', 'keep', 'replace']).optional(),
   skipDuplicates: z.boolean().optional().default(true),
 })
 

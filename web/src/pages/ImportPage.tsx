@@ -92,7 +92,7 @@ export function ImportPage() {
   const [pendingSaved, setPendingSaved] = useState<SavedMapping | null>(null)
   const [drafts, setDrafts] = useState<ImportDraft[]>([])
   const [learn, setLearn] = useState(true)
-  const [doneMsg, setDoneMsg] = useState<string | null>(null)
+  const [done, setDone] = useState<{ inserted: number; replaced: number } | null>(null)
 
   const accounts = useQuery({ queryKey: ['accounts'], queryFn: listAccounts })
   const categories = useQuery({ queryKey: ['categories'], queryFn: listCategories })
@@ -101,7 +101,7 @@ export function ImportPage() {
     async (f: File, overrides?: ParseOverrides, saved?: SavedMapping) => {
       setBusy(true)
       setError(null)
-      setDoneMsg(null)
+      setDone(null)
       try {
         const result = await parseBankCsv(f, overrides)
         setFile(f)
@@ -296,9 +296,9 @@ export function ImportPage() {
           setLearn={setLearn}
           onBack={() => setStep('map')}
           onCancel={cancelImport}
-          onDone={(inserted) => {
+          onDone={(result) => {
             cancelImport()
-            setDoneMsg(String(inserted))
+            setDone(result)
           }}
         />
       </div>
@@ -614,9 +614,15 @@ export function ImportPage() {
 
       <StepRail current={1} />
 
-      {doneMsg && (
+      {done && (
         <p className="rounded-[14px] border border-[color:var(--savings-border)] bg-savings-weak px-4 py-3 text-[13px] text-savings">
-          {t('import.donePrefix')} {doneMsg} {t('import.doneSuffix')}
+          {t('import.donePrefix')} {done.inserted} {t('import.doneSuffix')}
+          {done.replaced > 0 && (
+            <>
+              {' '}
+              {done.replaced} {t('import.doneReplaced')}.
+            </>
+          )}
         </p>
       )}
 

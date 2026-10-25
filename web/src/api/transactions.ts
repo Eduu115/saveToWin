@@ -60,8 +60,10 @@ export function createTransactionsBatch(body: {
     note?: string | null
   }[]
   skipDuplicates?: boolean
+  /** Una decisión para todos los duplicados del lote. */
+  onDuplicate?: 'skip' | 'keep' | 'replace'
 }) {
-  return api<{ inserted: number; skippedDuplicates: number; items: Transaction[] }>(
+  return api<{ inserted: number; skippedDuplicates: number; replaced: number; items: Transaction[] }>(
     '/api/transactions/batch',
     {
       method: 'POST',

@@ -1,0 +1,25 @@
+Nombre corto
+  saveToWin — gasto rápido
+
+Resumen (132 caracteres máx. en Chrome)
+  Apunta un gasto en tu saveToWin: importe, categoría y cuenta, sin abrir la app.
+
+Descripción
+  Extensión oficial de saveToWin para apuntar un gasto en segundos.
+
+  1. Instálala desde esta tienda (no hace falta el modo desarrollador).
+  2. Abre el icono (o Ctrl+Mayús+E / Cmd+Mayús+E).
+  3. Escribe la dirección de tu servidor (por ejemplo https://savetowin.app).
+  4. Entra con tu usuario. El navegador pide permiso solo para esa dirección.
+  5. Importe, nota, categoría, cuenta y fecha → Apuntar gasto.
+
+  No guarda la contraseña. La sesión caduca al día, igual que en la web, y se
+  cierra si cambias la contraseña. Compatible con la verificación en dos pasos.
+
+  Pensada para servidores self-hosted: la misma extensión sirve para savetowin.app
+  y para tu instancia en casa.
+
+Privacidad
+  Los datos van solo entre tu navegador y el servidor que indiques. No hay
+  analítica de terceros ni reventa de datos. Política de privacidad: la de tu
+  instancia de saveToWin.

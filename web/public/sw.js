@@ -3,7 +3,7 @@
  * la primera; sin red, la última guardada. Lo demás → caché primero.
  * ponytail: sin precache de hashes; offline solo sirve lo ya visitado.
  */
-const CACHE = 'savetowin-v3'
+const CACHE = 'savetowin-v4'
 
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then((c) => c.addAll(['/', '/manifest.webmanifest'])))

@@ -5,15 +5,11 @@ import { z } from 'zod'
 import { db } from '../../db/client.js'
 import { authCodes, pendingRegistrations, users } from '../../db/schema.js'
 import { seedForUser } from '../../db/seed.js'
-import { clearAuthCookie, readAuthCookie, setAuthCookie } from '../lib/cookies.js'
+import { authenticateToken } from '../lib/auth.js'
+import { clearAuthCookie, readAuthToken, setAuthCookie } from '../lib/cookies.js'
 import { env } from '../lib/env.js'
 import { apiError } from '../lib/errors.js'
-import {
-  signAccessToken,
-  signTwoFactorChallenge,
-  verifyAccessToken,
-  verifyTwoFactorChallenge,
-} from '../lib/jwt.js'
+import { signAccessToken, signTwoFactorChallenge, verifyTwoFactorChallenge } from '../lib/jwt.js'
 import { mailConfigured, maskEmail, sendOrFail } from '../lib/mail.js'
 import { emailCode, normalizeRecovery, sha256, verifyTotp } from '../lib/totp.js'
 import { loginSchema, registerConfirmSchema, registerSchema, updateMeSchema } from '../lib/schemas.js'
@@ -27,6 +23,16 @@ function toPublicUser(row: typeof users.$inferSelect) {
     createdAt: row.createdAt,
     savingsGoalCents: row.savingsGoalCents,
   }
+}
+
+/** La extensión pide el JWT en el cuerpo: su origen no puede usar la cookie httpOnly. */
+function sessionJson(c: Context, user: typeof users.$inferSelect, token: string) {
+  setAuthCookie(c, token)
+  const body: { user: ReturnType<typeof toPublicUser>; token?: string } = {
+    user: toPublicUser(user),
+  }
+  if (c.req.header('x-savetowin-client') === 'extension') body.token = token
+  return c.json(body)
 }
 
 export const authRoutes = new Hono()
@@ -156,8 +162,7 @@ authRoutes.post('/login', async (c) => {
   }
 
   const token = await signAccessToken(user.id, user.sessionVersion)
-  setAuthCookie(c, token)
-  return c.json({ user: toPublicUser(user) })
+  return sessionJson(c, user, token)
 })
 
 const twoFactorSchema = z.object({
@@ -189,8 +194,7 @@ authRoutes.post('/login/2fa', async (c) => {
       .set({ totpRecovery: user.totpRecovery.filter((h) => h !== hashed) })
       .where(eq(users.id, user.id))
   }
-  setAuthCookie(c, await signAccessToken(user.id, user.sessionVersion))
-  return c.json({ user: toPublicUser(user) })
+  return sessionJson(c, user, await signAccessToken(user.id, user.sessionVersion))
 })
 
 authRoutes.post('/logout', (c) => {
@@ -199,23 +203,20 @@ authRoutes.post('/logout', (c) => {
 })
 
 authRoutes.get('/me', async (c) => {
-  const token = readAuthCookie(c)
-  // Sin cookie no hay sesión, y no es un error: el cliente lleva al login.
+  const token = readAuthToken(c)
+  // Sin cookie ni Bearer no hay sesión, y no es un error: el cliente lleva al login.
   if (!token) return c.json({ user: null })
 
-  let payload
-  try {
-    payload = await verifyAccessToken(token)
-  } catch {
-    return c.json(apiError('UNAUTHORIZED', 'Sesión inválida'), 401)
+  const session = await authenticateToken(token)
+  if (!session.ok) {
+    const message =
+      session.code === 'SESSION_REVOKED'
+        ? 'Tu sesión se ha cerrado. Vuelve a entrar.'
+        : 'Sesión inválida'
+    return c.json(apiError(session.code, message), 401)
   }
 
-  const userId = Number(payload.sub)
-  if (!Number.isInteger(userId)) {
-    return c.json(apiError('UNAUTHORIZED', 'Sesión inválida'), 401)
-  }
-
-  const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1)
+  const [user] = await db.select().from(users).where(eq(users.id, session.userId)).limit(1)
   if (!user) {
     return c.json(apiError('UNAUTHORIZED', 'Usuario no encontrado'), 401)
   }
@@ -224,22 +225,20 @@ authRoutes.get('/me', async (c) => {
 })
 
 authRoutes.patch('/me', async (c) => {
-  const token = readAuthCookie(c)
+  const token = readAuthToken(c)
   if (!token) {
     return c.json(apiError('UNAUTHORIZED', 'No autenticado'), 401)
   }
 
-  let payload
-  try {
-    payload = await verifyAccessToken(token)
-  } catch {
-    return c.json(apiError('UNAUTHORIZED', 'Sesión inválida'), 401)
+  const session = await authenticateToken(token)
+  if (!session.ok) {
+    const message =
+      session.code === 'SESSION_REVOKED'
+        ? 'Tu sesión se ha cerrado. Vuelve a entrar.'
+        : 'Sesión inválida'
+    return c.json(apiError(session.code, message), 401)
   }
-
-  const userId = Number(payload.sub)
-  if (!Number.isInteger(userId)) {
-    return c.json(apiError('UNAUTHORIZED', 'Sesión inválida'), 401)
-  }
+  const userId = session.userId
 
   const body = await parseBody(c, updateMeSchema)
   if (body instanceof Response) return body
