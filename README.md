@@ -104,17 +104,17 @@ mejor que una ficha de tienda.
 
 ### Extensión de navegador (gasto rápido)
 
-Carpeta `extension/` (Chrome y Firefox, Manifest V3). También se descarga desde
-**Perfil** (`/savetowin-extension.zip`).
+Carpeta `extension/` (Chrome y Firefox, Manifest V3). Uso diario: publicarla en
+la **Chrome Web Store** y en **Firefox Add-ons** (pasos en `extension/STORE.md`).
+El modo «complemento temporal» de Firefox se borra al reiniciar; no sirve como
+instalación permanente.
 
-1. Descomprime el zip.
-2. Chrome: `chrome://extensions` → modo desarrollador → Cargar descomprimida.
-3. Firefox: `about:debugging#/runtime/this-firefox` → Cargar complemento temporal.
-4. Escribe la dirección del servidor (en prod `https://savetowin.app`) y entra.
-   Atajo sugerido: Ctrl+Mayús+E.
+```bash
+npm run extension:pack   # → extension/dist/savetowin-extension.zip
+```
 
-Usa el mismo usuario. El token de sesión caduca al día y se invalida al cambiar
-la contraseña. La contraseña no se guarda en la extensión.
+El mismo zip se sirve en **Perfil** (`/savetowin-extension.zip`) para subirlo a
+las tiendas. Al entrar, pide permiso solo para la URL del servidor.
 
 ### Copias y despliegue automáticos (`ops/`)
 

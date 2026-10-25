@@ -76,14 +76,16 @@ export const es = {
   'profile.delete.final': 'Eliminar definitivamente',
   'profile.extension.title': 'Gasto rápido en el navegador',
   'profile.extension.lead':
-    'Extensión para Chrome y Firefox: importe, categoría y cuenta, y el gasto entra en tu cuenta sin abrir la app.',
-  'profile.extension.download': 'Descargar extensión',
+    'Extensión para Chrome y Firefox: importe, categoría y cuenta, y el gasto entra en tu cuenta sin abrir la app. Publicada en las tiendas cuando la revisión lo permita; aquí tienes el paquete firmable.',
+  'profile.extension.download': 'Descargar paquete (tiendas)',
   'profile.extension.how':
-    'Descomprime el zip. En Chrome abre chrome://extensions, activa el modo desarrollador y pulsa «Cargar descomprimida». En Firefox abre about:debugging, elige «Este Firefox» y «Cargar complemento temporal». Luego escribe la dirección de este servidor e inicia sesión. Atajo: Ctrl+Mayús+E.',
+    'Este zip es el que se sube a la Chrome Web Store y a addons.mozilla.org. No hace falta cargarlo a mano: en Firefox el modo temporal se borra al reiniciar. Mientras la ficha de tienda no esté pública, en Chrome puedes usar «Cargar descomprimida» solo para probar (modo desarrollador).',
   'profile.extension.session':
-    'No guarda la contraseña. La sesión caduca al día, igual que la web, y se cierra si cambias la contraseña.',
+    'No guarda la contraseña. La sesión caduca al día, igual que la web, y se cierra si cambias la contraseña. Al entrar pide permiso solo para la dirección de tu servidor.',
   'profile.extension.pwa':
     'En el móvil ya puedes instalar saveToWin desde el navegador: menú → Añadir a la pantalla de inicio. No hace falta una tienda.',
+  'profile.extension.store':
+    'Chrome Web Store (cuenta de desarrollador, 5 $ una vez) y Firefox Add-ons (gratis). Pasos en extension/STORE.md del repo.',
   'auth.legalConsent': 'Al crear la cuenta aceptas las condiciones y la política de privacidad:',
   'nag.2fa.title': 'Protege tu cuenta con la verificación en dos pasos',
   'nag.2fa.body': 'Un código de tu móvil además de la contraseña. Se activa en un minuto.',
@@ -152,6 +154,8 @@ export const es = {
   'transactions.keyDelete': 'Borrar dígito',
   'transactions.keypad': 'Volver al teclado',
   'transactions.paidWith': 'Pagado con',
+  'transactions.bizum': 'Bizum',
+  'transactions.bizumHint': 'Bizum no lleva categoría: se guarda en Otros.',
   'transactions.notePlaceholder': 'Añade una nota',
   'transactions.empty': 'No hay movimientos todavía',
   'transactions.date': 'Fecha',
@@ -452,7 +456,7 @@ export const es = {
   'import.preview': 'Vista previa',
   'import.stat.new': 'movimientos nuevos',
   'import.stat.willImport': 'se importarán',
-  'import.stat.dupes': 'duplicados, omitidos',
+  'import.stat.dupes': 'ya existían, se conservan',
   'import.stat.dupesFound': 'ya están en saveToWin',
   'import.stat.dupesReplace': 'se sustituirán',
   'import.stat.dupesKeep': 'se conservan ambos',
@@ -460,8 +464,8 @@ export const es = {
   'import.dup.title': 'Ya hay movimientos iguales',
   'import.dup.hint':
     'Misma fecha, importe y texto, en cualquier cuenta. Eliges una vez y vale para todos.',
-  'import.dup.skip': 'Omitir duplicados',
-  'import.dup.skipHint': 'Entran solo los nuevos. Los que ya están se quedan igual.',
+  'import.dup.skip': 'Conservar los existentes',
+  'import.dup.skipHint': 'Se quedan los que ya tienes. Del archivo solo entran los nuevos.',
   'import.dup.replace': 'Sustituir',
   'import.dup.replaceHint': 'Los del archivo reemplazan a los que coinciden.',
   'import.dup.keep': 'Conservar ambos',
@@ -469,8 +473,9 @@ export const es = {
   'import.dup.abort': 'Abortar',
   'import.dup.abortHint': 'No se importa nada de este archivo.',
   'import.dup.choose': 'Elige qué hacer con los duplicados',
-  'import.dup.allSkip': 'Si los omites no entra ninguno: sustituye, conserva ambos o aborta.',
-  'import.dup.badge.skip': 'Ya está — se omite',
+  'import.dup.allSkip':
+    'Si conservas los existentes no entra ninguno nuevo: sustituye, conserva ambos o aborta.',
+  'import.dup.badge.skip': 'Ya está — se conserva el tuyo',
   'import.dup.badge.replace': 'Ya está — se sustituye',
   'import.dup.badge.keep': 'Ya está — se añaden los dos',
   'import.dup.badge.abort': 'Ya está — se cancela todo',
