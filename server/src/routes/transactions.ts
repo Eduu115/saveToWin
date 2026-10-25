@@ -15,6 +15,11 @@ import { parseBody, parseQuery } from '../lib/validate.js'
 
 export const transactionsRoutes = new Hono<{ Variables: AuthVariables }>()
 
+/** Misma clave que el cliente (`dupKey`): fecha + céntimos + texto. */
+function movementKey(date: string, amount: number, note: string | null | undefined): string {
+  return `${date}|${amount}|${(note ?? '').trim().toLowerCase()}`
+}
+
 async function ownedCategory(userId: number, categoryId: number) {
   const [row] = await db
     .select({ id: categories.id })
@@ -157,71 +162,106 @@ transactionsRoutes.post('/batch', async (c) => {
     }
   }
 
-  let existing = new Set<string>()
-  if (body.skipDuplicates) {
-    const dates = body.items.map((i) => i.date).sort()
-    const from = dates[0]!
-    const to = dates[dates.length - 1]!
-    const rows = await db
-      .select({
-        date: transactions.date,
-        amount: transactions.amount,
-        note: transactions.note,
-      })
-      .from(transactions)
-      .where(
-        and(
-          eq(transactions.userId, userId),
-          gte(transactions.date, from),
-          lte(transactions.date, to),
-        ),
-      )
-    existing = new Set(
-      rows.map((r) => `${r.date}|${r.amount}|${(r.note ?? '').trim().toLowerCase()}`),
-    )
-  }
-
-  const toInsert: (typeof body.items)[number][] = []
-  let skippedDuplicates = 0
-  const seenBatch = new Set<string>()
   for (const item of body.items) {
     if (item.amount < 0) {
       return c.json(apiError('VALIDATION_ERROR', 'amount debe ser ≥ 0'), 400)
     }
-    const key = `${item.date}|${item.amount}|${(item.note ?? '').trim().toLowerCase()}`
-    if (body.skipDuplicates && (existing.has(key) || seenBatch.has(key))) {
-      skippedDuplicates++
-      continue
-    }
-    seenBatch.add(key)
-    toInsert.push(item)
   }
 
-  const inserted =
-    toInsert.length === 0
-      ? []
-      : await db
-          .insert(transactions)
-          .values(
-            toInsert.map((item) => ({
-              userId,
-              date: item.date,
-              amount: item.amount,
-              type: item.type,
-              categoryId: item.categoryId,
-              accountId: item.accountId,
-              cardId: item.cardId ?? null,
-              note: item.note ?? null,
-              tags: item.tags ?? null,
-            })),
-          )
-          .returning()
+  // onDuplicate manda. Sin él, skipDuplicates conserva el comportamiento anterior.
+  const policy = body.onDuplicate ?? (body.skipDuplicates ? 'skip' : 'keep')
 
-  return c.json({
-    inserted: inserted.length,
-    skippedDuplicates,
-    items: inserted,
+  const result = await db.transaction(async (tx) => {
+    const existing = new Map<string, number[]>()
+    if (policy === 'skip' || policy === 'replace') {
+      const dates = body.items.map((i) => i.date).sort()
+      const from = dates[0]!
+      const to = dates[dates.length - 1]!
+      const rows = await tx
+        .select({
+          id: transactions.id,
+          date: transactions.date,
+          amount: transactions.amount,
+          note: transactions.note,
+        })
+        .from(transactions)
+        .where(
+          and(
+            eq(transactions.userId, userId),
+            gte(transactions.date, from),
+            lte(transactions.date, to),
+          ),
+        )
+      for (const row of rows) {
+        const key = movementKey(row.date, row.amount, row.note)
+        const ids = existing.get(key)
+        if (ids) ids.push(row.id)
+        else existing.set(key, [row.id])
+      }
+    }
+
+    const toInsert: (typeof body.items)[number][] = []
+    let skippedDuplicates = 0
+    const seenBatch = new Set<string>()
+    for (const item of body.items) {
+      const key = movementKey(item.date, item.amount, item.note)
+      if (policy === 'skip' && (existing.has(key) || seenBatch.has(key))) {
+        skippedDuplicates++
+        continue
+      }
+      seenBatch.add(key)
+      toInsert.push(item)
+    }
+
+    let replaced = 0
+    if (policy === 'replace' && toInsert.length > 0) {
+      const ids = new Set<number>()
+      for (const item of toInsert) {
+        for (const id of existing.get(movementKey(item.date, item.amount, item.note)) ?? []) {
+          ids.add(id)
+        }
+      }
+      const deleteIds = [...ids]
+      if (deleteIds.length > 0) {
+        // ponytail: borra también un cargo de suscripción si coincide la clave.
+        // No se vuelve a materializar si nextDate ya avanzó.
+        const deleted = await tx
+          .delete(transactions)
+          .where(and(eq(transactions.userId, userId), inArray(transactions.id, deleteIds)))
+          .returning({ id: transactions.id })
+        replaced = deleted.length
+      }
+    }
+
+    const inserted =
+      toInsert.length === 0
+        ? []
+        : await tx
+            .insert(transactions)
+            .values(
+              toInsert.map((item) => ({
+                userId,
+                date: item.date,
+                amount: item.amount,
+                type: item.type,
+                categoryId: item.categoryId,
+                accountId: item.accountId,
+                cardId: item.cardId ?? null,
+                note: item.note ?? null,
+                tags: item.tags ?? null,
+              })),
+            )
+            .returning()
+
+    return {
+      inserted: inserted.length,
+      skippedDuplicates,
+      replaced,
+      items: inserted,
+    }
   })
+
+  return c.json(result)
 })
 
 transactionsRoutes.patch('/:id', async (c) => {

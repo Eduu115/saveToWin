@@ -18,6 +18,7 @@ import {
 import { extensionProfileSections } from '../extension'
 import { t } from '../i18n/t'
 import { BackupCard } from '../ui/BackupCard'
+import { ExtensionCard } from '../ui/ExtensionCard'
 import { GubiaCredit } from '../ui/GubiaCredit'
 import { LegalLinks } from '../ui/LegalLinks'
 
@@ -608,6 +609,7 @@ export function ProfilePage() {
             <Section key={i} />
           ))}
           <BackupCard />
+          <ExtensionCard />
           <DeleteAccountCard twoFactor={p.twoFactorEnabled} />
           <button
             type="button"

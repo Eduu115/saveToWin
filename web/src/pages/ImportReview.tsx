@@ -11,6 +11,7 @@ import {
 import { useMemo, useState, type ReactNode } from 'react'
 import { createTransactionsBatch } from '../api/transactions'
 import type { Account, Category } from '../domain'
+import { rowWillImport, type DuplicatePolicy } from '../import/duplicatePolicy'
 import type { ImportDraft } from '../import/mapRows'
 import { learnRule } from '../import/rulesStore'
 import { t } from '../i18n/t'
@@ -46,7 +47,7 @@ export function ImportReview(props: {
   setLearn: (v: boolean) => void
   onBack: () => void
   onCancel: () => void
-  onDone: (inserted: number) => void
+  onDone: (result: { inserted: number; replaced: number }) => void
 }) {
   const {
     drafts,
@@ -62,6 +63,8 @@ export function ImportReview(props: {
   const qc = useQueryClient()
   const [filter, setFilter] = useState<Filter>('all')
   const [error, setError] = useState<string | null>(null)
+  /** null = aún no ha elegido y hay duplicados. Sin duplicados no hace falta. */
+  const [policy, setPolicy] = useState<DuplicatePolicy | null>(null)
 
   const otherId = categories.find((c) => c.key === 'Other')?.id
 
@@ -78,6 +81,23 @@ export function ImportReview(props: {
     return { duplicates, needsReview, uncategorized, auto, selected, total: drafts.length }
   }, [drafts, otherId])
 
+  const mustChoose = stats.duplicates > 0
+  const effective: DuplicatePolicy | null = mustChoose ? policy : 'skip'
+  const willImport =
+    effective === null ? 0 : drafts.filter((d) => rowWillImport(d, effective)).length
+  const importCount = effective === null ? stats.selected : willImport
+
+  const dupLabel =
+    effective === 'replace'
+      ? t('import.stat.dupesReplace')
+      : effective === 'keep'
+        ? t('import.stat.dupesKeep')
+        : effective === 'abort'
+          ? t('import.stat.dupesAbort')
+          : effective === null
+            ? t('import.stat.dupesFound')
+            : t('import.stat.dupes')
+
   const visible = drafts.filter((d) => {
     if (filter === 'duplicates') return d.duplicate
     if (filter === 'review') {
@@ -91,30 +111,35 @@ export function ImportReview(props: {
 
   const importMut = useMutation({
     mutationFn: async () => {
-      const items = drafts
-        .filter((d) => d.selected && !d.duplicate && d.categoryId != null)
-        .map((d) => ({
-          date: d.date,
-          amount: d.amount,
-          type: d.type,
-          categoryId: d.categoryId!,
-          accountId: d.accountId,
-          note: d.note,
-        }))
+      const chosen = effective
+      if (!chosen || chosen === 'abort') throw new Error('EMPTY')
+      const rows = drafts.filter((d) => rowWillImport(d, chosen))
+      const items = rows.map((d) => ({
+        date: d.date,
+        amount: d.amount,
+        type: d.type,
+        categoryId: d.categoryId!,
+        accountId: d.accountId,
+        note: d.note,
+      }))
       if (items.length === 0) throw new Error('EMPTY')
-      return createTransactionsBatch({ items, skipDuplicates: true })
+      return createTransactionsBatch({
+        items,
+        onDuplicate: chosen === 'keep' || chosen === 'replace' ? chosen : 'skip',
+        skipDuplicates: chosen === 'skip',
+      })
     },
     onSuccess: async (res) => {
-      if (learn) {
+      if (learn && effective && effective !== 'abort') {
         for (const d of drafts) {
-          if (!d.selected || d.duplicate || !d.categoryId) continue
+          if (!rowWillImport(d, effective) || !d.categoryId) continue
           const cat = categories.find((c) => c.id === d.categoryId)
           if (cat) learnRule(d.raw, cat.key)
         }
       }
       await qc.invalidateQueries({ queryKey: ['transactions'] })
       await qc.invalidateQueries({ queryKey: ['stats'] })
-      onDone(res.inserted)
+      onDone({ inserted: res.inserted, replaced: res.replaced })
     },
     onError: () => setError(t('import.error.batch')),
   })
@@ -161,14 +186,14 @@ export function ImportReview(props: {
         <StatCard
           icon={<CirclePlus className="size-[19px]" strokeWidth={2.2} />}
           iconClass="bg-savings-weak text-savings"
-          value={String(stats.selected)}
-          label={t('import.stat.new')}
+          value={String(importCount)}
+          label={mustChoose ? t('import.stat.willImport') : t('import.stat.new')}
         />
         <StatCard
           icon={<Copy className="size-[19px]" strokeWidth={2.2} />}
           iconClass="bg-surface-2 text-ink-2"
           value={String(stats.duplicates)}
-          label={t('import.stat.dupes')}
+          label={dupLabel}
         />
         <StatCard
           icon={<TriangleAlert className="size-[19px]" strokeWidth={2.2} />}
@@ -185,6 +210,53 @@ export function ImportReview(props: {
           label={t('import.stat.auto')}
         />
       </div>
+
+      {mustChoose && (
+        <div className="flex flex-col gap-3 rounded-[20px] border border-line bg-surface px-5 py-4">
+          <h2 id="dup-policy-title" className="text-[15px] font-bold">
+            {t('import.dup.title')}
+          </h2>
+          <p className="text-[12.5px] leading-relaxed text-ink-2">{t('import.dup.hint')}</p>
+          <div role="radiogroup" aria-labelledby="dup-policy-title" className="grid gap-2 sm:grid-cols-2">
+            {(
+              [
+                ['skip', t('import.dup.skip'), t('import.dup.skipHint')],
+                ['replace', t('import.dup.replace'), t('import.dup.replaceHint')],
+                ['keep', t('import.dup.keep'), t('import.dup.keepHint')],
+                ['abort', t('import.dup.abort'), t('import.dup.abortHint')],
+              ] as const
+            ).map(([id, title, hint]) => {
+              const on = policy === id
+              const aborting = id === 'abort'
+              return (
+                <button
+                  key={id}
+                  type="button"
+                  role="radio"
+                  aria-checked={on}
+                  onClick={() => setPolicy(id)}
+                  className={[
+                    'flex min-h-tap flex-col items-start gap-0.5 rounded-2xl border px-3.5 py-3 text-left',
+                    on
+                      ? aborting
+                        ? 'border-2 border-danger bg-danger-weak'
+                        : 'border-2 border-accent bg-accent-weak'
+                      : 'border-line bg-bg',
+                  ].join(' ')}
+                >
+                  <span className={`text-[13.5px] font-bold ${on && aborting ? 'text-danger' : ''}`}>
+                    {title}
+                  </span>
+                  <span className="text-[12px] leading-snug text-ink-2">{hint}</span>
+                </button>
+              )
+            })}
+          </div>
+          {effective === 'skip' && willImport === 0 && stats.duplicates === stats.total && (
+            <p className="text-[12.5px] font-semibold text-warn">{t('import.dup.allSkip')}</p>
+          )}
+        </div>
+      )}
 
       <div className="overflow-hidden rounded-[20px] border border-line bg-surface">
         <div className="flex flex-wrap items-center gap-2 border-b border-line px-5 py-3.5">
@@ -248,12 +320,30 @@ export function ImportReview(props: {
             const Icon = cat ? categoryIcon(cat.key) : null
             const needsEyes =
               !d.duplicate && (d.categoryId === null || (d.categoryId === otherId && !d.autoCategorized))
+            const faded =
+              d.duplicate && (effective === 'skip' || effective === 'abort' || effective === null)
+            const showCheck =
+              effective === 'abort'
+                ? false
+                : d.duplicate
+                  ? effective === 'replace' || effective === 'keep'
+                  : d.selected
+            const dupText =
+              effective === 'replace'
+                ? t('import.dup.badge.replace')
+                : effective === 'keep'
+                  ? t('import.dup.badge.keep')
+                  : effective === 'abort'
+                    ? t('import.dup.badge.abort')
+                    : effective === 'skip'
+                      ? t('import.dup.badge.skip')
+                      : t('import.alreadyExists')
             return (
               <div
                 key={d.localId}
                 className={[
                   'grid grid-cols-1 items-center gap-2 border-b border-line-grid px-5 py-3 md:grid-cols-[44px_92px_1fr_210px_150px_130px] md:gap-0 md:py-0 md:h-14',
-                  d.duplicate ? 'opacity-50' : '',
+                  faded ? 'opacity-50' : '',
                   needsEyes ? 'bg-warn-weak' : d.type === 'income' ? 'bg-income-weak' : '',
                 ].join(' ')}
               >
@@ -262,32 +352,30 @@ export function ImportReview(props: {
                   disabled={d.duplicate}
                   onClick={() => toggle(d.localId)}
                   className={[
-                    'flex size-[18px] items-center justify-center rounded-[5px]',
-                    d.duplicate
+                    'flex size-[18px] items-center justify-center rounded-[5px] disabled:opacity-100',
+                    !showCheck
                       ? 'border-[1.5px] border-line'
-                      : d.selected
-                        ? needsEyes
-                          ? 'bg-warn text-white'
-                          : d.type === 'income'
-                            ? 'bg-income text-white'
-                            : 'bg-accent text-accent-fg'
-                        : 'border-[1.5px] border-line',
+                      : needsEyes
+                        ? 'bg-warn text-white'
+                        : d.type === 'income'
+                          ? 'bg-income text-white'
+                          : 'bg-accent text-accent-fg',
                   ].join(' ')}
                   aria-label={t('import.toggleRow')}
                 >
-                  {d.selected && !d.duplicate && <Check className="size-3" strokeWidth={3} />}
+                  {showCheck && <Check className="size-3" strokeWidth={3} />}
                 </button>
                 <span className="text-[13px] tabular-nums text-ink-2">{formatShortDate(d.date)}</span>
                 <div className="flex min-w-0 flex-col gap-0.5 pr-2">
                   <span
-                    className={`truncate text-[13px] font-semibold ${d.duplicate ? 'line-through' : ''}`}
+                    className={`truncate text-[13px] font-semibold ${faded ? 'line-through' : ''}`}
                   >
                     {d.title}
                   </span>
                   {d.duplicate ? (
                     <span className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-ink-2">
                       <Copy className="size-[11px]" strokeWidth={2.8} />
-                      {t('import.alreadyExists')}
+                      {dupText}
                     </span>
                   ) : needsEyes ? (
                     <span className="inline-flex items-center gap-1 text-[10.5px] font-semibold text-warn">
@@ -298,7 +386,7 @@ export function ImportReview(props: {
                     <span className="truncate font-mono text-[10.5px] text-ink-3">{d.raw}</span>
                   )}
                 </div>
-                {d.duplicate && cat ? (
+                {faded && cat ? (
                   <span className="flex items-center gap-2 text-[12.5px]">
                     <span
                       className={`flex size-[22px] items-center justify-center rounded-[7px] text-white ${categoryBgClass(cat.color)}`}
@@ -343,7 +431,7 @@ export function ImportReview(props: {
                 <span
                   className={[
                     'text-right text-[13px] font-bold tabular-nums',
-                    d.duplicate ? 'line-through' : '',
+                    faded ? 'line-through' : '',
                     d.type === 'income' ? 'text-income' : '',
                   ].join(' ')}
                 >
@@ -392,15 +480,36 @@ export function ImportReview(props: {
         </button>
         <button
           type="button"
-          disabled={importMut.isPending || stats.selected === 0}
+          disabled={
+            importMut.isPending ||
+            effective === null ||
+            (effective !== 'abort' && willImport === 0)
+          }
           onClick={() => {
             setError(null)
+            if (effective === 'abort') {
+              onCancel()
+              return
+            }
             importMut.mutate()
           }}
-          className="inline-flex h-[52px] items-center justify-center gap-2 rounded-[15px] bg-accent px-6 text-[14px] font-bold text-accent-fg shadow-accent disabled:opacity-40"
+          className={[
+            'inline-flex h-[52px] items-center justify-center gap-2 rounded-[15px] px-6 text-[14px] font-bold disabled:opacity-40',
+            effective === 'abort'
+              ? 'bg-danger text-white'
+              : 'bg-accent text-accent-fg shadow-accent',
+          ].join(' ')}
         >
-          <Check className="size-[18px]" strokeWidth={2.6} />
-          {t('import.confirm')} {stats.selected} {t('import.confirmSuffix')}
+          {effective === 'abort' ? (
+            t('import.confirmAbort')
+          ) : effective === null ? (
+            t('import.dup.choose')
+          ) : (
+            <>
+              <Check className="size-[18px]" strokeWidth={2.6} />
+              {t('import.confirm')} {willImport} {t('import.confirmSuffix')}
+            </>
+          )}
         </button>
       </div>
     </div>

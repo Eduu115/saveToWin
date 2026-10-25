@@ -21,6 +21,12 @@ export function clearAuthCookie(c: Context) {
   deleteCookie(c, AUTH_COOKIE, { path: '/' })
 }
 
-export function readAuthCookie(c: Context) {
+/** Cookie de la web, o `Authorization: Bearer` de la extensión del navegador. */
+export function readAuthToken(c: Context): string | undefined {
+  const header = c.req.header('Authorization')
+  if (header) {
+    const match = /^Bearer\s+(\S+)$/i.exec(header.trim())
+    if (match?.[1]) return match[1]
+  }
   return getCookie(c, AUTH_COOKIE)
 }

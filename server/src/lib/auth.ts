@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm'
 import { createMiddleware } from 'hono/factory'
 import { db } from '../../db/client.js'
 import { users } from '../../db/schema.js'
-import { readAuthCookie } from './cookies.js'
+import { readAuthToken } from './cookies.js'
 import { apiError } from './errors.js'
 import { verifyAccessToken } from './jwt.js'
 
@@ -28,22 +28,16 @@ const PUBLIC_API = new Set([
   '/api/auth/logout',
 ])
 
-export const requireAuth = createMiddleware<{ Variables: AuthVariables }>(async (c, next) => {
-  if (PUBLIC_API.has(c.req.path)) {
-    return next()
-  }
-
-  const token = readAuthCookie(c)
-  if (!token) {
-    return c.json(apiError('UNAUTHORIZED', 'No autenticado'), 401)
-  }
-
+export async function authenticateToken(
+  token: string,
+): Promise<
+  | { ok: true; userId: number }
+  | { ok: false; code: 'UNAUTHORIZED' | 'SESSION_REVOKED' }
+> {
   try {
     const payload = await verifyAccessToken(token)
     const userId = Number(payload.sub)
-    if (!Number.isInteger(userId)) {
-      return c.json(apiError('UNAUTHORIZED', 'Sesión inválida'), 401)
-    }
+    if (!Number.isInteger(userId)) return { ok: false, code: 'UNAUTHORIZED' }
     // ponytail: una consulta por clave primaria en cada petición; cachear si pesa.
     const [user] = await db
       .select({ sessionVersion: users.sessionVersion })
@@ -51,12 +45,32 @@ export const requireAuth = createMiddleware<{ Variables: AuthVariables }>(async 
       .where(eq(users.id, userId))
       .limit(1)
     if (!user || user.sessionVersion !== payload.sv) {
-      return c.json(apiError('SESSION_REVOKED', 'Tu sesión se ha cerrado. Vuelve a entrar.'), 401)
+      return { ok: false, code: 'SESSION_REVOKED' }
     }
-    c.set('userId', userId)
+    return { ok: true, userId }
   } catch {
-    return c.json(apiError('UNAUTHORIZED', 'Sesión inválida'), 401)
+    return { ok: false, code: 'UNAUTHORIZED' }
+  }
+}
+
+export const requireAuth = createMiddleware<{ Variables: AuthVariables }>(async (c, next) => {
+  if (PUBLIC_API.has(c.req.path)) {
+    return next()
   }
 
+  const token = readAuthToken(c)
+  if (!token) {
+    return c.json(apiError('UNAUTHORIZED', 'No autenticado'), 401)
+  }
+
+  const session = await authenticateToken(token)
+  if (!session.ok) {
+    const message =
+      session.code === 'SESSION_REVOKED'
+        ? 'Tu sesión se ha cerrado. Vuelve a entrar.'
+        : 'Sesión inválida'
+    return c.json(apiError(session.code, message), 401)
+  }
+  c.set('userId', session.userId)
   return next()
 })
