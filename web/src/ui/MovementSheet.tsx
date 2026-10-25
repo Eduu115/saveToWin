@@ -66,12 +66,21 @@ function typedAmountCents(amount: string): number | null {
 
 const KEYS = ['1', '2', '3', '4', '5', '6', '7', '8', '9', ',', '0', 'del'] as const
 
+/** Tarjeta «Bizum»: el gasto no se categoriza (va a Otros). */
+export function isBizumCardName(name: string): boolean {
+  return name.trim().toLowerCase() === 'bizum'
+}
+
 type Props = {
   draft: MovementDraft
   setDraft: (d: MovementDraft) => void
   editing: boolean
   isSubscriptionForm: boolean
   isSavingsForm: boolean
+  /** Sin selector de categoría; la categoría queda fija (Otros). */
+  isBizumForm: boolean
+  /** Id de la categoría Otros, al elegir la tarjeta Bizum. */
+  otherCategoryId: number | null
   categories: Category[]
   accounts: Account[]
   cards: Card[]
@@ -96,6 +105,8 @@ export function MovementSheet(props: Props) {
     editing,
     isSubscriptionForm,
     isSavingsForm,
+    isBizumForm,
+    otherCategoryId,
     categories,
     accounts,
     cards,
@@ -108,6 +119,15 @@ export function MovementSheet(props: Props) {
   useEffect(() => {
     if (isSubscriptionForm) setHeight('full')
   }, [isSubscriptionForm])
+
+  function setCard(cardId: string) {
+    const card = cards.find((c) => String(c.id) === cardId)
+    if (card && isBizumCardName(card.name) && otherCategoryId != null) {
+      setDraft({ ...draft, cardId, categoryId: String(otherCategoryId) })
+      return
+    }
+    setDraft({ ...draft, cardId })
+  }
 
   const compact = !desktop && height === 'compact'
   // 3c: al crecer desde compacta, la tarjeta terracota se estira hasta ser la cabecera.
@@ -276,15 +296,22 @@ export function MovementSheet(props: Props) {
               <span className="ml-1 self-end pb-4 text-xl font-bold opacity-70">€</span>
             </div>
             <div className="flex flex-wrap gap-2">
-              {selectedCat && (
-                <button
-                  type="button"
-                  onClick={grow}
-                  className={`${chip} text-white ${categoryBgClass(selectedCat.color)}`}
-                >
-                  <SelectedIcon size={15} strokeWidth={2.2} aria-hidden />
-                  {selectedCat.label}
+              {isBizumForm ? (
+                <button type="button" onClick={grow} className={`${chip} bg-accent-weak text-accent`}>
+                  <CreditCard size={15} strokeWidth={2.2} aria-hidden />
+                  {t('transactions.bizum')}
                 </button>
+              ) : (
+                selectedCat && (
+                  <button
+                    type="button"
+                    onClick={grow}
+                    className={`${chip} text-white ${categoryBgClass(selectedCat.color)}`}
+                  >
+                    <SelectedIcon size={15} strokeWidth={2.2} aria-hidden />
+                    {selectedCat.label}
+                  </button>
+                )
               )}
               {selectedAcc && !isSavingsForm && (
                 <button type="button" onClick={grow} className={`${chip} bg-surface-2 text-ink`}>
@@ -357,38 +384,43 @@ export function MovementSheet(props: Props) {
             </div>
 
             <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 sm:p-5">
-              <fieldset>
-                <legend className="mb-2 text-[11px] font-bold uppercase tracking-wide text-ink-2">
-                  {t('transactions.category')}
-                </legend>
-                <div className="grid grid-cols-4 gap-2">
-                  {categories.map((c) => {
-                    const Icon = categoryIcon(c.key)
-                    const on = String(c.id) === draft.categoryId
-                    return (
-                      <button
-                        key={c.id}
-                        type="button"
-                        aria-pressed={on}
-                        onClick={() => setDraft({ ...draft, categoryId: String(c.id) })}
-                        className={`flex min-h-[62px] flex-col items-center justify-center gap-1 rounded-tile border px-1 py-2 text-[11px] font-semibold leading-tight focus-visible:shadow-focus focus-visible:outline-none ${
-                          on
-                            ? `border-transparent text-white ${categoryBgClass(c.color)}`
-                            : 'border-line bg-surface text-ink-2'
-                        }`}
-                      >
-                        <Icon
-                          size={19}
-                          strokeWidth={2.2}
-                          aria-hidden
-                          style={on ? undefined : { color: categoryCssVar(c.color) }}
-                        />
-                        <span className="line-clamp-2 text-center">{c.label}</span>
-                      </button>
-                    )
-                  })}
-                </div>
-              </fieldset>
+              {!isBizumForm && (
+                <fieldset>
+                  <legend className="mb-2 text-[11px] font-bold uppercase tracking-wide text-ink-2">
+                    {t('transactions.category')}
+                  </legend>
+                  <div className="grid grid-cols-4 gap-2">
+                    {categories.map((c) => {
+                      const Icon = categoryIcon(c.key)
+                      const on = String(c.id) === draft.categoryId
+                      return (
+                        <button
+                          key={c.id}
+                          type="button"
+                          aria-pressed={on}
+                          onClick={() => setDraft({ ...draft, categoryId: String(c.id) })}
+                          className={`flex min-h-[62px] flex-col items-center justify-center gap-1 rounded-tile border px-1 py-2 text-[11px] font-semibold leading-tight focus-visible:shadow-focus focus-visible:outline-none ${
+                            on
+                              ? `border-transparent text-white ${categoryBgClass(c.color)}`
+                              : 'border-line bg-surface text-ink-2'
+                          }`}
+                        >
+                          <Icon
+                            size={19}
+                            strokeWidth={2.2}
+                            aria-hidden
+                            style={on ? undefined : { color: categoryCssVar(c.color) }}
+                          />
+                          <span className="line-clamp-2 text-center">{c.label}</span>
+                        </button>
+                      )
+                    })}
+                  </div>
+                </fieldset>
+              )}
+              {isBizumForm && (
+                <p className="text-[12.5px] leading-relaxed text-ink-2">{t('transactions.bizumHint')}</p>
+              )}
 
               {isSubscriptionForm && (
                 <div className="grid gap-3">
@@ -475,7 +507,7 @@ export function MovementSheet(props: Props) {
                               key={c.id || 'none'}
                               type="button"
                               aria-pressed={on}
-                              onClick={() => setDraft({ ...draft, cardId: c.id })}
+                              onClick={() => setCard(c.id)}
                               className={`${chip} h-10 border text-[12.5px] ${
                                 on ? 'border-accent bg-accent-weak text-accent' : 'border-line bg-surface text-ink-2'
                               }`}

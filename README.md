@@ -94,7 +94,27 @@ docker compose --profile https up -d --build
 
 Datos en volumen `pgdata`. Cada usuario puede descargar o restaurar su copia en
 JSON desde su **Perfil** (`GET/POST /api/backup`).
-PWA instalable en build de producción (manifest + service worker).
+PWA instalable en build de producción (manifest + service worker, iconos PNG).
+En el móvil: menú del navegador → **Añadir a la pantalla de inicio**. Chrome, Edge
+y Safari la abren a pantalla completa. Publicar en Play Store es viable después
+(Trusted Web Activity apuntando a `savetowin.app`, cuenta de desarrollador de
+Google). El App Store suele rechazar un envoltorio de una web. Como cada casa
+tiene su propia dirección, la instalación desde el navegador cubre el caso real
+mejor que una ficha de tienda.
+
+### Extensión de navegador (gasto rápido)
+
+Carpeta `extension/` (Chrome y Firefox, Manifest V3). Uso diario: publicarla en
+la **Chrome Web Store** y en **Firefox Add-ons** (pasos en `extension/STORE.md`).
+El modo «complemento temporal» de Firefox se borra al reiniciar; no sirve como
+instalación permanente.
+
+```bash
+npm run extension:pack   # → extension/dist/savetowin-extension.zip
+```
+
+El mismo zip se sirve en **Perfil** (`/savetowin-extension.zip`) para subirlo a
+las tiendas. Al entrar, pide permiso solo para la URL del servidor.
 
 ### Copias y despliegue automáticos (`ops/`)
 

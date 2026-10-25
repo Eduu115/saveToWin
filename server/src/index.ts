@@ -33,6 +33,26 @@ export type {
 
 const app = new Hono()
 
+// La extensión (otro origen) llama a la API con Bearer. Solo esos orígenes;
+// una web cualquiera no puede fingir chrome-extension://.
+app.use('/api/*', async (c, next) => {
+  const origin = c.req.header('origin') ?? ''
+  const extensionOrigin =
+    origin.startsWith('chrome-extension://') || origin.startsWith('moz-extension://')
+  if (extensionOrigin) {
+    c.header('Access-Control-Allow-Origin', origin)
+    c.header('Vary', 'Origin')
+    c.header(
+      'Access-Control-Allow-Headers',
+      'Content-Type, Authorization, X-SaveToWin-Client',
+    )
+    c.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS')
+    c.header('Access-Control-Max-Age', '86400')
+    if (c.req.method === 'OPTIONS') return c.body(null, 204)
+  }
+  await next()
+})
+
 app.use('/api/auth/login', rateLimitAuth)
 app.use('/api/auth/register', rateLimitAuth)
 app.use('/api/auth/register/confirm', rateLimitAuth)

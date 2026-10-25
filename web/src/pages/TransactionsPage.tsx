@@ -21,7 +21,12 @@ import {
   categoryIcon,
   sortCategoriesByDisplayOrder,
 } from '../ui/categoryMeta'
-import { MovementSheet, type FlowDraft, type MovementDraft } from '../ui/MovementSheet'
+import {
+  MovementSheet,
+  isBizumCardName,
+  type FlowDraft,
+  type MovementDraft,
+} from '../ui/MovementSheet'
 import {
   FilterBar,
   FilterSheet,
@@ -156,11 +161,17 @@ export function TransactionsPage() {
     return (cats.data?.items ?? []).find((c) => String(c.id) === draft.categoryId)
   }, [cats.data, draft.categoryId])
 
-  const isSubscriptionForm =
-    !editing && selectedCat?.key === 'Subscriptions' && draft.type === 'expense'
   // Ahorro: solo fecha + cantidad + ingreso/retirada; cuenta siempre Savings, sin tarjeta.
   const isSavingsForm = draft.type === 'savings'
   const savingsAccountId = accs.data?.items.find((a) => a.key === 'Savings')?.id
+  const otherCategoryId = activeCats.find((c) => c.key === 'Other')?.id ?? null
+  const selectedCard = (cardsQ.data?.items ?? []).find((c) => String(c.id) === draft.cardId)
+  const isBizumForm = Boolean(selectedCard && isBizumCardName(selectedCard.name))
+  const isSubscriptionForm =
+    !editing &&
+    !isBizumForm &&
+    selectedCat?.key === 'Subscriptions' &&
+    draft.type === 'expense'
 
   const activeAccounts = useMemo(() => {
     const items = accs.data?.items ?? []
@@ -210,11 +221,12 @@ export function TransactionsPage() {
         })
       }
       if (isSavingsForm && savingsAccountId == null) throw new Error(t('common.error'))
+      if (isBizumForm && otherCategoryId == null) throw new Error(t('common.error'))
       const body = {
         date: draft.date,
         amount,
         type: draft.type,
-        categoryId: Number(draft.categoryId),
+        categoryId: isBizumForm ? Number(otherCategoryId) : Number(draft.categoryId),
         accountId: isSavingsForm ? Number(savingsAccountId) : Number(draft.accountId),
         cardId: !isSavingsForm && draft.cardId ? Number(draft.cardId) : null,
         note: draft.note || null,
@@ -736,6 +748,8 @@ export function TransactionsPage() {
           editing={editing != null}
           isSubscriptionForm={isSubscriptionForm}
           isSavingsForm={isSavingsForm}
+          isBizumForm={isBizumForm}
+          otherCategoryId={otherCategoryId}
           categories={catsForSelect}
           accounts={activeAccounts}
           cards={cardsForSelect}
